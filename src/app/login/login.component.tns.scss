@@ -1,0 +1,113 @@
+/* Add mobile styles for the component here.  */
+.page {
+  align-items: center;
+  flex-direction: column;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.form {
+  background: rgb(2, 0, 36);
+  background: linear-gradient(0deg, rgba(2, 0, 36, 1) 0%, rgba(139, 0, 19, 1) 0%, rgba(237, 27, 52, 1) 100%);
+  vertical-align: middle;
+  height: 60%;
+}
+
+.form-inputs {
+  vertical-align: bottom;
+  margin-top: 70;
+  margin-left: 20;
+  margin-right: 20;
+}
+
+.eleave-logo {
+  height: 90;
+  width: 180;
+  margin-top: 5%;
+}
+
+.yoma-bank-logo {
+  width: 250;
+}
+
+.clip-path {
+  clip-path: circle(145% at -69.5% 20.5%);
+  background: rgba(139, 0, 19, 1);
+  height: 1000;
+  width: 1000;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  // clip-path: ellipse(50% 50% at 50% 50%);
+  // background: rgba(139, 0, 19, 1);
+  // position: absolute;
+  // z-index: -1;
+}
+
+.input {
+  font-size: 18;
+  color: #fff;
+  placeholder-color: #a8a8a8;
+}
+
+.input:disabled {
+  background-color: white;
+  opacity: 0.5;
+}
+
+.btn {
+  font-size: 18;
+  height: 45;
+  color: #000;
+  border-color: #ed1b34;
+  &.-outline {
+    color: #ed1b34;
+  }
+}
+
+.forgotpassword-label {
+  color: #fff;
+  font-size: 16;
+  margin-top: 8;
+}
+
+@keyframes faded {
+  from {
+    opacity: 0.5;
+    transform: scale(0.5, 0.5);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1, 1.1);
+    animation-timing-function: ease-out;
+  }
+  to {
+    opacity: 1;
+    transform: scale(1, 1);
+  }
+}
+.fade-1 {
+  animation-name: faded;
+  animation-duration: 0.4;
+  animation-fill-mode: forwards;
+  opacity: 0;
+}
+
+.fade-2 {
+  animation-delay: 0.3;
+  animation-name: faded;
+  animation-duration: 0.4;
+  animation-fill-mode: forwards;
+  opacity: 0;
+}
+
+.fade-3 {
+  animation-delay: 0.4;
+  animation-name: faded;
+  animation-duration: 0.4;
+  animation-fill-mode: forwards;
+  opacity: 0;
+}

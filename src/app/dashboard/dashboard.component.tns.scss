@@ -1,0 +1,64 @@
+/* Add mobile styles for the component here.  */
+
+.profile-section {
+  background: rgb(2, 0, 36);
+  background: linear-gradient(0deg, rgba(2, 0, 36, 1) 0%, rgba(139, 0, 19, 1) 0%, rgba(237, 27, 52, 1) 100%);
+  vertical-align: top;
+  height: 40%;
+
+  .employee-pic {
+    width: 120;
+    margin-top: 30;
+  }
+
+  .employee-name {
+    font-size: 22;
+    font-weight: bold;
+    color: #fff;
+  }
+
+  .employee-position {
+    margin-top: 10;
+    font-size: 17;
+    font-weight: normal;
+    color: #fff;
+  }
+}
+
+.clip-path {
+  clip-path: circle(145% at 75% 21%);
+  background: #fff;
+  height: 1000;
+  width: 1000;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.event-container {
+  padding: 12;
+}
+
+.leave {
+  margin: 0 6;
+}
+.employee-name {
+  font-weight: 500;
+  font-size: 20;
+}
+.employee-id {
+  font-size: 16;
+}
+.leave-info {
+  font-size: 14;
+  color: #99a1ab;
+}
+
+.leave-status {
+  padding-left: 9em;
+  padding-right: 9em;
+  color: #ffffff;
+  border-radius: 15em;
+  background-color: #edb11b;
+}
