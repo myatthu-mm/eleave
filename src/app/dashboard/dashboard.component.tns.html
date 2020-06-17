@@ -1,23 +1,41 @@
-<FlexboxLayout>
-    <GridLayout rows="2*, auto, 5*">
-        <StackLayout row="0" class="profile-section">
-            <Image class="employee-pic" src="~/assets/images/employee.png"></Image>
-            <GridLayout rows="auto, auto" horizontalAlignment="center" class="m-t-10">
-                <Label row="0" text="Sabai Aung" textWrap="true" class="employee-name"
-                    horizontalAlignment="center"></Label>
-                <Label row="1" text="Product Owner, IT Department" textWrap="true" class="employee-position"></Label>
-            </GridLayout>
+<GridLayout rows="2*, auto, 5*">
+    <StackLayout row="0" class="profile-section">
+        <Image class="employee-pic" src="~/assets/images/employee.png"></Image>
+        <GridLayout rows="auto, auto" horizontalAlignment="center" class="m-t-10">
+            <Label row="0" text="Sabai Aung" textWrap="true" class="employee-name" horizontalAlignment="center"></Label>
+            <Label row="1" text="Product Owner, IT Department" textWrap="true" class="employee-position"></Label>
+        </GridLayout>
+    </StackLayout>
+    <AbsoluteLayout row="1" height="30" horizontalAlignment="center">
+        <StackLayout width="100%" height="55" backgroundColor="#8b0013">
         </StackLayout>
-        <AbsoluteLayout row="1" height="50" horizontalAlignment="center">
-            <StackLayout width="100%" height="55" backgroundColor="#8b0013">
+        <StackLayout top="30" class="clip-path" horizontalAlignment="center"></StackLayout>
+    </AbsoluteLayout>
+    <StackLayout row="2">
+        <GridLayout rows="2*, 3*">
+            <StackLayout row="0">
+                <Label text="Donut Chart" textWrap="true"></Label>
             </StackLayout>
-            <StackLayout top="30" class="clip-path" horizontalAlignment="center"></StackLayout>
+            <StackLayout row="1">
+                <ListView [items]="items" (itemTap)="onItemTap($event)" height="220" class="list-group">
+                    <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
+                        <GridLayout class="list-group-item" columns="4*, 1*" rows="auto, auto" [ngSwitch]="item.status">
+                            <Label [text]="item.date" row="0" col="0" colspan="3" class="list-group-item__date"></Label>
+                            <Label [text]="item.type" row="1" col="0" colspan="3" class="list-group-item__type"></Label>
 
-
-        </AbsoluteLayout>
-        <StackLayout row="2" verticalAlignment="center">
-            <Label text="dashboard" textWrap="true"></Label>
-
-        </StackLayout>
-    </GridLayout>
-</FlexboxLayout>
+                            <Label *ngSwitchCase="'pending'" [text]="item.status" row="0" col="1" rowspan="2"
+                                class="list-group-item__status bg-warning"></Label>
+                            <Label *ngSwitchCase="'rejected'" [text]="item.status" row="0" col="1" rowspan="2"
+                                class="list-group-item__status bg-primary"></Label>
+                            <Label *ngSwitchDefault [text]="item.status" row="0" col="1" rowspan="2"
+                                class="list-group-item__status bg-success"></Label>
+                        </GridLayout>
+                    </ng-template>
+                </ListView>
+                <StackLayout horizontalAlignment="center">
+                    <Label text="View all leave history" textWrap="true" class="h3 m-t-25"></Label>
+                </StackLayout>
+            </StackLayout>
+        </GridLayout>
+    </StackLayout>
+</GridLayout>

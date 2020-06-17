@@ -41,8 +41,8 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    let response = { access_token: 'asdsdafasf' };
-    this.routerExtensions.navigate(['/dashboard', response['access_token']], { clearHistory: true });
+    this.routerExtensions.navigate(['/home'], { clearHistory: true });
+    // this.routerExtensions.navigate(['/dashboard', response['access_token']], { clearHistory: true });
     // this._backendServie.login({ username: this.user.username, password: this.user.password })
     //   .subscribe(response => {
     //     this.secureStorge = new SecureStorage();

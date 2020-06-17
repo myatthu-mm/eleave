@@ -1,5 +1,43 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<ActionBar [title]="title"></ActionBar>
-<StackLayout class="p-20">
-    <Label text="Welcome to {{ title }}!" class="h1 text-center" textWrap="true"></Label>
-</StackLayout>
+<BottomNavigation>
+    <TabStrip>
+        <TabStripItem>
+            <Image src="font://&#xf015;" class="fas"></Image>
+            <Label text="Dashboard"></Label>
+        </TabStripItem>
+        <TabStripItem>
+            <Image src="font://&#xf271;" class="fas"></Image>
+            <Label text="Request Leave"></Label>
+        </TabStripItem>
+        <TabStripItem>
+            <Image src="font://&#xf1da;" class="fas"></Image>
+            <Label text="Leave History"></Label>
+        </TabStripItem>
+        <TabStripItem>
+            <Image src="font://&#xf141;" class="fas"></Image>
+            <Label text="More"></Label>
+        </TabStripItem>
+    </TabStrip>
+
+    <TabContentItem>
+        <FlexboxLayout>
+            <app-dashboard></app-dashboard>
+        </FlexboxLayout>
+    </TabContentItem>
+
+    <TabContentItem>
+        <FlexboxLayout horizontalAlignment="center">
+            <Label text="Request Leave" style="font-size: 30em;"></Label>
+        </FlexboxLayout>
+    </TabContentItem>
+    <TabContentItem>
+        <FlexboxLayout horizontalAlignment="center">
+            <Label text="Leave History" style="font-size: 30em;"></Label>
+        </FlexboxLayout>
+    </TabContentItem>
+
+    <TabContentItem>
+        <FlexboxLayout horizontalAlignment="center">
+            <Label text="More" style="font-size: 30em;"></Label>
+        </FlexboxLayout>
+    </TabContentItem>
+</BottomNavigation>

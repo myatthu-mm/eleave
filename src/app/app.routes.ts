@@ -11,7 +11,7 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'dashboard/:tokenObject',
+    path: 'dashboard',
     component: DashboardComponent
   },
   {
