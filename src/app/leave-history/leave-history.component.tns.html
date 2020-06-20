@@ -1,0 +1,8 @@
+<ActionBar title="Leave History">
+    <NavigationButton android.systemIcon="ic_menu_back"></NavigationButton>
+    <ActionItem (tap)="onFilter()" icon="font://&#xf0b0;" class="fas" ios.position="right" android.position="actionBar">
+    </ActionItem>
+</ActionBar>
+<FlexboxLayout>
+    <app-leave-listview [items]="items"></app-leave-listview>
+</FlexboxLayout>

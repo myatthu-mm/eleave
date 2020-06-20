@@ -9,25 +9,26 @@ import { LoginComponent } from '@src/app/login/login.component';
 import { DashboardComponent } from '@src/app/dashboard/dashboard.component';
 import { NativeScriptUICalendarModule } from 'nativescript-ui-calendar/angular';
 import { NativeScriptHttpClientModule } from 'nativescript-angular/http-client';
-// Uncomment and add to NgModule imports if you need to use two-way binding
-// import { NativeScriptFormsModule } from 'nativescript-angular/forms';
-
-// Uncomment and add to NgModule imports  if you need to use the HTTP wrapper
-// import { NativeScriptHttpClientModule } from 'nativescript-angular/http-client';
+import { NativeScriptUIChartModule } from "nativescript-ui-chart/angular";
+import { LeaveHistoryComponent } from '@src/app/leave-history/leave-history.component';
+import { LeaveListviewComponent } from '@src/app/ui-components/leave-listview/leave-listview.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     LoginComponent,
-    DashboardComponent
+    DashboardComponent,
+    LeaveHistoryComponent,
+    LeaveListviewComponent,
   ],
   imports: [
     NativeScriptModule,
     AppRoutingModule,
     NativeScriptFormsModule,
     NativeScriptUICalendarModule,
-    NativeScriptHttpClientModule
+    NativeScriptHttpClientModule,
+    NativeScriptUIChartModule
   ],
   providers: [
   ],

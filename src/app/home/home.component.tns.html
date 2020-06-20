@@ -1,4 +1,4 @@
-<BottomNavigation>
+<BottomNavigation id="ButtonNav" selectedIndex="1">
     <TabStrip>
         <TabStripItem>
             <Image src="font://&#xf015;" class="fas"></Image>
@@ -26,12 +26,13 @@
 
     <TabContentItem>
         <FlexboxLayout horizontalAlignment="center">
-            <Label text="Request Leave" style="font-size: 30em;"></Label>
+            <Label text="Request leave" style="font-size: 30em;"></Label>
         </FlexboxLayout>
     </TabContentItem>
+
     <TabContentItem>
-        <FlexboxLayout horizontalAlignment="center">
-            <Label text="Leave History" style="font-size: 30em;"></Label>
+        <FlexboxLayout>
+            <app-leave-history></app-leave-history>
         </FlexboxLayout>
     </TabContentItem>
 

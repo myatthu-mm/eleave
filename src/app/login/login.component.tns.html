@@ -7,14 +7,9 @@
                 <StackLayout row="0">
                     <TextField class="input" hint="Employee ID" autocorrect="false" [(ngModel)]="user.username">
                     </TextField>
-                    <!-- <GridLayout columns="*,auto">
-                        <TextField class="input" hint="Employee ID" autocorrect="false" [(ngModel)]="user.username">
-                        </TextField>
-                        <Label col="1" text="x" color="#fff" fontSize="20" verticalAlignment="center"></Label>
-                    </GridLayout> -->
                 </StackLayout>
 
-                <StackLayout row="1" class="m-b-20">
+                <StackLayout row="1" class="m-b-10">
                     <TextField #password class="input" hint="Password" secure="true" [(ngModel)]="user.password">
                     </TextField>
                 </StackLayout>

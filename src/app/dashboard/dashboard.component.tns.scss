@@ -2,23 +2,25 @@
   background: rgb(2, 0, 36);
   background: linear-gradient(0deg, rgba(2, 0, 36, 1) 0%, rgba(139, 0, 19, 1) 0%, rgba(237, 27, 52, 1) 100%);
   vertical-align: top;
-  height: 40%;
+  height: 250;
 
   .employee-pic {
     width: 120;
-    margin-top: 30;
+    margin-top: 20;
   }
 
-  .employee-name {
-    font-size: 22;
-    font-weight: bold;
-    color: #fff;
-  }
+  .employee-section-panel {
+    margin-top: 3%;
+    .employee-name {
+      font-size: 18;
+      font-weight: bold;
+      color: #fff;
+    }
 
-  .employee-position {
-    font-size: 17;
-    font-weight: normal;
-    color: #fff;
+    .employee-position {
+      font-size: 13;
+      color: #fff;
+    }
   }
 }
 
@@ -33,30 +35,27 @@
   right: 0;
 }
 
-.list-group {
-  margin: 0% 4%;
+.chart-label {
+  vertical-align: center;
+  .chart-title {
+    horizontal-align: center;
+    color: #313337;
+    font-size: 12;
+    font-weight: bold;
+  }
+
+  .chart-subtitle {
+    horizontal-align: center;
+    font-weight: bold;
+    color: #656565;
+    font-size: 14;
+  }
 }
 
-.list-group-item {
-  background-color: #fff;
-  &__date {
-    font-size: 18;
-    color: #000;
-  }
-  &__type {
-    font-size: 13;
-  }
-  &__status {
-    font-size: 12;
-    padding-left: 9em;
-    padding-right: 9em;
-    color: #ffffff;
-    border-radius: 15em;
-  }
-  .bg-warning {
-    background-color: #fdce3e;
-  }
-  .bg-success {
-    background-color: #5ec232;
-  }
+.legend {
+  color: #000;
+  vertical-align: middle;
+  margin-top: 70%;
+  font-size: 13pt;
+  font-weight: 500;
 }

@@ -1,0 +1,29 @@
+/* Add mobile styles for the component here.  */
+.list-group {
+    margin: 0% 4%;
+}
+
+.list-group-item {
+    background-color: #fff;
+    padding: 5% 10%;
+    &__date {
+        font-size: 17;
+        color: #000;
+    }
+    &__type {
+        font-size: 13;
+    }
+    &__status {
+        font-size: 12;
+        padding-left: 9em;
+        padding-right: 9em;
+        color: #ffffff;
+        border-radius: 15em;
+    }
+    .bg-warning {
+        background-color: rgb(237, 177, 27);
+    }
+    .bg-success {
+        background-color: #5ec232;
+    }
+}
