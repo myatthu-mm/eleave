@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { LeaveItem } from '../shared/models/leave-item.model';
 import { LeaveService } from '../shared/services/leave.service';
 import { Page } from "tns-core-modules/ui/page";
+
 @Component({
   selector: 'app-leave-history',
   templateUrl: './leave-history.component.html',
@@ -10,7 +11,9 @@ import { Page } from "tns-core-modules/ui/page";
 })
 export class LeaveHistoryComponent implements OnInit {
   private _leaveItems: Array<LeaveItem>;
-  constructor(private _leaveService: LeaveService, private _page: Page) {
+  constructor(
+    private _leaveService: LeaveService,
+    private _page: Page) {
   }
 
   get items(): Array<LeaveItem> {
@@ -26,6 +29,7 @@ export class LeaveHistoryComponent implements OnInit {
     console.log('Leave history created................');
     this._page.actionBarHidden = false;
     this.items = this._leaveService.getLeaveHistories();
+
   }
 
 
