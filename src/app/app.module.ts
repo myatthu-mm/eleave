@@ -8,6 +8,8 @@ import { LoginComponent } from '@src/app/login/login.component';
 import { DashboardComponent } from '@src/app/dashboard/dashboard.component';
 import { LeaveHistoryComponent } from '@src/app/leave-history/leave-history.component';
 import { LeaveListviewComponent } from '@src/app/ui-components/leave-listview/leave-listview.component';
+import { ModalComponent } from '@src/app/ui-components/modal/modal.component';
+import { DatePickerComponent } from '@src/app/ui-components/date-picker/date-picker.component';
 
 
 @NgModule({
@@ -18,6 +20,8 @@ import { LeaveListviewComponent } from '@src/app/ui-components/leave-listview/le
     DashboardComponent,
     LeaveHistoryComponent,
     LeaveListviewComponent,
+    ModalComponent,
+    DatePickerComponent,
   ],
   imports: [
     BrowserModule,

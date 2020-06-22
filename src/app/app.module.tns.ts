@@ -12,7 +12,9 @@ import { NativeScriptHttpClientModule } from 'nativescript-angular/http-client';
 import { NativeScriptUIChartModule } from "nativescript-ui-chart/angular";
 import { LeaveHistoryComponent } from '@src/app/leave-history/leave-history.component';
 import { LeaveListviewComponent } from '@src/app/ui-components/leave-listview/leave-listview.component';
-
+import { ModalComponent } from '@src/app/ui-components/modal/modal.component';
+import { DatePickerComponent } from '@src/app/ui-components/date-picker/date-picker.component';
+import { ModalDialogService } from "nativescript-angular/modal-dialog";
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,6 +23,8 @@ import { LeaveListviewComponent } from '@src/app/ui-components/leave-listview/le
     DashboardComponent,
     LeaveHistoryComponent,
     LeaveListviewComponent,
+    ModalComponent,
+    DatePickerComponent,
   ],
   imports: [
     NativeScriptModule,
@@ -31,7 +35,9 @@ import { LeaveListviewComponent } from '@src/app/ui-components/leave-listview/le
     NativeScriptUIChartModule
   ],
   providers: [
+    ModalDialogService
   ],
+  entryComponents: [ModalComponent],
   bootstrap: [AppComponent],
   schemas: [NO_ERRORS_SCHEMA]
 })

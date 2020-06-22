@@ -22,3 +22,13 @@
     font-family: "Font Awesome 5 Free", "fa-regular-400";
     font-weight: 400;
 }
+
+.btn {
+    font-size: 18;
+    height: 45;
+    color: #000;
+    border-color: #ed1b34;
+    &.-outline {
+        color: #ed1b34;
+    }
+}
