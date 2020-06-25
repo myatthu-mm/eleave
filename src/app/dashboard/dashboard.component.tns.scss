@@ -55,7 +55,17 @@
 .legend {
   color: #000;
   vertical-align: middle;
-  margin-top: 70%;
+  margin-top: 80%;
   font-size: 13pt;
   font-weight: 500;
+}
+
+.scroll-menu {
+  height: 200;
+  padding: 0;
+}
+
+.scroll-pane {
+  width: 140;
+  height: 150;
 }
