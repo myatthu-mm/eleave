@@ -1,8 +1,20 @@
-<ActionBar title="Leave History">
+<ActionBar title="Leave History" class="actionbar-color">
     <NavigationButton android.systemIcon="ic_menu_back"></NavigationButton>
-    <ActionItem (tap)="onFilter()" icon="font://&#xf0b0;" class="fas" ios.position="right" android.position="actionBar">
+    <ActionItem (tap)="onFilter()" icon="font://&#xf0b0;" class="fas action" ios.position="right"
+        android.position="actionBar">
     </ActionItem>
 </ActionBar>
-<FlexboxLayout>
-    <app-leave-listview [items]="items"></app-leave-listview>
-</FlexboxLayout>
+<GridLayout rows="auto, *">
+    <FlexboxLayout flexWrap="wrap" flexDirection="row" justifyContent="space-around" height="80" row="0" class="p-24"
+        *ngIf="startDate_label">
+        <app-removable-chip [isStart]="true" [label]="startDate_label" (removeEvent)="listenRemoveEvent($event)"
+            *ngIf="startDate_label">
+        </app-removable-chip>
+        <app-removable-chip [isStart]="false" [label]="endDate_label" (removeEvent)="listenRemoveEvent($event)"
+            *ngIf="endDate_label">
+        </app-removable-chip>
+    </FlexboxLayout>
+    <FlexboxLayout row="1">
+        <app-leave-listview [items]="items"></app-leave-listview>
+    </FlexboxLayout>
+</GridLayout>

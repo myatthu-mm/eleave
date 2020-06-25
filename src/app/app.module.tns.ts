@@ -15,6 +15,8 @@ import { LeaveListviewComponent } from '@src/app/ui-components/leave-listview/le
 import { ModalComponent } from '@src/app/ui-components/modal/modal.component';
 import { DatePickerComponent } from '@src/app/ui-components/date-picker/date-picker.component';
 import { ModalDialogService } from "nativescript-angular/modal-dialog";
+import { ModalDatetimepicker } from "nativescript-modal-datetimepicker";
+import { RemovableChipComponent } from '@src/app/ui-components/removable-chip/removable-chip.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,6 +27,7 @@ import { ModalDialogService } from "nativescript-angular/modal-dialog";
     LeaveListviewComponent,
     ModalComponent,
     DatePickerComponent,
+    RemovableChipComponent,
   ],
   imports: [
     NativeScriptModule,
@@ -32,10 +35,10 @@ import { ModalDialogService } from "nativescript-angular/modal-dialog";
     NativeScriptFormsModule,
     NativeScriptUICalendarModule,
     NativeScriptHttpClientModule,
-    NativeScriptUIChartModule
+    NativeScriptUIChartModule,
   ],
   providers: [
-    ModalDialogService
+    ModalDialogService, ModalDatetimepicker
   ],
   entryComponents: [ModalComponent],
   bootstrap: [AppComponent],
