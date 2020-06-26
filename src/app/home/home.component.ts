@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Page } from "tns-core-modules/ui/page";
 import { BottomNavigation } from "tns-core-modules/ui/bottom-navigation/bottom-navigation";
+import { TabStripItem } from 'tns-core-modules/ui/tab-navigation-base/tab-strip-item/tab-strip-item';
 
 @Component({
   selector: 'app-home',
@@ -21,10 +22,12 @@ export class HomeComponent implements OnInit {
 
   onLoaded(index) {
     console.log(`Tab ${index} loaded`);
-
   }
 
-  gotoLeaveHistory(_tabData) {
+  listenHistoryEvent($event) {
+    // this.historyTab.notify({ eventName: 'tap', object: this.historyTab })
     this.bottomNavigation.selectedIndex = 2;
   }
+
 }
+

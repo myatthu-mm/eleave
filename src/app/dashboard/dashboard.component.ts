@@ -18,6 +18,10 @@ export class DashboardComponent implements OnInit {
   private _listItems: Array<LeaveItem>;
   private token: any;
   private _pieSource: ObservableArray<Country>;
+
+  @Output()
+  gotoHistory_event: EventEmitter<Boolean> = new EventEmitter<Boolean>();
+
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _routerExtension: RouterExtensions,
@@ -83,11 +87,10 @@ export class DashboardComponent implements OnInit {
     console.log(`Index: ${args.index}; View: ${args.view} ; Item: ${this._listItems[args.index]}`);
   }
 
-
-  templateSelector(item: Item) {
-    if (item.status == 'rejected') return 'rejected'
-    return "approved";
+  gotoLeaveHistory() {
+    this.gotoHistory_event.emit(true);
   }
+
 
   // onDateSelected(args: CalendarSelectionEventData) {
   //   const startDate = args.date.getFullYear() + '-' + ("0" + (1 + Number(args.date.getMonth()))).slice(-2) + "-" + ("0" + args.date.getDate()).slice(-2);
@@ -114,8 +117,4 @@ export class DashboardComponent implements OnInit {
   // }
 
 
-}
-
-class Item {
-  constructor(public id: number, public date: string, public type: string, public status: string) { }
 }

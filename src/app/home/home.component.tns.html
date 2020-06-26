@@ -20,7 +20,7 @@
 
     <TabContentItem>
         <FlexboxLayout>
-            <app-dashboard></app-dashboard>
+            <app-dashboard (gotoHistory_event)="listenHistoryEvent($event)"></app-dashboard>
         </FlexboxLayout>
     </TabContentItem>
 
