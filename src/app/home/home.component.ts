@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Page } from "tns-core-modules/ui/page";
 import { BottomNavigation } from "tns-core-modules/ui/bottom-navigation/bottom-navigation";
-import { TabStripItem } from 'tns-core-modules/ui/tab-navigation-base/tab-strip-item/tab-strip-item';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +14,6 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.debug('home component');
     this._page.actionBarHidden = true;
     this.bottomNavigation = this._page.getViewById('ButtonNav');
   }

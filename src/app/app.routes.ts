@@ -8,7 +8,7 @@ import { DatePickerComponent } from '@src/app/ui-components/date-picker/date-pic
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: '/login',
+    redirectTo: '/home',
     pathMatch: 'full'
   },
   {

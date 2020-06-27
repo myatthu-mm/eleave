@@ -1,15 +1,21 @@
-<ListView row="0" [items]="items" (itemTap)="onItemTap($event)" height="210" class="list-group">
+<ListView row="0" [items]="items" (itemTap)="onItemTap($event)" ios:height="210" android:height="200"
+    class="list-group">
     <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
         <GridLayout class="list-group-item" columns="4*, 1*" rows="auto, auto" [ngSwitch]="item.status">
-            <Label [text]="item.date" row="0" col="0" colspan="3" class="list-group-item__date"></Label>
-            <Label [text]="item.type" row="1" col="0" colspan="3" class="list-group-item__type"></Label>
+            <Label [text]="item.date" row="0" col="0" colspan="3" ios:class="list-group-item__date--ios"
+                android:class="list-group-item__date--android"></Label>
+            <Label [text]="item.type" row="1" col="0" colspan="3" ios:class="list-group-item__type--ios"
+                android:class="list-group-item__type--android"></Label>
 
             <Label *ngSwitchCase="'pending'" [text]="item.status" row="0" col="1" rowspan="2"
-                class="list-group-item__status bg-warning"></Label>
+                class="list-group-item__status bg-warning" ios:class="list-group-item__status--ios"
+                android:class="list-group-item__status--android"></Label>
             <Label *ngSwitchCase="'rejected'" [text]="item.status" row="0" col="1" rowspan="2"
-                class="list-group-item__status bg-primary"></Label>
+                class="list-group-item__status bg-primary" ios:class="list-group-item__status--ios"
+                android:class="list-group-item__status--android"></Label>
             <Label *ngSwitchDefault [text]="item.status" row="0" col="1" rowspan="2"
-                class="list-group-item__status bg-success"></Label>
+                class="list-group-item__status bg-success" ios:class="list-group-item__status--ios"
+                android:class="list-group-item__status"></Label>
         </GridLayout>
     </ng-template>
 </ListView>
