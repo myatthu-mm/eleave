@@ -3,6 +3,7 @@ import { ModalDialogParams } from 'nativescript-angular/modal-dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RouterExtensions } from 'nativescript-angular/router';
 import * as ModalPicker from 'nativescript-modal-datetimepicker';
+import { Page } from "tns-core-modules/ui/page";
 import { MonthName } from '../../shared/constants';
 @Component({
   selector: 'app-date-picker',
@@ -19,11 +20,11 @@ export class DatePickerComponent implements OnInit {
 
   constructor(
     private params: ModalDialogParams,
-    private router: RouterExtensions,
-    private _activeRoute: ActivatedRoute
+    private _page: Page
   ) { }
 
   ngOnInit() {
+    this._page.actionBarHidden = true;
   }
 
   onStartDateChanged(args) {

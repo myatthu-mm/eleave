@@ -1,0 +1,15 @@
+/* Add ios mobile styles for the component here.  */
+@import "./leave-listview.component.common.scss";
+
+.list-group-item {
+    &__date {
+        font-size: 17;
+        color: #000;
+    }
+    &__type {
+        font-size: 13;
+    }
+    &__status {
+        font-size: 12;
+    }
+}

@@ -1,28 +1,51 @@
 <ScrollView>
     <StackLayout orientation="vertical" class="m-t-20">
         <GridLayout rows="auto, *" columns="*">
-            <Label row="0" text="&#xf00d;" class="far close-button m-r-20" horizontalAlignment="right"
-                (tap)="onClose()"></Label>
+            <ios>
+                <Label row="0" text="&#xf00d;" class="far close-button m-r-20" horizontalAlignment="right"
+                    (tap)="onClose()"></Label>
+            </ios>
+            <android>
+                <Image row="0" src="font://&#xf00d;" stretch="none" class="fas close-button m-r-20"
+                    horizontalAlignment="right" (tap)="onClose()"></Image>
+            </android>
             <!-- <Label text="&#xf0b0" row="0" horizontalAlignment="right" class="fas right close-button"></Label>></Label> -->
         </GridLayout>
-        <GridLayout class="m-20">
-            <Label text="Choose Date" class="h2" horizontalAlignment="center"></Label>
+        <GridLayout class="m-10">
+            <android>
+                <Label text="Choose Date" class="h2" horizontalAlignment="center"></Label>
+            </android>
         </GridLayout>
         <!--Add your page content here-->
         <GridLayout rows="auto, 1*" columns="auto ,*,1*" class="m-15">
             <Label text="&#xf073;" fontSize="15" class="far" row="0" col="0"></Label>
             <Label [text]="startDate_label" fontSize="17" class="m-l-10" textWrap="true" row="0" col="1"
                 (tap)="openStartDatepicker()"></Label>
-            <Label text="&#xf00d;" class="far btn-removable m-r-10" row="0" col="2" horizontalAlignment="right"
-                (tap)="startDate_Clear()" *ngIf="startDate_model"></Label>
+            <ios>
+                <Label text="&#xf00d;" class="far btn-removable m-r-10" row="0" col="2" horizontalAlignment="right"
+                    (tap)="startDate_Clear()" *ngIf="startDate_model"></Label>
+            </ios>
+            <android>
+                <Image src="font://&#xf00d;" stretch="none" class="fas btn-removable m-r-10" row="0" col="2"
+                    horizontalAlignment="right" (tap)="startDate_Clear()" *ngIf="startDate_model"></Image>
+            </android>
             <StackLayout class="hr" row="1" colSpan="3" backgroundColor="gray" height="2"></StackLayout>
         </GridLayout>
         <GridLayout rows="auto, 1*" columns="auto ,*,1*" class="m-15">
             <Label text="&#xf073;" fontSize="15" class="far" row="0" col="0"></Label>
             <Label [text]="endDate_label" fontSize="17" class="m-l-10" textWrap="true" row="0" col="1"
                 (tap)="openEndDatepicker()"></Label>
-            <Label text="&#xf00d;" class="far btn-removable m-r-10" row="0" col="2" horizontalAlignment="right"
-                (tap)="endDate_Clear()" *ngIf="endDate_model"></Label>
+
+            <ios>
+                <Label text="&#xf00d;" class="far btn-removable m-r-10" row="0" col="2" horizontalAlignment="right"
+                    (tap)="endDate_Clear()" *ngIf="endDate_model"></Label>
+            </ios>
+            <android>
+                <Image src="font://&#xf00d;" stretch="none" class="fas btn-removable m-r-10" row="0" col="2"
+                    horizontalAlignment="right" (tap)="endDate_Clear()" *ngIf="endDate_model"></Image>
+            </android>
+
+
             <StackLayout class="hr" row="1" colSpan="3" backgroundColor="gray" height="2"></StackLayout>
         </GridLayout>
         <!-- <Button text="Date picker" (tap)="openDatepicker()"></Button> -->
