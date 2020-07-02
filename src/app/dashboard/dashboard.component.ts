@@ -72,6 +72,7 @@ export class DashboardComponent implements OnInit {
   }
 
   private callToProfile() {
+    this.processing = true;
     this._backendService.getProfile().subscribe(response => {
       const status = response['status'];
       if (status.code === 200) {
@@ -105,6 +106,7 @@ export class DashboardComponent implements OnInit {
       alert('Balance Error');
       console.error('Error response:', error);
       this.processing = false;
+      this.callToLeaveHistory();
     });
   }
 

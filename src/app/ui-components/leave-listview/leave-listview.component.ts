@@ -21,7 +21,9 @@ export class LeaveListviewComponent implements OnInit {
 
   onItemTap(args: ItemEventData) {
     this.routerExtensions.navigate(['/history-details'], {
-      queryParams: this.items[args.index]
+      queryParams: this.items[args.index],
+      animated: true,
+      transition: { name: 'slide' }
     });
   }
 

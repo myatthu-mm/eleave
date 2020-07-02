@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { RouterExtensions } from "nativescript-angular/router";
 import { History } from '../../shared/models/leave-history.model';
 @Component({
   selector: 'app-leave-history-details',
@@ -14,6 +15,7 @@ export class LeaveHistoryDetailsComponent implements OnInit {
 
   constructor(
     private _activatedRoute: ActivatedRoute,
+    private _routerExtensions: RouterExtensions
   ) { }
 
   ngOnInit() {
@@ -24,6 +26,9 @@ export class LeaveHistoryDetailsComponent implements OnInit {
     }
   }
 
+  goBack() {
+    this._routerExtensions.back();
+  }
 
 
 }
