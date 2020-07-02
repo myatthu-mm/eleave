@@ -61,7 +61,7 @@ export class DashboardComponent implements OnInit {
 
   @HostListener('loaded')
   pageOnInit() {
-    console.log('Dashboard created................');
+    console.log('Dashboard created***');
     this._page.actionBarHidden = true;
     this.callToProfile();
 

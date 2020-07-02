@@ -1,6 +1,5 @@
 import { MonthName, LeaveStatus, LeaveType } from '../constants';
 import { Injectable } from '@angular/core';
-import { LeaveItem } from '../models/leave-item.model';
 import { History } from '../models/leave-history.model';
 @Injectable()
 export class LeaveService {
@@ -31,23 +30,4 @@ export class LeaveService {
 
     private getLeaveTypeByCode = (_code: string) => LeaveType[Object.keys(LeaveType).find(key => key === _code)];
 
-    getLeaveHistories(): LeaveItem[] {
-        return [
-            { date: "Sep 10, 2019 - Sep 13, 2019", type: "Annual leave (AL) 3 day(s)", leave_status: "rejected" },
-            { date: "Aug 6, 2019 - Aug 7, 2019", type: "Annual leave (AL) 3 day(s)", leave_status: "pending" },
-            { date: "July 31, 2019 - July 31, 2019", type: "Cascual leave (CL) 1 day(s)", leave_status: "approved" },
-            { date: "Sep 10, 2019 - Sep 13, 2019", type: "Annual leave (AL) 3 day(s)", leave_status: "rejected" },
-            { date: "Aug 6, 2019 - Aug 7, 2019", type: "Annual leave (AL) 3 day(s)", leave_status: "pending" },
-            { date: "July 31, 2019 - July 31, 2019", type: "Cascual leave (CL) 1 day(s)", leave_status: "approved" },
-            { date: "Sep 10, 2019 - Sep 13, 2019", type: "Annual leave (AL) 3 day(s)", leave_status: "rejected" },
-            { date: "Aug 6, 2019 - Aug 7, 2019", type: "Annual leave (AL) 3 day(s)", leave_status: "pending" },
-            { date: "July 31, 2019 - July 31, 2019", type: "Cascual leave (CL) 1 day(s)", leave_status: "approved" },
-            { date: "Sep 10, 2019 - Sep 13, 2019", type: "Annual leave (AL) 3 day(s)", leave_status: "rejected" },
-            { date: "Aug 6, 2019 - Aug 7, 2019", type: "Annual leave (AL) 3 day(s)", leave_status: "pending" },
-            { date: "July 31, 2019 - July 31, 2019", type: "Cascual leave (CL) 1 day(s)", leave_status: "approved" },
-            { date: "Sep 10, 2019 - Sep 13, 2019", type: "Annual leave (AL) 3 day(s)", leave_status: "rejected" },
-            { date: "Aug 6, 2019 - Aug 7, 2019", type: "Annual leave (AL) 3 day(s)", leave_status: "pending" },
-            { date: "July 31, 2019 - July 31, 2019", type: "Cascual leave (CL) 1 day(s)", leave_status: "approved" },
-        ]
-    }
 }

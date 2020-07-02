@@ -12,11 +12,10 @@ export class LeaveListviewComponent implements OnInit {
   constructor(
     private routerExtensions: RouterExtensions,
   ) {
-    console.log('list created');
-
   }
 
   ngOnInit() {
+    console.log('list preloading.....');
   }
 
   onItemTap(args: ItemEventData) {
