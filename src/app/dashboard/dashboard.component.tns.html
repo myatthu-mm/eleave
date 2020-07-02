@@ -1,11 +1,10 @@
 <FlexboxLayout>
     <GridLayout ios:rows="2*, auto, 5*" android:rows="3*, auto, 5*">
         <StackLayout row="0" class="profile-section" android:height="300">
-            <Image class="employee-pic" src="~/assets/images/employee.png"></Image>
+            <Image class="employee-pic" [src]="ProfileImage"></Image>
             <GridLayout rows="1*, 1*" horizontalAlignment="center" class="employee-section-panel">
-                <Label row="0" text="Sabai Aung" textWrap="true" class="employee-name"
-                    horizontalAlignment="center"></Label>
-                <Label row="1" text="Product Owner, IT Department" textWrap="true" class="employee-position"></Label>
+                <Label row="0" [text]="Name" textWrap="true" class="employee-name" horizontalAlignment="center"></Label>
+                <Label row="1" [text]="JobPosition" textWrap="true" class="employee-position"></Label>
             </GridLayout>
         </StackLayout>
         <AbsoluteLayout row="1" ios:height="30" android:height="55" horizontalAlignment="center">
@@ -14,15 +13,18 @@
             <StackLayout top="30" class="clip-path" horizontalAlignment="center"></StackLayout>
         </AbsoluteLayout>
 
+
+
         <StackLayout row="2" android:backgroundColor="#efefef">
+            <ActivityIndicator [busy]="processing"></ActivityIndicator>
             <GridLayout rows="2*, 3*">
                 <ScrollView orientation="horizontal">
                     <StackLayout row="0" orientation="horizontal" class="scroll-menu">
-                        <GridLayout class="scroll-pane" *ngFor="let item of [1,2,3,4,5]">
+                        <GridLayout class="scroll-pane" *ngFor="let item of LeaveBalances">
                             <RadPieChart allowAnimation="true" row="0" backgroundColor="transparent">
                                 <DonutSeries tkPieSeries seriesName="myPieSeries" startAngle="-90" endAngle="270"
-                                    outerRadiusFactor="0.8" innerRadiusFactor="0.6" valueProperty="Amount"
-                                    [items]="pieSource">
+                                    outerRadiusFactor="0.8" innerRadiusFactor="0.6" valueProperty="amount"
+                                    [items]="item.pieSource">
                                 </DonutSeries>
                                 <Palette tkPiePalette seriesName="myPieSeries">
                                     <PaletteEntry tkPiePaletteEntry strokeWidth="0" fillColor="#F44334">
@@ -32,11 +34,11 @@
                                 </Palette>
                             </RadPieChart>
                             <StackLayout row="0" class="chart-label">
-                                <Label class="chart-title" text="4/10"></Label>
+                                <Label class="chart-title" text='{{item.balance}}/{{item.entitle}}'></Label>
                                 <Label class="chart-subtitle" text="Days"></Label>
                             </StackLayout>
                             <StackLayout row="0" class="legend" horizontalAlignment="center">
-                                <Label text="Annual Leave" textWrap="true"></Label>
+                                <Label [text]="item.leave_type_description" textWrap="true"></Label>
                             </StackLayout>
                         </GridLayout>
 
@@ -45,7 +47,7 @@
 
 
                 <GridLayout row="1" ios:rows="auto, auto" android:rows="*, auto" android:class="m-t-10">
-                    <app-leave-listview [items]="items"></app-leave-listview>
+                    <app-leave-listview [items]="LeaveHistories"></app-leave-listview>
                     <StackLayout row="1" horizontalAlignment="center" android:class="m-b-15">
                         <Label text="View all leave history" textWrap="true" class="h3 m-20"
                             (tap)="gotoLeaveHistory()"></Label>

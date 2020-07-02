@@ -1,15 +1,15 @@
 <ListView row="0" [items]="items" (itemTap)="onItemTap($event)" ios:height="210" android:height="200"
     class="list-group">
     <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
-        <GridLayout class="list-group-item" columns="4*, 1*" rows="auto, auto" [ngSwitch]="item.status">
+        <GridLayout class="list-group-item" columns="4*, 1*" rows="auto, auto" [ngSwitch]="item.leave_status">
             <Label [text]="item.date" row="0" col="0" colspan="3" class="list-group-item__date"></Label>
             <Label [text]="item.type" row="1" col="0" colspan="3" class="list-group-item__type"></Label>
 
-            <Label *ngSwitchCase="'pending'" [text]="item.status" row="0" col="1" rowspan="2"
+            <Label *ngSwitchCase="'pending'" [text]="item.leave_status" row="0" col="1" rowspan="2"
                 class="list-group-item__status bg-warning"></Label>
-            <Label *ngSwitchCase="'rejected'" [text]="item.status" row="0" col="1" rowspan="2"
+            <Label *ngSwitchCase="'rejected'" [text]="item.leave_status" row="0" col="1" rowspan="2"
                 class="list-group-item__status bg-primary"></Label>
-            <Label *ngSwitchDefault [text]="item.status" row="0" col="1" rowspan="2"
+            <Label *ngSwitchDefault [text]="item.leave_status" row="0" col="1" rowspan="2"
                 class="list-group-item__status bg-success"></Label>
         </GridLayout>
     </ng-template>

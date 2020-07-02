@@ -1,6 +1,5 @@
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { NativeScriptModule } from 'nativescript-angular/nativescript.module';
-
 import { AppRoutingModule } from '@src/app/app-routing.module';
 import { AppComponent } from '@src/app/app.component';
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
@@ -17,6 +16,7 @@ import { DatePickerComponent } from '@src/app/ui-components/date-picker/date-pic
 import { ModalDialogService } from "nativescript-angular/modal-dialog";
 import { ModalDatetimepicker } from "nativescript-modal-datetimepicker";
 import { RemovableChipComponent } from '@src/app/ui-components/removable-chip/removable-chip.component';
+import { LeaveHistoryDetailsComponent } from '@src/app/leave-history/leave-history-details/leave-history-details.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,6 +28,7 @@ import { RemovableChipComponent } from '@src/app/ui-components/removable-chip/re
     ModalComponent,
     DatePickerComponent,
     RemovableChipComponent,
+    LeaveHistoryDetailsComponent,
   ],
   imports: [
     NativeScriptModule,

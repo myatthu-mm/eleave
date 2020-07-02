@@ -1,10 +1,14 @@
 export enum LeaveType {
     AL = 'Annual Leave',
-    SL = 'Sick Leave',
     CL = 'Casual Leave',
-    ML = 'Maternity Leave',
-    DL = 'Duty Leave',
-    PL = 'Paternity Leave'
+    CPL = 'Compassionate Leave',
+    EXL = 'Examination Leave',
+    MRL = 'Married Leave',
+    MDL = 'Medical Leave',
+    OD = 'On Duty',
+    PTL = 'Paternity Leave',
+    SL = 'Sick Leave',
+    WPL = 'Without Pay'
 }
 
 export enum LeaveStatus {
@@ -26,4 +30,14 @@ export enum MonthName {
     Oct,
     Nov,
     Dec
+}
+
+
+export class BackendSettings {
+    public static SERVER_URL = 'https://dev-eleave-spring.yomabank.org/api/v1/eleave/';
+    public static LOGIN_ENDPOINT = 'login';
+    public static PROFILE_ENDPOINT = 'employee-profile';
+    public static BALANCE_ENDPOINT = 'leave-balance';
+    public static HISTORY_ENDPOINT = 'leave-hisotry';
+    public static LOGIN_NOMFA = 'https://dev-eleave-spring.yomabank.org/api/auth/login/no-mfa';
 }

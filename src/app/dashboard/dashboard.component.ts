@@ -1,13 +1,13 @@
 import { Component, OnInit, EventEmitter, Output, HostListener } from '@angular/core';
-import { LeaveService, LeaveInfo, Country } from '../shared/services/leave.service';
+import { LeaveService } from '../shared/services/leave.service';
 import { BackendService } from '../shared/services/backend.service';
-import { CalendarSelectionEventData } from 'nativescript-ui-calendar';
 import { ActivatedRoute } from '@angular/router';
-import { ItemEventData } from "tns-core-modules/ui/list-view";
-import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { RouterExtensions } from "nativescript-angular/router";
-import { LeaveItem } from '../shared/models/leave-item.model';
 import { Page } from "tns-core-modules/ui/page";
+import { Profile } from '../shared/models/profile.model';
+import { LeaveBalance } from '../shared/models/leave-balance.model';
+import { History } from '../shared/models/leave-history.model';
+import { PieSource } from '../shared/models/pie-source.model';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -15,9 +15,11 @@ import { Page } from "tns-core-modules/ui/page";
   providers: [BackendService, LeaveService]
 })
 export class DashboardComponent implements OnInit {
-  private _listItems: Array<LeaveItem>;
-  private token: any;
-  private _pieSource: ObservableArray<Country>;
+  profile: Profile;
+  private balanceList: LeaveBalance[];
+  private historyList: History[];
+  processing: boolean;
+
 
   @Output()
   gotoHistory_event: EventEmitter<Boolean> = new EventEmitter<Boolean>();
@@ -28,93 +30,101 @@ export class DashboardComponent implements OnInit {
     private _backendService: BackendService,
     private _leaveInfoService: LeaveService,
     private _page: Page) {
+    this.profile = new Profile();
+    this.processing = true;
   }
 
-  get items(): Array<LeaveItem> {
-    return this._listItems;
+  get Name(): string {
+    return this.profile.last_name || '';
   }
 
-  set items(value) {
-    this._listItems = value;
+  get JobPosition(): string {
+    return this.profile.job_category_name + ', ' + this.profile.unit_name;
   }
 
-  get pieSource(): ObservableArray<Country> {
-    return this._pieSource;
+  get ProfileImage(): string {
+    if (this.profile.title === 'U') {
+      return '~/assets/images/employee-men.png'
+    }
+    return '~/assets/images/employee.png';
   }
+
+  get LeaveBalances(): Array<LeaveBalance> {
+    return this.balanceList;
+  }
+
+  get LeaveHistories(): Array<History> {
+    return this.historyList;
+  }
+
 
 
   @HostListener('loaded')
   pageOnInit() {
     console.log('Dashboard created................');
     this._page.actionBarHidden = true;
-    this._pieSource = new ObservableArray(this._leaveInfoService.getCategoricalSource());
-    this._listItems = [
-      { date: "Sep 10, 2019 - Sep 13, 2019", type: "Annual leave (AL) 3 day(s)", status: "rejected" },
-      { date: "Aug 6, 2019 - Aug 7, 2019", type: "Annual leave (AL) 3 day(s)", status: "pending" },
-      { date: "July 31, 2019 - July 31, 2019", type: "Cascual leave (CL) 1 day(s)", status: "approved" },
-    ]
+    this.callToProfile();
+
   }
 
   ngOnInit() {
-    // this._activatedRoute.params.subscribe(params => {
-    //   this.token = params;
-
-    // const today = new Date();
-    // const currentDate = today.getFullYear() + '-' + ("0" + (today.getMonth() + 1)).slice(-2) + '-' + ("0" + today.getDate()).slice(-2);
-    // const bodyData = {
-    //   "managerEmployeeId": "008076",
-    //   "leaveStatus": "Applied",
-    //   "startDate": currentDate,
-    //   "endDate": currentDate,
-    //   "employeeId": ""
-    // };
-    // this._backendService.getLeaves(this.token, bodyData).subscribe(response => {
-    //   if (response['status'].code === 200) {
-    //     const list = response['leave_associate_list']; // get array
-    //     this.myItems = this._leaveInfoService.getPrepareLeaveData(list);
-    //   } else if (!response['status'].message) {
-    //     alert("No data");
-    //   } else {
-    //     alert("Error");
-    //   }
-
-    // })
-
-    // });
+    console.log('dashboard preloading....');
   }
 
-  onItemTap(args: ItemEventData) {
-    console.log(`Index: ${args.index}; View: ${args.view} ; Item: ${this._listItems[args.index]}`);
+  private callToProfile() {
+    this._backendService.getProfile().subscribe(response => {
+      const status = response['status'];
+      if (status.code === 200) {
+        this.profile = response['data'];
+        this.callToLeaveBalance();
+      }
+    }, (error) => {
+      alert('Profile Error');
+      console.error('Error response:', error);
+      this.processing = false;
+    });
+  }
+
+  private callToLeaveBalance() {
+    this._backendService.getLeaveBalance().subscribe(response => {
+      const status = response['status'];
+      if (status.code === 200) {
+        this.balanceList = response['leave_balance_list'];
+        this.balanceList.map(item => {
+          const pieSource = <Array<PieSource>>[
+            { name: 'balance', amount: Number(item.balance) },
+            { name: 'taken', amount: Number(item.taken) }
+          ];
+          Object.assign(item, { pieSource: pieSource })
+          Object.assign(item, { balance: Number(item.balance) });
+          Object.assign(item, { entitle: Number(item.entitle) });
+        });
+        this.callToLeaveHistory();
+      }
+    }, (error) => {
+      alert('Balance Error');
+      console.error('Error response:', error);
+      this.processing = false;
+    });
+  }
+
+  private callToLeaveHistory() {
+    this._backendService.getLeaveHistory('2020-01-01', '2020-12-31').subscribe(response => {
+      const status = response['status'];
+      if (status.code === 200) {
+        this.historyList = this._leaveInfoService.getMinimalLeaves(response['leave_history_list']);
+        this.processing = false;
+      }
+    }, (error) => {
+      alert('history error');
+      console.error('Error response:', error);
+      this.processing = false;
+    });
   }
 
   gotoLeaveHistory() {
     this.gotoHistory_event.emit(true);
   }
-
-
-  // onDateSelected(args: CalendarSelectionEventData) {
-  //   const startDate = args.date.getFullYear() + '-' + ("0" + (1 + Number(args.date.getMonth()))).slice(-2) + "-" + ("0" + args.date.getDate()).slice(-2);
-  //   const endDate = startDate;
-  //   const bodyData = {
-  //     "managerEmployeeId": "008076",
-  //     "leaveStatus": "Applied",
-  //     "startDate": startDate,
-  //     "endDate": endDate,
-  //     "employeeId": ""
-  //   };
-  //   this._backendService.getLeaves(this.token, bodyData).subscribe(response => {
-  //     if (response['status'].code === 200) {
-  //       const list = response['leave_associate_list']; // get array
-  //       this.myItems = this._leaveInfoService.getPrepareLeaveData(list);
-  //     } else if (!response['status'].message) {
-  //       alert("No data");
-  //     } else {
-  //       alert("Error");
-  //     }
-
-  //   })
-
-  // }
 
 
 }

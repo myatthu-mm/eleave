@@ -6,15 +6,24 @@
 </ActionBar>
 <GridLayout rows="auto, *">
     <FlexboxLayout flexWrap="wrap" flexDirection="row" justifyContent="space-around" height="80" row="0" class="p-24"
-        *ngIf="startDate_label">
-        <app-removable-chip [isStart]="true" [label]="startDate_label" (removeEvent)="listenRemoveEvent($event)"
-            *ngIf="startDate_label">
+        *ngIf="startDate.label || endDate.label">
+        <app-removable-chip [isStart]="true" [label]="startDate.label" (removeEvent)="listenRemoveEvent($event)"
+            *ngIf="startDate.label">
         </app-removable-chip>
-        <app-removable-chip [isStart]="false" [label]="endDate_label" (removeEvent)="listenRemoveEvent($event)"
-            *ngIf="endDate_label">
+        <app-removable-chip [isStart]="false" [label]="endDate.label" (removeEvent)="listenRemoveEvent($event)"
+            *ngIf="endDate.label">
         </app-removable-chip>
+
     </FlexboxLayout>
+
     <FlexboxLayout row="1">
-        <app-leave-listview [items]="items"></app-leave-listview>
+        <GridLayout *ngIf="processing">
+            <ActivityIndicator [busy]="processing"></ActivityIndicator>
+        </GridLayout>
+        <GridLayout *ngIf="!processing && isEmpty">
+            <Label text="There is no leave history." class="h2" textWrap="true" horizontalAlignment="center"></Label>
+        </GridLayout>
+        <app-leave-listview [items]="LeaveHistories" *ngIf="!processing && !isEmpty"></app-leave-listview>
     </FlexboxLayout>
+
 </GridLayout>

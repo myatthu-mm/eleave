@@ -1,5 +1,5 @@
 export interface LeaveItem {
     date: string;
     type: string;
-    status: string;
+    leave_status: string;
 }

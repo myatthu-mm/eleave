@@ -1,0 +1,55 @@
+<StackLayout orientation="vertical">
+    <GridLayout rows="auto, auto" class="m-t-20 m-x-20">
+        <Label row="0" text="Leave Types" class="title"></Label>
+        <Label row="1" [text]="leaveType" class="desc"></Label>
+    </GridLayout>
+    <StackLayout class="m-x-20">
+        <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
+        </StackLayout>
+    </StackLayout>
+
+    <GridLayout rows="auto, auto" class="m-t-20 m-x-20">
+        <Label row="0" text="Duration" class="title"></Label>
+        <Label row="1" [text]="history.date" class="desc"></Label>
+    </GridLayout>
+    <StackLayout class="m-x-20">
+        <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
+        </StackLayout>
+    </StackLayout>
+
+    <GridLayout rows="auto, auto" class="m-t-20 m-x-20">
+        <Label row="0" text="Total Duration" class="title"></Label>
+        <Label row="1" [text]="history.duration" class="desc"></Label>
+    </GridLayout>
+    <StackLayout class="m-x-20">
+        <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
+        </StackLayout>
+    </StackLayout>
+
+    <GridLayout rows="auto, auto" class="m-t-20 m-x-20">
+        <Label row="0" text="Reason" class="title"></Label>
+        <Label row="1" [text]="history.remark || '-'" class="desc" textWrap="true"></Label>
+    </GridLayout>
+    <StackLayout class="m-x-20">
+        <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
+        </StackLayout>
+    </StackLayout>
+
+    <GridLayout rows="auto, auto" class="m-t-20 m-x-20">
+        <Label row="0" text="Approver's Comment" class="title"></Label>
+        <Label row="1" [text]="history.approver_comment || '-'" class="desc"></Label>
+    </GridLayout>
+    <StackLayout class="m-x-20">
+        <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
+        </StackLayout>
+    </StackLayout>
+
+    <GridLayout rows="auto, auto" class="m-t-20 m-x-20">
+        <Label row="0" text="Status" class="title"></Label>
+        <Label row="1" [text]="status" class="desc" textWrap="true"></Label>
+    </GridLayout>
+    <StackLayout class="m-x-20">
+        <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
+        </StackLayout>
+    </StackLayout>
+</StackLayout>

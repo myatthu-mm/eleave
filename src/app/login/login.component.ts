@@ -6,6 +6,7 @@ import { FingerprintAuth, BiometricIDAvailableResult } from 'nativescript-finger
 import { BackendService } from '../shared/services/backend.service';
 import { SecureStorage } from "nativescript-secure-storage";
 import { isIOS } from "tns-core-modules/platform"
+import { setString } from "tns-core-modules/application-settings";
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -31,59 +32,34 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.user = new User();
-    this.secureStorge.get({
-      key: "username"
-    }).then(value => {
-      console.log('Gotvalue:', value);
-
-      if (value) this.isPersonalLogin = true;
-    })
+    // this.user.userId = '008076';
+    // this.user.password = '00008076';
   }
 
   login() {
-    this.routerExtensions.navigate(['/home'], { clearHistory: true });
-    // this.routerExtensions.navigate(['/dashboard', response['access_token']], { clearHistory: true });
-    // this._backendServie.login({ username: this.user.username, password: this.user.password })
-    //   .subscribe(response => {
-    //     this.secureStorge = new SecureStorage();
-    //     this.secureStorge.set({
-    //       key: "username",
-    //       value: this.user.username
-    //     }).then(success => console.log('Successfully set username? ', success));
-    //     this.secureStorge.set({
-    //       key: "password",
-    //       value: this.user.password
-    //     }).then(success => console.log('Successfully set password? ', success));
-    //     this.routerExtensions.navigate(['/dashboard', response['access_token']]);
-    //   }, (error) => {
-    //     alert("Access Denied");
-    //     console.log(error);
-
-    //   });
-  }
-
-  loginWithFP() {
-    this.fingerprintAuth.verifyFingerprintWithCustomFallback({
-      message: 'Scan yer finger', // optional, shown in the fingerprint dialog (default: 'Scan your finger').
-      fallbackMessage: 'Enter PIN', // optional, the button label when scanning fails (default: 'Enter password').
-      authenticationValidityDuration: 10 // optional (used on Android, default 5)
-    }).then(
-      () => {
-        const username = this.secureStorge.getSync({ key: "username" });
-        const password = this.secureStorge.getSync({ key: "password" });
-        this._backendServie.login({ username: username, password: password })
-          .subscribe(response => {
-            this.routerExtensions.navigate(['/dashboard', response['access_token']]);
-          }, (error) => {
-            alert("Access Denied");
-          });
-      },
-      error => {
-        // when error.code === -3, the user pressed the button labeled with your fallbackMessage
-        console.log("Fingerprint NOT OK. Error code: " + error.code + ". Error message: " + error.message);
-      }
-    );
-    // this.routerExtensions.navigate(['/dashboard']);
+    this.processing = true;
+    const bodyPayload = {
+      userId: this.user.userId,
+      password: this.user.password
+    };
+    this._backendServie.loginNomfa(bodyPayload)
+      .toPromise()
+      .then((response) => {
+        this._backendServie.login(bodyPayload, response['access_token']).subscribe(res => {
+          setString('token', response['access_token']);
+          setString('userId', this.user.userId);
+          this.routerExtensions.navigate(['/home'], { clearHistory: true });
+        }, (error) => {
+          alert("Access Denied");
+          console.error('Error response:', error);
+          this.processing = false;
+        })
+      })
+      .catch((err) => {
+        alert("Access Denied Nomfa");
+        console.error('Error response:', err);
+        this.processing = false;
+      })
   }
 
 }

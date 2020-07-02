@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Page } from "tns-core-modules/ui/page";
 import { BottomNavigation } from "tns-core-modules/ui/bottom-navigation/bottom-navigation";
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -10,12 +9,15 @@ import { BottomNavigation } from "tns-core-modules/ui/bottom-navigation/bottom-n
 export class HomeComponent implements OnInit {
   title = 'E-leave';
   bottomNavigation: BottomNavigation;
-  constructor(private _page: Page) {
+  token: string;
+  constructor(
+    private _page: Page) {
   }
 
   ngOnInit() {
     this._page.actionBarHidden = true;
     this.bottomNavigation = this._page.getViewById('ButtonNav');
+
   }
 
   onLoaded(index) {
