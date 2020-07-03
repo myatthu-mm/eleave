@@ -1,4 +1,4 @@
-export interface LeaveBalance {
+export interface Balance {
     leave_type_code: string;
     leave_type_description: string;
     carry: string;

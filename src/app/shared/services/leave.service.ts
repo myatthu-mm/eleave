@@ -1,12 +1,13 @@
 import { MonthName, LeaveStatus, LeaveType } from '../constants';
 import { Injectable } from '@angular/core';
 import { History } from '../models/leave-history.model';
+import { Balance } from '../models/leave-balance.model';
+import { PieSource } from '../models/pie-source.model';
 @Injectable()
 export class LeaveService {
 
     getMinimalLeaves(list: History[]) {
-        const latestList = list.slice(0, 3);
-        return this.getFormattedLeaveHistories(latestList);
+        return this.getFormattedLeaveHistories(list.slice(0, 3));
     }
 
     getFormattedLeaveHistories(list: History[]) {
@@ -19,6 +20,19 @@ export class LeaveService {
             Object.assign(item, { type: `${type}` });
             Object.assign(item, { duration: `${Number(item.duration)} day(s)` })
             Object.assign(item, { leave_status: item.leave_status.toLowerCase() });
+        });
+        return list;
+    }
+
+    getFormattedLeaveBalances(list: Balance[]) {
+        list.map(item => {
+            const pieSource = <Array<PieSource>>[
+                { name: 'balance', amount: Number(item.balance) },
+                { name: 'taken', amount: Number(item.taken) }
+            ];
+            Object.assign(item, { pieSource: pieSource })
+            Object.assign(item, { balance: Number(item.balance) });
+            Object.assign(item, { entitle: Number(item.entitle) });
         });
         return list;
     }

@@ -11,7 +11,7 @@ import { LeaveListviewComponent } from '@src/app/ui-components/leave-listview/le
 import { ModalComponent } from '@src/app/ui-components/modal/modal.component';
 import { DatePickerComponent } from '@src/app/ui-components/date-picker/date-picker.component';
 import { RemovableChipComponent } from '@src/app/ui-components/removable-chip/removable-chip.component';
-import { LeaveHistoryDetailsComponent } from '@src/app/leave-history/leave-history-details/leave-history-details.component';
+import { LeaveListviewDetailsComponent } from '@src/app/ui-components/leave-listview-details/leave-listview-details.component';
 
 
 @NgModule({
@@ -25,7 +25,7 @@ import { LeaveHistoryDetailsComponent } from '@src/app/leave-history/leave-histo
     ModalComponent,
     DatePickerComponent,
     RemovableChipComponent,
-    LeaveHistoryDetailsComponent,
+    LeaveListviewDetailsComponent,
   ],
   imports: [
     BrowserModule,

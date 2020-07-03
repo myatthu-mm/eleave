@@ -1,6 +1,9 @@
 import { Component, OnInit, HostListener, ViewContainerRef } from '@angular/core';
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
 import { Page } from "tns-core-modules/ui/page";
+import { Store } from '@ngxs/store';
+import { HistoryListState } from '../shared/states/history/history.state';
+
 import { ModalComponent } from '../ui-components/modal/modal.component';
 import { History } from '../shared/models/leave-history.model';
 import { LeaveService } from '../shared/services/leave.service';
@@ -25,7 +28,8 @@ export class LeaveHistoryComponent implements OnInit {
     private _backendService: BackendService,
     private _page: Page,
     private modalService: ModalDialogService,
-    private viewContainerRef: ViewContainerRef) {
+    private viewContainerRef: ViewContainerRef,
+    private _store: Store) {
   }
 
   get LeaveHistories(): Array<History> {
@@ -43,8 +47,7 @@ export class LeaveHistoryComponent implements OnInit {
     this.startDate = new DateModel();
     this.endDate = new DateModel();
 
-    this.callToLeaveHistory('2019-01-01', '2020-12-31');
-
+    this.callToLeaveHistory_State();
   }
 
 
@@ -82,7 +85,7 @@ export class LeaveHistoryComponent implements OnInit {
       if (this.endDate.value) {
         this.callToLeaveHistory(this.endDate.value, this.endDate.value);
       } else {
-        this.callToLeaveHistory('2020-01-01', '2020-12-31');
+        this.callToLeaveHistory_State();
       }
 
     } else {
@@ -90,9 +93,20 @@ export class LeaveHistoryComponent implements OnInit {
       if (this.startDate.value) {
         this.callToLeaveHistory(this.startDate.value, this.startDate.value);
       } else {
-        this.callToLeaveHistory('2020-01-01', '2020-12-31');
+        this.callToLeaveHistory_State();
       }
     }
+  }
+
+  private callToLeaveHistory_State() {
+    this._store.select(HistoryListState.historyList).subscribe(list => {
+      if (list.length) {
+        this.LeaveHistories = list[0];
+      } else {
+        this.callToLeaveHistory('2019-01-01', '2020-12-31');
+      }
+    });
+
   }
 
   private callToLeaveHistory(_startDate: string, _endDate: string) {

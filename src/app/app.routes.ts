@@ -4,7 +4,7 @@ import { LoginComponent } from '@src/app/login/login.component';
 import { DashboardComponent } from '@src/app/dashboard/dashboard.component';
 import { LeaveHistoryComponent } from '@src/app/leave-history/leave-history.component';
 import { DatePickerComponent } from '@src/app/ui-components/date-picker/date-picker.component';
-import { LeaveHistoryDetailsComponent } from '@src/app/leave-history/leave-history-details/leave-history-details.component';
+import { LeaveListviewDetailsComponent } from '@src/app/ui-components/leave-listview-details/leave-listview-details.component';
 
 export const routes: Routes = [
   {
@@ -31,7 +31,7 @@ export const routes: Routes = [
   },
   {
     path: 'history-details',
-    component: LeaveHistoryDetailsComponent
+    component: LeaveListviewDetailsComponent
   }
 
 ];

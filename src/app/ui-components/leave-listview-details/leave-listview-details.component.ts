@@ -3,11 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterExtensions } from "nativescript-angular/router";
 import { History } from '../../shared/models/leave-history.model';
 @Component({
-  selector: 'app-leave-history-details',
-  templateUrl: './leave-history-details.component.html',
-  styleUrls: ['./leave-history-details.component.scss']
+  selector: 'app-leave-listview-details',
+  templateUrl: './leave-listview-details.component.html',
+  styleUrls: ['./leave-listview-details.component.scss']
 })
-export class LeaveHistoryDetailsComponent implements OnInit {
+export class LeaveListviewDetailsComponent implements OnInit {
 
   history: History;
   leaveType: string;
