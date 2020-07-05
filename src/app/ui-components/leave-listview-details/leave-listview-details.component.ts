@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RouterExtensions } from "nativescript-angular/router";
-import { History } from '../../shared/models/leave-history.model';
+import { History } from '../../shared/models/history.model';
 @Component({
   selector: 'app-leave-listview-details',
   templateUrl: './leave-listview-details.component.html',

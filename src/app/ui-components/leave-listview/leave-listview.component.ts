@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ItemEventData } from "tns-core-modules/ui/list-view";
 import { RouterExtensions } from "nativescript-angular/router";
-import { History } from '../../shared/models/leave-history.model';
+import { History } from '../../shared/models/history.model';
 @Component({
   selector: 'app-leave-listview',
   templateUrl: './leave-listview.component.html',

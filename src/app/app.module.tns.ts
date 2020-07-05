@@ -25,6 +25,7 @@ import { BalanceListState } from '@src/app/shared/states/balance/balance.state';
 import { LeaveRequestComponent } from '@src/app/leave-request/leave-request.component';
 import { LeaveTypesComponent } from '@src/app/leave-types/leave-types.component';
 import { HistoryFilterModalComponent } from '@src/app/history-filter-modal/history-filter-modal.component';
+import { LeaveService } from '@src/app/shared/services/leave.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,7 +52,7 @@ import { HistoryFilterModalComponent } from '@src/app/history-filter-modal/histo
     NgxsModule.forRoot([HistoryListState, ProfileState, BalanceListState], { developmentMode: true })
   ],
   providers: [
-    ModalDialogService, ModalDatetimepicker
+    ModalDialogService, ModalDatetimepicker, LeaveService
   ],
   entryComponents: [ModalComponent],
   bootstrap: [AppComponent],

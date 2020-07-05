@@ -1,16 +1,16 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { RouterExtensions } from "nativescript-angular/router";
 import { Page } from "tns-core-modules/ui/page";
 import { EventData } from "tns-core-modules/data/observable";
 import { Switch } from "tns-core-modules/ui/switch";
 import { Store } from '@ngxs/store';
 import { BalanceListState } from '../shared/states/balance/balance.state';
+import { LeaveService } from '../shared/services/leave.service';
 
 @Component({
   selector: 'app-leave-request',
   templateUrl: './leave-request.component.html',
-  styleUrls: ['./leave-request.component.scss']
+  styleUrls: ['./leave-request.component.scss'],
 })
 export class LeaveRequestComponent implements OnInit {
   leaveTypeLabel: String = 'Annual Leave';
@@ -25,9 +25,9 @@ export class LeaveRequestComponent implements OnInit {
   balanceList: any[];
   constructor(
     private _page: Page,
-    private _activatedRoute: ActivatedRoute,
     private _routerExtension: RouterExtensions,
-    private _store: Store) { }
+    private _store: Store,
+    private _leaveService: LeaveService) { }
 
   get isValidForm(): boolean {
     return (this.startDate_Value.length != 0) && (this.endDate_Value.length !== 0) && (this.leaveBalance > 0);
@@ -39,11 +39,10 @@ export class LeaveRequestComponent implements OnInit {
 
   ngOnInit() {
     console.log('Leave request preloading...');
-    this._activatedRoute.queryParams.subscribe(params => {
-      if (Object.keys(params).length > 0) {
-        this.leaveTypeLabel = params.name;
-        this.leaveTypeValue = params.id;
-
+    this._leaveService.getLeaveTypeObs().subscribe(data => {
+      if (data) {
+        this.leaveTypeLabel = data.name;
+        this.leaveTypeValue = data.id;
       }
     });
   }
@@ -52,7 +51,7 @@ export class LeaveRequestComponent implements OnInit {
   pageOnInit() {
     console.log('Leave request view created***');
     this._page.actionBarHidden = false;
-    this._page.actionBar.title = 'Leave Request';
+    // this._page.actionBar.title = 'Leave Request';
     this.balanceList = this._store.selectSnapshot(BalanceListState.balanceList)[0];
     this.leaveBalance = this.getLeaveBalance(this.leaveTypeValue);
   }

@@ -5,7 +5,7 @@ import { Store } from '@ngxs/store';
 import { HistoryListState } from '../shared/states/history/history.state';
 
 import { ModalComponent } from '../ui-components/modal/modal.component';
-import { History } from '../shared/models/leave-history.model';
+import { History } from '../shared/models/history.model';
 import { LeaveService } from '../shared/services/leave.service';
 import { BackendService } from '../shared/services/backend.service';
 import { MonthName } from '../shared/constants';
@@ -44,7 +44,7 @@ export class LeaveHistoryComponent implements OnInit {
   pageOnInit() {
     console.log('Leave history created................');
     this._page.actionBarHidden = false;
-    this._page.actionBar.title = 'Leave History';
+    // this._page.actionBar.title = 'Leave History';
     this.startDate = new DateModel();
     this.endDate = new DateModel();
     this.callToLeaveHistory_State();

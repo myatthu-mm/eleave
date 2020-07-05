@@ -1,6 +1,4 @@
 import { Component, OnInit, EventEmitter, Output, HostListener } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { RouterExtensions } from "nativescript-angular/router";
 import { Page } from "tns-core-modules/ui/page";
 import { Store } from '@ngxs/store';
 import { UpdateHistoryList } from '../shared/states/history/history.actions';
@@ -11,9 +9,8 @@ import { HistoryListState } from '../shared/states/history/history.state';
 import { LeaveService } from '../shared/services/leave.service';
 import { BackendService } from '../shared/services/backend.service';
 import { Profile } from '../shared/models/profile.model';
-import { Balance } from '../shared/models/leave-balance.model';
-import { History } from '../shared/models/leave-history.model';
-import { PieSource } from '../shared/models/pie-source.model';
+import { Balance } from '../shared/models/balance.model';
+import { History } from '../shared/models/history.model';
 import { UpdateBalanceList } from '../shared/states/balance/balance.actions';
 @Component({
   selector: 'app-dashboard',
@@ -32,8 +29,6 @@ export class DashboardComponent implements OnInit {
   gotoHistory_event: EventEmitter<Boolean> = new EventEmitter<Boolean>();
 
   constructor(
-    private _activatedRoute: ActivatedRoute,
-    private _routerExtension: RouterExtensions,
     private _store: Store,
     private _backendService: BackendService,
     private _leaveInfoService: LeaveService,

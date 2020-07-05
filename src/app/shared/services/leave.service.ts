@@ -1,10 +1,22 @@
 import { MonthName, LeaveType } from '../constants';
 import { Injectable } from '@angular/core';
-import { History } from '../models/leave-history.model';
-import { Balance } from '../models/leave-balance.model';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { History } from '../models/history.model';
+import { Balance } from '../models/balance.model';
 import { PieSource } from '../models/pie-source.model';
 @Injectable()
 export class LeaveService {
+
+    private leaveType_Obs$: BehaviorSubject<any> = new BehaviorSubject(null);
+
+    getLeaveTypeObs(): Observable<any> {
+        return this.leaveType_Obs$.asObservable();
+    }
+
+    setLeaveTypeObs(_data: any) {
+        this.leaveType_Obs$.next(_data);
+    }
+
 
     getMinimalLeaves(list: History[]) {
         return this.getFormattedLeaveHistories(list.slice(0, 3));
