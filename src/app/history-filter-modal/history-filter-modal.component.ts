@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalDialogParams } from 'nativescript-angular/modal-dialog';
-import * as ModalPicker from 'nativescript-modal-datetimepicker';
 import { Page } from "tns-core-modules/ui/page";
 import { MonthName } from '../shared/constants';
 
@@ -11,73 +10,44 @@ import { MonthName } from '../shared/constants';
 })
 export class HistoryFilterModalComponent implements OnInit {
 
-  startDate: Date = new Date();
-  startDate_label: string = 'Start Date';
-  endDate_label: string = 'End Date';
-  startDate_model: string = '';
-  endDate_model: string = '';
+  startDate_Value: string = '';
+  endDate_Value: string = '';
 
   constructor(
     private params: ModalDialogParams,
     private _page: Page
   ) { }
 
+  get isValidForm(): boolean {
+    return (this.startDate_Value.length !== 0 && this.endDate_Value.length !== 0);
+  }
+
   ngOnInit() {
     this._page.actionBarHidden = true;
   }
 
-  onStartDateChanged(args) {
-    console.log("Date start object: " + args.value);
+  listenStartDate_Event($event) {
+    this.startDate_Value = $event;
   }
 
-  onEndDateChanged(args) {
-    console.log("Date End value: " + args.value);
+  listenEndDate_Event($event) {
+    this.endDate_Value = $event;
   }
 
-  public openStartDatepicker() {
-    const picker = new ModalPicker.ModalDatetimepicker();
-    picker.pickDate({
-      title: 'Choose Start Date',
-      theme: 'overlay',
-      overlayAlpha: 0.8,
-      maxDate: new Date()
-    }).then((result) => {
-      this.startDate_label = `${MonthName[result['month']]} ${result['day']}, ${result['year']}`;
-      this.startDate_model = result['year'] + '-' + result['month'] + '-' + result['day'];
-      console.log(result['year'] + '-' + result['month'] + '-' + result['day']);
-    }).catch((error) => {
-      console.log('Error: ' + error);
-    });
-  }
+  private getDateLabel = (_dateStr) => `${MonthName[Number(_dateStr.split('-')[1])]} ${_dateStr.split('-')[2]}, ${_dateStr.split('-')[0]}`;
 
-  public openEndDatepicker() {
-    const picker = new ModalPicker.ModalDatetimepicker();
-    picker.pickDate({
-      title: 'Choose End Date',
-      theme: 'overlay',
-      overlayAlpha: 0.8,
-      maxDate: new Date()
-    }).then((result) => {
-      this.endDate_label = `${MonthName[result['month']]} ${result['day']}, ${result['year']}`;
-      this.endDate_model = result['year'] + '-' + result['month'] + '-' + result['day'];
-      console.log(result['year'] + '-' + result['month'] + '-' + result['day']);
-    }).catch((error) => {
-      console.log('Error: ' + error);
-    });
-  }
-
-  public startDate_Clear() {
-    this.startDate_label = 'Start Date';
-    this.startDate_model = '';
-  }
-
-  public endDate_Clear() {
-    this.endDate_label = 'End Date';
-    this.endDate_model = '';
+  public applyFilter() {
+    const response = {
+      startValue: this.startDate_Value,
+      startLabel: this.getDateLabel(this.startDate_Value),
+      endValue: this.endDate_Value,
+      endLabel: this.getDateLabel(this.endDate_Value)
+    }
+    this.params.closeCallback(response);
   }
 
   public onClose() {
-    this.params.closeCallback(`${this.startDate_model}&${this.endDate_model}`);
+    this.params.closeCallback();
   }
 
 }

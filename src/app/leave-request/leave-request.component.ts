@@ -6,6 +6,7 @@ import { Switch } from "tns-core-modules/ui/switch";
 import { Store } from '@ngxs/store';
 import { BalanceListState } from '../shared/states/balance/balance.state';
 import { LeaveService } from '../shared/services/leave.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-leave-request',
@@ -23,6 +24,7 @@ export class LeaveRequestComponent implements OnInit {
   switchState: boolean = false;
   isMorning: boolean = true;
   balanceList: any[];
+  private _subscriptions = new Subscription();
   constructor(
     private _page: Page,
     private _routerExtension: RouterExtensions,
@@ -39,21 +41,30 @@ export class LeaveRequestComponent implements OnInit {
 
   ngOnInit() {
     console.log('Leave request preloading...');
-    this._leaveService.getLeaveTypeObs().subscribe(data => {
-      if (data) {
-        this.leaveTypeLabel = data.name;
-        this.leaveTypeValue = data.id;
-      }
-    });
   }
 
   @HostListener('loaded')
   pageOnInit() {
     console.log('Leave request view created***');
     this._page.actionBarHidden = false;
-    // this._page.actionBar.title = 'Leave Request';
+    this._page.actionBar.title = 'Request Leave';
+
+    this._subscriptions.add(
+      this._leaveService.getLeaveTypeObs().subscribe(data => {
+        if (data) {
+          this.leaveTypeLabel = data.name;
+          this.leaveTypeValue = data.id;
+        }
+      })
+    );
     this.balanceList = this._store.selectSnapshot(BalanceListState.balanceList)[0];
     this.leaveBalance = this.getLeaveBalance(this.leaveTypeValue);
+  }
+
+  @HostListener('unloaded')
+  pageOnDestroy() {
+    console.log('request destroy-----');
+    this._subscriptions.unsubscribe();
   }
 
   getLeaveBalance(_leaveCode: String) {

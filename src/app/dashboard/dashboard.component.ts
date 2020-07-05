@@ -1,6 +1,8 @@
 import { Component, OnInit, EventEmitter, Output, HostListener } from '@angular/core';
 import { Page } from "tns-core-modules/ui/page";
 import { Store } from '@ngxs/store';
+import { Subject, pipe } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { UpdateHistoryList } from '../shared/states/history/history.actions';
 import { UpdateProfile } from '../shared/states/profile/profile.actions';
 import { ProfileState } from '../shared/states/profile/profile.state';
@@ -16,14 +18,13 @@ import { UpdateBalanceList } from '../shared/states/balance/balance.actions';
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
-  providers: [BackendService, LeaveService]
 })
 export class DashboardComponent implements OnInit {
   profile: Profile;
   private balanceList: Balance[];
   private historyList: History[];
   processing: boolean;
-
+  private _unsubscribe$ = new Subject();
 
   @Output()
   gotoHistory_event: EventEmitter<Boolean> = new EventEmitter<Boolean>();
@@ -79,6 +80,14 @@ export class DashboardComponent implements OnInit {
     this.callToLeaveBalance_State();
   }
 
+  @HostListener('unloaded')
+  pageOnDestroy() {
+    console.log('dashboard destroy-----');
+    this._unsubscribe$.next();
+    this._unsubscribe$.complete();
+  }
+
+
   private callToProfile_State() {
     const profile = this._store.selectSnapshot(ProfileState.profile);
     if (Object.keys(profile).length > 0) {
@@ -90,19 +99,21 @@ export class DashboardComponent implements OnInit {
   }
 
   private callToProfile() {
-    this._backendService.getProfile().subscribe(response => {
-      const status = response['status'];
-      if (status.code === 200) {
-        this.profile = response['data'];
-        this._store.dispatch(new UpdateProfile(this.profile));
+    this._backendService.getProfile()
+      .pipe(takeUntil(this._unsubscribe$))
+      .subscribe(response => {
+        const status = response['status'];
+        if (status.code === 200) {
+          this.profile = response['data'];
+          this._store.dispatch(new UpdateProfile(this.profile));
+          this.callToLeaveBalance_State();
+        }
+      }, (error) => {
+        alert('Profile Error');
+        console.error('Error response:', error);
+        this.processing = false;
         this.callToLeaveBalance_State();
-      }
-    }, (error) => {
-      alert('Profile Error');
-      console.error('Error response:', error);
-      this.processing = false;
-      this.callToLeaveBalance_State();
-    });
+      });
   }
 
   private callToLeaveBalance_State() {
@@ -200,19 +211,21 @@ export class DashboardComponent implements OnInit {
     this._store.dispatch(new UpdateBalanceList(this.LeaveBalances));
     return;
 
-    this._backendService.getLeaveBalance().subscribe(response => {
-      const status = response['status'];
-      if (status.code === 200) {
-        this.LeaveBalances = this._leaveInfoService.getFormattedLeaveBalances(response['leave_balance_list']);
-        this._store.dispatch(new UpdateBalanceList(this.LeaveBalances));
+    this._backendService.getLeaveBalance()
+      .pipe(takeUntil(this._unsubscribe$))
+      .subscribe(response => {
+        const status = response['status'];
+        if (status.code === 200) {
+          this.LeaveBalances = this._leaveInfoService.getFormattedLeaveBalances(response['leave_balance_list']);
+          this._store.dispatch(new UpdateBalanceList(this.LeaveBalances));
+          this.callToLeaveHistory_State();
+        }
+      }, (error) => {
+        alert('Balance Error');
+        console.error('Error response:', error);
+        this.processing = false;
         this.callToLeaveHistory_State();
-      }
-    }, (error) => {
-      alert('Balance Error');
-      console.error('Error response:', error);
-      this.processing = false;
-      this.callToLeaveHistory_State();
-    });
+      });
   }
 
   private callToLeaveHistory_State() {
@@ -226,18 +239,20 @@ export class DashboardComponent implements OnInit {
   }
 
   private callToLeaveHistory() {
-    this._backendService.getLeaveHistory('2020-01-01', '2020-12-31').subscribe(response => {
-      const status = response['status'];
-      if (status.code === 200) {
-        this.LeaveHistories = this._leaveInfoService.getMinimalLeaves(response['leave_history_list']);
+    this._backendService.getLeaveHistory('2020-01-01', '2020-12-31')
+      .pipe(takeUntil(this._unsubscribe$))
+      .subscribe(response => {
+        const status = response['status'];
+        if (status.code === 200) {
+          this.LeaveHistories = this._leaveInfoService.getMinimalLeaves(response['leave_history_list']);
+          this.processing = false;
+          this._store.dispatch(new UpdateHistoryList(this.LeaveHistories));
+        }
+      }, (error) => {
+        alert('history error');
+        console.error('Error response:', error);
         this.processing = false;
-        this._store.dispatch(new UpdateHistoryList(this.LeaveHistories));
-      }
-    }, (error) => {
-      alert('history error');
-      console.error('Error response:', error);
-      this.processing = false;
-    });
+      });
   }
 
   gotoLeaveHistory() {

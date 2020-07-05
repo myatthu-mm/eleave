@@ -1,7 +1,8 @@
-<ActionBar title="Leave History">
+<ActionBar>
     <NavigationButton android.systemIcon="ic_menu_back"></NavigationButton>
     <ActionItem (tap)="onFilter()" icon="font://&#xf0b0;" class="fas action-icon" ios.position="right"
-        android.position="actionBar" android.position="actionBar">
+        android.position="actionBar" android.position="actionBar"
+        [visibility]="filterIconVisibility ? 'visible' : 'collapsed'">
     </ActionItem>
 </ActionBar>
 <GridLayout rows="auto, *">

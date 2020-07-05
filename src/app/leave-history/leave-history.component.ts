@@ -9,11 +9,12 @@ import { History } from '../shared/models/history.model';
 import { LeaveService } from '../shared/services/leave.service';
 import { BackendService } from '../shared/services/backend.service';
 import { MonthName } from '../shared/constants';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'app-leave-history',
   templateUrl: './leave-history.component.html',
-  styleUrls: ['./leave-history.component.scss'],
-  providers: [LeaveService, BackendService]
+  styleUrls: ['./leave-history.component.scss']
 })
 export class LeaveHistoryComponent implements OnInit {
 
@@ -22,7 +23,8 @@ export class LeaveHistoryComponent implements OnInit {
   endDate: DateModel;
   processing: boolean;
   isEmpty: boolean;
-
+  filterIconVisibility: boolean;
+  private _unsubscribe$ = new Subject();
   constructor(
     private _leaveService: LeaveService,
     private _backendService: BackendService,
@@ -44,10 +46,19 @@ export class LeaveHistoryComponent implements OnInit {
   pageOnInit() {
     console.log('Leave history created................');
     this._page.actionBarHidden = false;
-    // this._page.actionBar.title = 'Leave History';
+    this._page.actionBar.title = 'Leave History';
+    this.filterIconVisibility = true;
     this.startDate = new DateModel();
     this.endDate = new DateModel();
     this.callToLeaveHistory_State();
+  }
+
+  @HostListener('unloaded')
+  pageOnDestroy() {
+    console.log('history destroy-----');
+    this.filterIconVisibility = false;
+    this._unsubscribe$.next();
+    this._unsubscribe$.complete();
   }
 
 
@@ -65,13 +76,12 @@ export class LeaveHistoryComponent implements OnInit {
       context: {}
     };
     this.modalService.showModal(ModalComponent, options).then((result: any) => {
-      if (result && result.length > 1) {
-        const startDate_str = result.split('&')[0];
-        const endDate_str = result.split('&')[1];
-        this.startDate.value = this.get2DigitsDate(startDate_str);
-        this.startDate.label = this.getDateLabel(startDate_str);
-        this.endDate.value = this.get2DigitsDate(endDate_str);
-        this.endDate.label = this.getDateLabel(endDate_str);
+      if (result) {
+        console.log(result);
+        this.startDate.value = result.startValue;
+        this.startDate.label = result.startLabel;
+        this.endDate.value = result.endValue;
+        this.endDate.label = result.endLabel;
         this.callToLeaveHistory(this.startDate.value, this.endDate.value);
       } else {
         console.log('nothing');
@@ -99,44 +109,42 @@ export class LeaveHistoryComponent implements OnInit {
   }
 
   private callToLeaveHistory_State() {
-    this._store.select(HistoryListState.historyList).subscribe(list => {
-      if (list.length) {
-        this.LeaveHistories = list[0];
-      } else {
-        this.callToLeaveHistory('2019-01-01', '2020-12-31');
-      }
-    });
+    this._store.select(HistoryListState.historyList)
+      .pipe(takeUntil(this._unsubscribe$))
+      .subscribe(list => {
+        if (list.length) {
+          this.LeaveHistories = list[0];
+        } else {
+          this.callToLeaveHistory('2019-01-01', '2020-12-31');
+        }
+      });
 
   }
 
   private callToLeaveHistory(_startDate: string, _endDate: string) {
     this.processing = true;
     this.isEmpty = false;
-    this._backendService.getLeaveHistory(_startDate, _endDate).subscribe(response => {
-      const status = response['status'];
-      if (status.code === 200) {
-        this.LeaveHistories = this._leaveService.getFormattedLeaveHistories(response['leave_history_list']);
+    this._backendService.getLeaveHistory(_startDate, _endDate)
+      .pipe(takeUntil(this._unsubscribe$))
+      .subscribe(response => {
+        const status = response['status'];
+        if (status.code === 200) {
+          this.LeaveHistories = this._leaveService.getFormattedLeaveHistories(response['leave_history_list']);
+          this.processing = false;
+        } else {
+          this.LeaveHistories = [];
+          this.isEmpty = true;
+          this.processing = false;
+        }
+      }, (error) => {
+        alert('history error');
+        console.error('Error response:', error);
         this.processing = false;
-      } else {
-        this.LeaveHistories = [];
-        this.isEmpty = true;
-        this.processing = false;
-      }
-    }, (error) => {
-      alert('history error');
-      console.error('Error response:', error);
-      this.processing = false;
-    });
+      });
   }
 
   private getDateLabel = (_dateStr) => `${MonthName[Number(_dateStr.split('-')[1])]} ${_dateStr.split('-')[2]}, ${_dateStr.split('-')[0]}`;
 
-  private get2DigitsDate(_dateStr) {
-    let year = _dateStr.split('-')[0];
-    let month = ('0' + _dateStr.split('-')[1]).slice(-2);
-    let date = ('0' + _dateStr.split('-')[2]).slice(-2);
-    return `${year}-${month}-${date}`
-  }
 
 }
 
