@@ -1,4 +1,8 @@
 // Import common styles
-@import 'app-common';
+@import "app-common";
 
 // Place any CSS rules you want to apply only on Android here
+.label {
+    font-size: 17;
+    color: #000;
+}

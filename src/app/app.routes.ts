@@ -3,9 +3,10 @@ import { HomeComponent } from '@src/app/home/home.component';
 import { LoginComponent } from '@src/app/login/login.component';
 import { DashboardComponent } from '@src/app/dashboard/dashboard.component';
 import { LeaveHistoryComponent } from '@src/app/leave-history/leave-history.component';
-import { DatePickerComponent } from '@src/app/ui-components/date-picker/date-picker.component';
+import { HistoryFilterModalComponent } from '@src/app/history-filter-modal/history-filter-modal.component';
 import { LeaveListviewDetailsComponent } from '@src/app/ui-components/leave-listview-details/leave-listview-details.component';
-
+import { LeaveRequestComponent } from '@src/app/leave-request/leave-request.component';
+import { LeaveTypesComponent } from '@src/app/leave-types/leave-types.component';
 export const routes: Routes = [
   {
     path: '',
@@ -20,7 +21,7 @@ export const routes: Routes = [
     path: 'home',
     component: HomeComponent,
     children: [
-      { path: 'datepicker', component: DatePickerComponent }
+      { path: 'history-filter-modal', component: HistoryFilterModalComponent }
     ]
   },
   {
@@ -32,6 +33,14 @@ export const routes: Routes = [
   {
     path: 'history-details',
     component: LeaveListviewDetailsComponent
+  },
+  {
+    path: 'request',
+    component: LeaveRequestComponent
+  },
+  {
+    path: 'types',
+    component: LeaveTypesComponent
   }
 
 ];

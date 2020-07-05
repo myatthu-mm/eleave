@@ -1,0 +1,16 @@
+<ActionBar ios:title="Leave Types" android:title="Leave Types">
+    <NavigationButton android.systemIcon="ic_menu_back" android.position="actionBar">
+    </NavigationButton>
+</ActionBar>
+
+<ScrollView>
+    <StackLayout>
+        <ListView [items]="LeaveTypes" (itemTap)="onItemTap($event)" ios:height="450" android:height="500">
+            <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
+                <StackLayout>
+                    <Label [text]="item.name" textWrap="true" class="label"></Label>
+                </StackLayout>
+            </ng-template>
+        </ListView>
+    </StackLayout>
+</ScrollView>

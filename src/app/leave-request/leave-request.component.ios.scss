@@ -1,0 +1,20 @@
+@import "./leave-request.component.common.scss";
+.btn-removable {
+    color: #fff;
+    font-size: 10;
+    width: 16;
+    height: 16;
+    border-radius: 100;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding-left: 4.5;
+}
+
+.left-option {
+    border-bottom-left-radius: 20;
+    border-top-left-radius: 20;
+}
+
+.right-option {
+    border-bottom-right-radius: 20;
+    border-top-right-radius: 20;
+}

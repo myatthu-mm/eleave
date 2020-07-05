@@ -17,7 +17,7 @@ export class ModalComponent implements OnInit {
 
   ngOnInit() {
     console.log('Modal init');
-    this._routerExtensions.navigate(['datepicker'], { relativeTo: this._activeRoute });
+    this._routerExtensions.navigate(['history-filter-modal'], { relativeTo: this._activeRoute });
   }
 
   close() {

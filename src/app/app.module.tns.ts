@@ -22,6 +22,9 @@ import { LeaveListviewDetailsComponent } from '@src/app/ui-components/leave-list
 import { HistoryListState } from '@src/app/shared/states/history/history.state';
 import { ProfileState } from '@src/app/shared/states/profile/profile.state';
 import { BalanceListState } from '@src/app/shared/states/balance/balance.state';
+import { LeaveRequestComponent } from '@src/app/leave-request/leave-request.component';
+import { LeaveTypesComponent } from '@src/app/leave-types/leave-types.component';
+import { HistoryFilterModalComponent } from '@src/app/history-filter-modal/history-filter-modal.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,6 +37,9 @@ import { BalanceListState } from '@src/app/shared/states/balance/balance.state';
     DatePickerComponent,
     RemovableChipComponent,
     LeaveListviewDetailsComponent,
+    LeaveRequestComponent,
+    LeaveTypesComponent,
+    HistoryFilterModalComponent,
   ],
   imports: [
     NativeScriptModule,

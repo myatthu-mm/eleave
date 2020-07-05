@@ -32,11 +32,12 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.user = new User();
-    this.user.userId = '006216';
-    this.user.password = '00006216';
+    this.user.userId = '007992';
+    this.user.password = '00007992';
   }
 
   login() {
+    this.routerExtensions.navigate(['/home'], { clearHistory: true }); return;
     this.processing = true;
     const bodyPayload = {
       userId: this.user.userId,

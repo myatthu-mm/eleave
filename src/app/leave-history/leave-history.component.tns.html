@@ -1,6 +1,6 @@
-<ActionBar title="Leave History" class="actionbar-color">
+<ActionBar title="Leave History">
     <NavigationButton android.systemIcon="ic_menu_back"></NavigationButton>
-    <ActionItem (tap)="onFilter()" icon="font://&#xf0b0;" class="fas action" ios.position="right"
+    <ActionItem (tap)="onFilter()" icon="font://&#xf0b0;" class="fas action-icon" ios.position="right"
         android.position="actionBar" android.position="actionBar">
     </ActionItem>
 </ActionBar>
@@ -13,7 +13,6 @@
         <app-removable-chip [isStart]="false" [label]="endDate.label" (removeEvent)="listenRemoveEvent($event)"
             *ngIf="endDate.label">
         </app-removable-chip>
-
     </FlexboxLayout>
 
     <FlexboxLayout row="1">

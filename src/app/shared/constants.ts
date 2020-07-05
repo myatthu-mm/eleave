@@ -5,6 +5,7 @@ export enum LeaveType {
     EXL = 'Examination Leave',
     MRL = 'Married Leave',
     MDL = 'Medical Leave',
+    MTL = 'Maternity Leave',
     OD = 'On Duty',
     PTL = 'Paternity Leave',
     SL = 'Sick Leave',

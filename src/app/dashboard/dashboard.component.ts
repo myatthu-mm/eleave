@@ -80,7 +80,8 @@ export class DashboardComponent implements OnInit {
   pageOnInit() {
     console.log('Dashboard created***');
     this._page.actionBarHidden = true;
-    this.callToProfile_State();
+    // this.callToProfile_State();
+    this.callToLeaveBalance_State();
   }
 
   private callToProfile_State() {
@@ -113,13 +114,97 @@ export class DashboardComponent implements OnInit {
     const balanceList = this._store.selectSnapshot(BalanceListState.balanceList);
     if (balanceList.length) {
       this.LeaveBalances = balanceList[0];
-      this.callToLeaveHistory_State();
+      // this.callToLeaveHistory_State();
     } else {
       this.callToLeaveBalance();
     }
   }
 
   private callToLeaveBalance() {
+    const response = {
+      "status": {
+        "code": 200,
+        "message": "success"
+      },
+      "leave_balance_list": [
+        {
+          "leave_type_code": "AL",
+          "leave_type_description": "Annual Leave",
+          "carry": "0.00",
+          "yearly_entitled_Days": "0.00",
+          "has_balance": "true",
+          "entitle": "10.0",
+          "taken": "8.00",
+          "forfeited": "0.00",
+          "balance": "2.0",
+          "balance_b4": "0.00"
+        },
+        {
+          "leave_type_code": "CL",
+          "leave_type_description": "Casual Leave",
+          "carry": "0.00",
+          "yearly_entitled_Days": "0.00",
+          "has_balance": "true",
+          "entitle": "6.0",
+          "taken": "6.00",
+          "forfeited": "0.00",
+          "balance": "0.0",
+          "balance_b4": "0.00"
+        },
+        {
+          "leave_type_code": "CPL",
+          "leave_type_description": "Compassionate Leave",
+          "carry": "0.00",
+          "yearly_entitled_Days": "0.00",
+          "has_balance": "true",
+          "entitle": "7.0",
+          "taken": "0.00",
+          "forfeited": "0.00",
+          "balance": "7.0",
+          "balance_b4": "0.00"
+        },
+        {
+          "leave_type_code": "MTL",
+          "leave_type_description": "Maternity Leave",
+          "carry": "0.00",
+          "yearly_entitled_Days": "0.00",
+          "has_balance": "true",
+          "entitle": "98.0",
+          "taken": "0.00",
+          "forfeited": "0.00",
+          "balance": "98.0",
+          "balance_b4": "0.00"
+        },
+        {
+          "leave_type_code": "OD",
+          "leave_type_description": "On Duty",
+          "carry": "0.00",
+          "yearly_entitled_Days": "0.00",
+          "has_balance": "true",
+          "entitle": "100.0",
+          "taken": "2.00",
+          "forfeited": "0.00",
+          "balance": "98.0",
+          "balance_b4": "0.00"
+        },
+        {
+          "leave_type_code": "WPL",
+          "leave_type_description": "Without Pay",
+          "carry": "0.00",
+          "yearly_entitled_Days": "0.00",
+          "has_balance": "true",
+          "entitle": "150.0",
+          "taken": "13.00",
+          "forfeited": "0.00",
+          "balance": "137.0",
+          "balance_b4": "0.00"
+        }
+      ]
+    };
+    this.LeaveBalances = this._leaveInfoService.getFormattedLeaveBalances(response['leave_balance_list']);
+    this._store.dispatch(new UpdateBalanceList(this.LeaveBalances));
+    return;
+
     this._backendService.getLeaveBalance().subscribe(response => {
       const status = response['status'];
       if (status.code === 200) {

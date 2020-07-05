@@ -1,0 +1,27 @@
+.left-option {
+    clip-path: polygon(0 0, 100% 0, 75% 100%, 0% 100%);
+    &-select {
+        border-width: 2;
+        border-color: #e81a32;
+        Label {
+            color: #f00a25;
+        }
+    }
+    &-unselect {
+        background-color: #f9f9f9;
+    }
+}
+
+.right-option {
+    clip-path: polygon(25% 0, 100% 0, 100% 100%, 0 100%);
+    &-select {
+        border-width: 2;
+        border-color: #e81a32;
+        Label {
+            color: #f00a25;
+        }
+    }
+    &-unselect {
+        background-color: #f9f9f9;
+    }
+}

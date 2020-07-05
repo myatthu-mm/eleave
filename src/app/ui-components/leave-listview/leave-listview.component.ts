@@ -22,7 +22,7 @@ export class LeaveListviewComponent implements OnInit {
     this.routerExtensions.navigate(['/history-details'], {
       queryParams: this.items[args.index],
       animated: true,
-      transition: { name: 'slide' }
+      transition: { name: 'fade' }
     });
   }
 

@@ -1,0 +1,26 @@
+.text-area {
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    border-bottom-color: #e4e4e4;
+}
+
+.-disabled {
+    background-color: #f9f9f9;
+    color: silver;
+}
+
+.border-select {
+    border-width: 1;
+    border-color: #e81a32;
+    Label {
+        color: #f00a25;
+    }
+}
+
+.border-unselect {
+    background-color: #f9f9f9;
+    Label {
+        color: silver;
+    }
+}

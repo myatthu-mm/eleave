@@ -1,10 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { ModalDialogParams } from 'nativescript-angular/modal-dialog';
-import { Router, ActivatedRoute } from '@angular/router';
-import { RouterExtensions } from 'nativescript-angular/router';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import * as ModalPicker from 'nativescript-modal-datetimepicker';
-import { Page } from "tns-core-modules/ui/page";
 import { MonthName } from '../../shared/constants';
+import { Color } from 'tns-core-modules/color';
 @Component({
   selector: 'app-date-picker',
   templateUrl: './date-picker.component.html',
@@ -12,73 +9,58 @@ import { MonthName } from '../../shared/constants';
 })
 export class DatePickerComponent implements OnInit {
 
-  startDate: Date = new Date();
-  startDate_label: string = 'Start Date';
-  endDate_label: string = 'End Date';
-  startDate_model: string = '';
-  endDate_model: string = '';
+  @Input() Title: string;
+  @Input() minDate?: string;
+  @Input() maxDate?: string;
+  dateLabel: string;
+  dateValue: string;
 
-  constructor(
-    private params: ModalDialogParams,
-    private _page: Page
-  ) { }
+  @Output()
+  getDate_event: EventEmitter<string> = new EventEmitter<string>();
+  constructor() { }
 
   ngOnInit() {
-    this._page.actionBarHidden = true;
+    this.dateLabel = this.Title;
   }
 
-  onStartDateChanged(args) {
-    console.log("Date start object: " + args.value);
-  }
-
-  onEndDateChanged(args) {
-    console.log("Date End value: " + args.value);
-  }
-
-  public openStartDatepicker() {
+  public openDatepicker() {
     const picker = new ModalPicker.ModalDatetimepicker();
-    picker.pickDate({
-      title: 'Choose Start Date',
+    const pickerOptions = {
+      title: `Choose ${this.Title}`,
       theme: 'overlay',
       overlayAlpha: 0.8,
-      maxDate: new Date()
-    }).then((result) => {
-      this.startDate_label = `${MonthName[result['month']]} ${result['day']}, ${result['year']}`;
-      this.startDate_model = result['year'] + '-' + result['month'] + '-' + result['day'];
-      console.log(result['year'] + '-' + result['month'] + '-' + result['day']);
+      doneLabelColor: new Color('#fe2f2f')
+    };
+    if (this.minDate) {
+      Object.assign(pickerOptions, { minDate: new Date(this.minDate) });
+    }
+    if (this.maxDate) {
+      Object.assign(pickerOptions, { maxDate: new Date(this.maxDate) });
+    }
+    picker.pickDate(pickerOptions).then((result) => {
+      // ok button
+      if (result) {
+        this.dateLabel = `${MonthName[result['month']]} ${result['day']}, ${result['year']}`;
+        this.dateValue = result['year'] + '-' + result['month'] + '-' + result['day'];
+        this.getDate_event.emit(this.get2DigitsDate(this.dateValue));
+      }
+
     }).catch((error) => {
       console.log('Error: ' + error);
     });
   }
 
-  public openEndDatepicker() {
-    const picker = new ModalPicker.ModalDatetimepicker();
-    picker.pickDate({
-      title: 'Choose End Date',
-      theme: 'overlay',
-      overlayAlpha: 0.8,
-      maxDate: new Date()
-    }).then((result) => {
-      this.endDate_label = `${MonthName[result['month']]} ${result['day']}, ${result['year']}`;
-      this.endDate_model = result['year'] + '-' + result['month'] + '-' + result['day'];
-      console.log(result['year'] + '-' + result['month'] + '-' + result['day']);
-    }).catch((error) => {
-      console.log('Error: ' + error);
-    });
+  public dateClear() {
+    this.dateLabel = this.Title;
+    this.dateValue = '';
+    this.getDate_event.emit('');
   }
 
-  public startDate_Clear() {
-    this.startDate_label = 'Start Date';
-    this.startDate_model = '';
-  }
-
-  public endDate_Clear() {
-    this.endDate_label = 'End Date';
-    this.endDate_model = '';
-  }
-
-  public onClose() {
-    this.params.closeCallback(`${this.startDate_model}&${this.endDate_model}`);
+  private get2DigitsDate(_dateStr) {
+    let year = _dateStr.split('-')[0];
+    let month = ('0' + _dateStr.split('-')[1]).slice(-2);
+    let date = ('0' + _dateStr.split('-')[2]).slice(-2);
+    return `${year}-${month}-${date}`
   }
 
 }

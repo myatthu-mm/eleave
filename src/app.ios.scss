@@ -2,3 +2,17 @@
 @import "app-common";
 
 // Place any CSS rules you want to apply only on iOS here
+ActionBar {
+    background-color: rgba(249, 249, 249, 0.94);
+    color: #000;
+
+    .action-icon {
+        color: rgb(254, 47, 47);
+        font-size: 18;
+    }
+}
+
+.label {
+    font-size: 17;
+    color: #000;
+}

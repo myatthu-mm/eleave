@@ -1,4 +1,4 @@
-import { MonthName, LeaveStatus, LeaveType } from '../constants';
+import { MonthName, LeaveType } from '../constants';
 import { Injectable } from '@angular/core';
 import { History } from '../models/leave-history.model';
 import { Balance } from '../models/leave-balance.model';
