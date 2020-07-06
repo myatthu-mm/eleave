@@ -27,6 +27,7 @@ import { LeaveTypesComponent } from '@src/app/leave-types/leave-types.component'
 import { HistoryFilterModalComponent } from '@src/app/history-filter-modal/history-filter-modal.component';
 import { LeaveService } from '@src/app/shared/services/leave.service';
 import { BackendService } from '@src/app/shared/services/backend.service';
+import { StateService } from '@src/app/shared/services/state.service';
 import { MoreComponent } from '@src/app/more/more.component';
 @NgModule({
   declarations: [
@@ -56,7 +57,7 @@ import { MoreComponent } from '@src/app/more/more.component';
     NgxsResetPluginModule.forRoot()
   ],
   providers: [
-    ModalDialogService, ModalDatetimepicker, LeaveService, BackendService
+    ModalDialogService, ModalDatetimepicker, LeaveService, BackendService, StateService
   ],
   entryComponents: [ModalComponent],
   bootstrap: [AppComponent],

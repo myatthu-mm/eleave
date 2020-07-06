@@ -10,6 +10,7 @@ import { TextView } from "tns-core-modules/ui/text-view";
 import { BalanceListState } from '../shared/states/balance/balance.state';
 import { LeaveService } from '../shared/services/leave.service';
 import { BackendService } from '../shared/services/backend.service';
+import { StateService } from '../shared/services/state.service';
 
 @Component({
   selector: 'app-leave-request',
@@ -35,7 +36,8 @@ export class LeaveRequestComponent implements OnInit {
     private _routerExtension: RouterExtensions,
     private _store: Store,
     private _leaveService: LeaveService,
-    private _backendService: BackendService) { }
+    private _backendService: BackendService,
+    private _stateService: StateService) { }
 
   get isValidForm(): boolean {
     return (this.startDate_Value.length != 0) && (this.endDate_Value.length !== 0) && (this.leaveBalance > 0);
@@ -63,14 +65,26 @@ export class LeaveRequestComponent implements OnInit {
         }
       })
     );
-    this.balanceList = this._store.selectSnapshot(BalanceListState.balanceList)[0];
-    this.leaveBalance = this.getLeaveBalance(this.leaveTypeValue);
+
+    this.processing = true;
+    this._stateService.getLeavebalances()
+      .pipe(takeUntil(this._unsubscribe$))
+      .subscribe(list => {
+        this.balanceList = list;
+        this.leaveBalance = this.getLeaveBalance(this.leaveTypeValue);
+      }, (error) => { },
+        () => {
+          this.processing = false;
+          console.log('balance complete');
+        });
   }
 
   @HostListener('unloaded')
   pageOnDestroy() {
     console.log('request destroy-----');
     this._subscriptions.unsubscribe();
+    this._unsubscribe$.next();
+    this._unsubscribe$.complete();
   }
 
   getLeaveBalance(_leaveCode: String) {
@@ -101,7 +115,6 @@ export class LeaveRequestComponent implements OnInit {
   onTextChange(args: EventData) {
     const tv = args.object as TextView;
     this.tvtext = tv.text;
-
   }
 
   requestLeave() {
@@ -118,11 +131,12 @@ export class LeaveRequestComponent implements OnInit {
         const status = response['status'];
         if (status.code == 200) {
           alert(`Leave ${status.message}`);
+          this._stateService.getLeavebalances(true);
           this.formReset();
         } else {
-          this.processing = false;
           alert(status.message);
         }
+        this.processing = false;
       }, error => {
         alert('Save leave Error');
         console.error('Error response:', error);
