@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ItemEventData } from "tns-core-modules/ui/list-view";
 import { RouterExtensions } from "nativescript-angular/router";
+import { isIOS } from "tns-core-modules/platform";
+import { ListView } from "tns-core-modules/ui/list-view";
 import { History } from '../../shared/models/history.model';
 @Component({
   selector: 'app-leave-listview',
@@ -18,11 +20,19 @@ export class LeaveListviewComponent implements OnInit {
     console.log('list preloading.....');
   }
 
+  onLoaded(lst: ListView) {
+    if (lst.ios) {
+      lst.ios.showsVerticalScrollIndicator = false;
+    } else {
+      lst.android.setVerticalScrollBarEnabled(false);
+    }
+  }
+
   onItemTap(args: ItemEventData) {
     this.routerExtensions.navigate(['/history-details'], {
       queryParams: this.items[args.index],
       animated: true,
-      transition: { name: 'fade' }
+      transition: { name: isIOS ? 'curl' : 'fade' }
     });
   }
 

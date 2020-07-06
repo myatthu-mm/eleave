@@ -76,8 +76,8 @@ export class DashboardComponent implements OnInit {
   pageOnInit() {
     console.log('Dashboard created***');
     this._page.actionBarHidden = true;
-    // this.callToProfile_State();
-    this.callToLeaveBalance_State();
+    this.callToProfile_State();
+    // this.callToLeaveBalance_State();
   }
 
   @HostListener('unloaded')
@@ -99,6 +99,7 @@ export class DashboardComponent implements OnInit {
   }
 
   private callToProfile() {
+    this.processing = true;
     this._backendService.getProfile()
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(response => {
@@ -120,97 +121,13 @@ export class DashboardComponent implements OnInit {
     const balanceList = this._store.selectSnapshot(BalanceListState.balanceList);
     if (balanceList.length) {
       this.LeaveBalances = balanceList[0];
-      // this.callToLeaveHistory_State();
+      this.callToLeaveHistory_State();
     } else {
       this.callToLeaveBalance();
     }
   }
 
   private callToLeaveBalance() {
-    const response = {
-      "status": {
-        "code": 200,
-        "message": "success"
-      },
-      "leave_balance_list": [
-        {
-          "leave_type_code": "AL",
-          "leave_type_description": "Annual Leave",
-          "carry": "0.00",
-          "yearly_entitled_Days": "0.00",
-          "has_balance": "true",
-          "entitle": "10.0",
-          "taken": "8.00",
-          "forfeited": "0.00",
-          "balance": "2.0",
-          "balance_b4": "0.00"
-        },
-        {
-          "leave_type_code": "CL",
-          "leave_type_description": "Casual Leave",
-          "carry": "0.00",
-          "yearly_entitled_Days": "0.00",
-          "has_balance": "true",
-          "entitle": "6.0",
-          "taken": "6.00",
-          "forfeited": "0.00",
-          "balance": "0.0",
-          "balance_b4": "0.00"
-        },
-        {
-          "leave_type_code": "CPL",
-          "leave_type_description": "Compassionate Leave",
-          "carry": "0.00",
-          "yearly_entitled_Days": "0.00",
-          "has_balance": "true",
-          "entitle": "7.0",
-          "taken": "0.00",
-          "forfeited": "0.00",
-          "balance": "7.0",
-          "balance_b4": "0.00"
-        },
-        {
-          "leave_type_code": "MTL",
-          "leave_type_description": "Maternity Leave",
-          "carry": "0.00",
-          "yearly_entitled_Days": "0.00",
-          "has_balance": "true",
-          "entitle": "98.0",
-          "taken": "0.00",
-          "forfeited": "0.00",
-          "balance": "98.0",
-          "balance_b4": "0.00"
-        },
-        {
-          "leave_type_code": "OD",
-          "leave_type_description": "On Duty",
-          "carry": "0.00",
-          "yearly_entitled_Days": "0.00",
-          "has_balance": "true",
-          "entitle": "100.0",
-          "taken": "2.00",
-          "forfeited": "0.00",
-          "balance": "98.0",
-          "balance_b4": "0.00"
-        },
-        {
-          "leave_type_code": "WPL",
-          "leave_type_description": "Without Pay",
-          "carry": "0.00",
-          "yearly_entitled_Days": "0.00",
-          "has_balance": "true",
-          "entitle": "150.0",
-          "taken": "13.00",
-          "forfeited": "0.00",
-          "balance": "137.0",
-          "balance_b4": "0.00"
-        }
-      ]
-    };
-    this.LeaveBalances = this._leaveInfoService.getFormattedLeaveBalances(response['leave_balance_list']);
-    this._store.dispatch(new UpdateBalanceList(this.LeaveBalances));
-    return;
-
     this._backendService.getLeaveBalance()
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(response => {
@@ -231,7 +148,7 @@ export class DashboardComponent implements OnInit {
   private callToLeaveHistory_State() {
     const historyList = this._store.selectSnapshot(HistoryListState.historyList);
     if (historyList.length) {
-      this.LeaveHistories = historyList[0];
+      this.LeaveHistories = historyList[0].slice(0, 3);
     } else {
       this.callToLeaveHistory();
     }
@@ -244,9 +161,10 @@ export class DashboardComponent implements OnInit {
       .subscribe(response => {
         const status = response['status'];
         if (status.code === 200) {
-          this.LeaveHistories = this._leaveInfoService.getMinimalLeaves(response['leave_history_list']);
+          const list = this._leaveInfoService.getFormattedLeaveHistories(response['leave_history_list']);
+          this.LeaveHistories = list.slice(0, 3);
           this.processing = false;
-          this._store.dispatch(new UpdateHistoryList(this.LeaveHistories));
+          this._store.dispatch(new UpdateHistoryList(list));
         }
       }, (error) => {
         alert('history error');

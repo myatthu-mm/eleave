@@ -77,7 +77,6 @@ export class LeaveHistoryComponent implements OnInit {
     };
     this.modalService.showModal(ModalComponent, options).then((result: any) => {
       if (result) {
-        console.log(result);
         this.startDate.value = result.startValue;
         this.startDate.label = result.startLabel;
         this.endDate.value = result.endValue;

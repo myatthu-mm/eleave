@@ -1,14 +1,13 @@
-import { Component, OnInit, HostListener, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { User } from '../shared/models/user.model';
 import { Page } from "tns-core-modules/ui/page";
 import { RouterExtensions } from "nativescript-angular/router";
-import { FingerprintAuth, BiometricIDAvailableResult } from 'nativescript-fingerprint-auth';
 import { BackendService } from '../shared/services/backend.service';
-import { SecureStorage } from "nativescript-secure-storage";
 import { isIOS } from "tns-core-modules/platform"
 import { setString } from "tns-core-modules/application-settings";
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Store } from '@ngxs/store';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -19,23 +18,26 @@ export class LoginComponent implements OnInit {
   isLoggingIn = true;
   user: User;
   processing = false;
-  isPersonalLogin = false;
-  secureStorge = new SecureStorage();
   public isIOS = isIOS;
-  private fingerprintAuth: FingerprintAuth;
   private _unsubscribe$ = new Subject();
   constructor(private page: Page,
     private routerExtensions: RouterExtensions,
-    private _backendServie: BackendService) {
+    private _backendServie: BackendService,
+    private _store: Store) {
     this.page.actionBarHidden = true;
 
-    this.fingerprintAuth = new FingerprintAuth();
   }
 
   ngOnInit() {
     this.user = new User();
-    this.user.userId = '007992';
-    this.user.password = '00007992';
+    this.user.userId = '006216';
+    this.user.password = '00006216';
+  }
+
+  @HostListener('loaded')
+  pageOnInit() {
+    console.log('login created***');
+
   }
 
   @HostListener('unloaded')
@@ -46,7 +48,6 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.routerExtensions.navigate(['/home'], { clearHistory: true }); return;
     this.processing = true;
     const bodyPayload = {
       userId: this.user.userId,

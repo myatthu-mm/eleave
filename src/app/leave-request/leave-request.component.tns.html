@@ -17,13 +17,14 @@
     </GridLayout>
 
     <GridLayout rows="auto" class="m-8">
-        <app-date-picker [Title]="'Start Date'" [maxDate]="endDate_Value"
+        <app-date-picker [Title]="'Start Date'" [minToay]="true" [maxDate]="endDate_Value"
             (getDate_event)="listenStartDate_Event($event)">
         </app-date-picker>
     </GridLayout>
 
     <GridLayout rows="auto" class="m-8">
-        <app-date-picker [Title]="'End Date'" [minDate]="startDate_Value" (getDate_event)="listenEndDate_Event($event)">
+        <app-date-picker [Title]="'End Date'" [minToay]="true" [minDate]="startDate_Value"
+            (getDate_event)="listenEndDate_Event($event)">
         </app-date-picker>
     </GridLayout>
 
@@ -62,7 +63,8 @@
     </GridLayout>
 
     <StackLayout class="m-t-20">
-        <TextView hint="Add a reason" autocorrect="true" [text]="tvtext" backgroundColor="#F9F9F9" class="text-area">
+        <TextView hint="Add a reason" autocorrect="true" [text]="tvtext" (textChange)="onTextChange($event)"
+            backgroundColor="#F9F9F9" class="text-area">
         </TextView>
     </StackLayout>
     <StackLayout class="m-t-20">

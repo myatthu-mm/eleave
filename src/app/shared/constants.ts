@@ -40,5 +40,6 @@ export class BackendSettings {
     public static PROFILE_ENDPOINT = 'employee-profile';
     public static BALANCE_ENDPOINT = 'leave-balance';
     public static HISTORY_ENDPOINT = 'leave-hisotry';
+    public static SAVELEAVE_ENDPOINT = 'save-leave';
     public static LOGIN_NOMFA = 'https://dev-eleave-spring.yomabank.org/api/auth/login/no-mfa';
 }

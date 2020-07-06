@@ -12,6 +12,7 @@ export class DatePickerComponent implements OnInit {
   @Input() Title: string;
   @Input() minDate?: string;
   @Input() maxDate?: string;
+  @Input() minToay?: boolean;
   dateLabel: string;
   dateValue: string;
 
@@ -36,6 +37,9 @@ export class DatePickerComponent implements OnInit {
     }
     if (this.maxDate) {
       Object.assign(pickerOptions, { maxDate: new Date(this.maxDate) });
+    }
+    if ((!this.minDate && !this.maxDate) && this.minToay) {
+      Object.assign(pickerOptions, { minDate: new Date() });
     }
     picker.pickDate(pickerOptions).then((result) => {
       // ok button

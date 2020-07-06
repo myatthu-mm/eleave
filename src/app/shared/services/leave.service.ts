@@ -39,12 +39,12 @@ export class LeaveService {
     getFormattedLeaveBalances(list: Balance[]) {
         list.map(item => {
             const pieSource = <Array<PieSource>>[
-                { name: 'balance', amount: Number(item.balance) },
-                { name: 'taken', amount: Number(item.taken) }
+                { name: 'balance', amount: Math.abs(Number(item.balance)) },
+                { name: 'taken', amount: Math.abs(Number(item.taken)) }
             ];
             Object.assign(item, { pieSource: pieSource })
-            Object.assign(item, { balance: Number(item.balance) });
-            Object.assign(item, { entitle: Number(item.entitle) });
+            Object.assign(item, { balance: Math.abs(Number(item.balance)) });
+            Object.assign(item, { entitle: Math.abs(Number(item.entitle)) });
         });
         return list;
     }

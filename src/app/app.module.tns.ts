@@ -7,7 +7,7 @@ import { NativeScriptUICalendarModule } from 'nativescript-ui-calendar/angular';
 import { NativeScriptHttpClientModule } from 'nativescript-angular/http-client';
 import { NativeScriptUIChartModule } from "nativescript-ui-chart/angular";
 import { NgxsModule } from '@ngxs/store';
-
+import { NgxsResetPluginModule } from 'ngxs-reset-plugin';
 import { AppRoutingModule } from '@src/app/app-routing.module';
 import { AppComponent } from '@src/app/app.component';
 import { HomeComponent } from '@src/app/home/home.component';
@@ -27,6 +27,7 @@ import { LeaveTypesComponent } from '@src/app/leave-types/leave-types.component'
 import { HistoryFilterModalComponent } from '@src/app/history-filter-modal/history-filter-modal.component';
 import { LeaveService } from '@src/app/shared/services/leave.service';
 import { BackendService } from '@src/app/shared/services/backend.service';
+import { MoreComponent } from '@src/app/more/more.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,6 +43,7 @@ import { BackendService } from '@src/app/shared/services/backend.service';
     LeaveRequestComponent,
     LeaveTypesComponent,
     HistoryFilterModalComponent,
+    MoreComponent,
   ],
   imports: [
     NativeScriptModule,
@@ -50,7 +52,8 @@ import { BackendService } from '@src/app/shared/services/backend.service';
     NativeScriptUICalendarModule,
     NativeScriptHttpClientModule,
     NativeScriptUIChartModule,
-    NgxsModule.forRoot([HistoryListState, ProfileState, BalanceListState], { developmentMode: true })
+    NgxsModule.forRoot([HistoryListState, ProfileState, BalanceListState], { developmentMode: true }),
+    NgxsResetPluginModule.forRoot()
   ],
   providers: [
     ModalDialogService, ModalDatetimepicker, LeaveService, BackendService

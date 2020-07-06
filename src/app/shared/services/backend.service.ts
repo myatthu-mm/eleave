@@ -5,8 +5,6 @@ import { BackendSettings } from '../constants';
 import { User } from '../models/user.model';
 @Injectable()
 export class BackendService {
-    private loginEndpoint = "auth/login";
-    private leavesEndpoint = "eleave-presentation-service/v1/eleave/associateLeave";
 
     constructor(private http: HttpClient) { }
 
@@ -39,6 +37,24 @@ export class BackendService {
             endDate: _endDate
         }
         return this.http.post(`${BackendSettings.SERVER_URL}${BackendSettings.HISTORY_ENDPOINT}`, body, { headers: header });
+    }
+
+    saveLeave(_leaveTypeCode: string, startDate: string, _endDate: string, _duration: string, _remark: string) {
+        const header = this.createRequestOptions(false, getString('token'));
+        const body = {
+            employeeId: getString('userId'),
+            leaveTypeCode: _leaveTypeCode,
+            startDate: startDate,
+            endDate: _endDate,
+            half: "",
+            duration: _duration,
+            updatedBy: "008164",
+            updatedDate: "2020-03-24",
+            remarks: _remark,
+            unit: "Security & Risk",
+            status: ''
+        };
+        return this.http.post(`${BackendSettings.SERVER_URL}${BackendSettings.SAVELEAVE_ENDPOINT}`, body, { headers: header });
     }
 
     private createRequestOptions(hasDeviceID?: boolean, _token?: string) {

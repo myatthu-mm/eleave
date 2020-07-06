@@ -18,7 +18,7 @@
         <StackLayout row="2" android:backgroundColor="#efefef">
             <ActivityIndicator [busy]="processing" *ngIf="processing"></ActivityIndicator>
             <GridLayout rows="2*, 3*">
-                <ScrollView orientation="horizontal">
+                <ScrollView orientation="horizontal" scrollBarIndicatorVisible="false">
                     <StackLayout row="0" orientation="horizontal" class="scroll-menu">
                         <GridLayout class="scroll-pane" *ngFor="let item of LeaveBalances">
                             <RadPieChart allowAnimation="true" row="0" backgroundColor="transparent">

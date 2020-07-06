@@ -15,6 +15,7 @@ import { LeaveListviewDetailsComponent } from '@src/app/ui-components/leave-list
 import { LeaveRequestComponent } from '@src/app/leave-request/leave-request.component';
 import { LeaveTypesComponent } from '@src/app/leave-types/leave-types.component';
 import { HistoryFilterModalComponent } from '@src/app/history-filter-modal/history-filter-modal.component';
+import { MoreComponent } from '@src/app/more/more.component';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { HistoryFilterModalComponent } from '@src/app/history-filter-modal/histo
     LeaveRequestComponent,
     LeaveTypesComponent,
     HistoryFilterModalComponent,
+    MoreComponent,
   ],
   imports: [
     BrowserModule,
