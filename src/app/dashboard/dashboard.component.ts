@@ -72,6 +72,7 @@ export class DashboardComponent implements OnInit {
   pageOnInit() {
     console.log('Dashboard created***');
     this._page.actionBarHidden = true;
+    this._unsubscribe$ = new Subject();
     this.callToProfile();
   }
 
@@ -80,6 +81,7 @@ export class DashboardComponent implements OnInit {
     console.log('dashboard destroy-----');
     this._unsubscribe$.next();
     this._unsubscribe$.complete();
+    this._unsubscribe$.unsubscribe();
   }
 
   private callToProfile() {
@@ -87,11 +89,13 @@ export class DashboardComponent implements OnInit {
     this._store.select(ProfileState.getProfile)
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(value => {
-        if (Object.keys(value).length > 1) {
+        if (value && Object.keys(value).length > 1) {
           this.profile = value;
           this.processing = false;
           this.callToLeaveBalance();
         } else {
+          console.log('call profile');
+
           this._store.dispatch(new RequestProfile());
         }
       }, (error) => {

@@ -16,6 +16,7 @@ import { LeaveRequestComponent } from '@src/app/leave-request/leave-request.comp
 import { LeaveTypesComponent } from '@src/app/leave-types/leave-types.component';
 import { HistoryFilterModalComponent } from '@src/app/history-filter-modal/history-filter-modal.component';
 import { MoreComponent } from '@src/app/more/more.component';
+import { PasswordChangeComponent } from '@src/app/password-change/password-change.component';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import { MoreComponent } from '@src/app/more/more.component';
     LeaveTypesComponent,
     HistoryFilterModalComponent,
     MoreComponent,
+    PasswordChangeComponent,
   ],
   imports: [
     BrowserModule,

@@ -49,6 +49,7 @@ export class LeaveHistoryComponent implements OnInit {
     this.filterIconVisibility = true;
     this.startDate = new DateModel();
     this.endDate = new DateModel();
+    this._unsubscribe$ = new Subject();
     this.callToLeaveHistory();
   }
 
@@ -58,6 +59,7 @@ export class LeaveHistoryComponent implements OnInit {
     this.filterIconVisibility = false;
     this._unsubscribe$.next();
     this._unsubscribe$.complete();
+    this._unsubscribe$.unsubscribe();
   }
 
 

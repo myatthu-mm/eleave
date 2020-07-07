@@ -38,8 +38,8 @@ export class LeaveTypesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe$.next(true);
-    this.unsubscribe$.complete();
+    this.unsubscribe$.next();
+    this.unsubscribe$.unsubscribe();
   }
 
   onItemTap(args: ItemEventData) {

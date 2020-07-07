@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpBackend } from "@angular/common/http";
 import { getString } from "tns-core-modules/application-settings";
 import { BackendSettings } from '../constants';
 import { User } from '../models/user.model';
@@ -9,27 +9,31 @@ export class BackendService {
     constructor(private http: HttpClient) { }
 
     loginNomfa(data: User) {
-        const header = this.createRequestOptions(true);
+        const headerData = {
+            "Content-Type": "application/json",
+            'deviceid': 'elmapp'
+        }
+        const header = new HttpHeaders(headerData);
         return this.http.post(`${BackendSettings.LOGIN_NOMFA}`, data, { headers: header });
     }
 
-    login(data: User, _token: string) {
-        const header = this.createRequestOptions(false, _token);
+    login(data: User) {
+        const header = this.createHeaderOptions();
         return this.http.post(`${BackendSettings.SERVER_URL}${BackendSettings.LOGIN_ENDPOINT}`, data, { headers: header });
     }
 
     getProfile() {
-        const header = this.createRequestOptions(false, getString('token'));
+        const header = this.createHeaderOptions();
         return this.http.post<any>(`${BackendSettings.SERVER_URL}${BackendSettings.PROFILE_ENDPOINT}`, { employeeId: getString('userId') }, { headers: header })
     }
 
     getLeaveBalance() {
-        const header = this.createRequestOptions(false, getString('token'));
+        const header = this.createHeaderOptions();
         return this.http.post<any>(`${BackendSettings.SERVER_URL}${BackendSettings.BALANCE_ENDPOINT}`, { employeeId: getString('userId') }, { headers: header })
     }
 
     getLeaveHistory(_startDate: string, _endDate: string) {
-        const header = this.createRequestOptions(false, getString('token'));
+        const header = this.createHeaderOptions();
         const body = {
             employeeId: getString('userId'),
             leaveTypeCode: "",
@@ -40,7 +44,7 @@ export class BackendService {
     }
 
     saveLeave(_leaveTypeCode: string, startDate: string, _endDate: string, _duration: string, _remark: string) {
-        const header = this.createRequestOptions(false, getString('token'));
+        const header = this.createHeaderOptions();
         const body = {
             employeeId: getString('userId'),
             leaveTypeCode: _leaveTypeCode,
@@ -57,12 +61,22 @@ export class BackendService {
         return this.http.post(`${BackendSettings.SERVER_URL}${BackendSettings.SAVELEAVE_ENDPOINT}`, body, { headers: header });
     }
 
-    private createRequestOptions(hasDeviceID?: boolean, _token?: string) {
+    changePassword(_currentPassword: string, _newPassword: string) {
+        const header = this.createHeaderOptions();
+        const body = {
+            oldPassword: _currentPassword,
+            newPassword: _newPassword,
+            userId: getString('userId')
+        };
+        return this.http.post(`${BackendSettings.SERVER_URL}${BackendSettings.CHANGEPASSWORD_ENDPOINT}`, body, { headers: header });
+    }
+
+
+    private createHeaderOptions() {
         const headerData = {
             "Content-Type": "application/json"
         };
-        if (hasDeviceID) { Object.assign(headerData, { 'deviceid': 'elmapp' }); }
-        if (_token) { Object.assign(headerData, { 'Authorization': `Bearer ${_token}` }) }
+        Object.assign(headerData, { 'Authorization': `Bearer ${getString('token')}` });
         const headers = new HttpHeaders(headerData);
         return headers;
     }

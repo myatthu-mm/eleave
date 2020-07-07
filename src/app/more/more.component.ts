@@ -2,9 +2,12 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { Page } from "tns-core-modules/ui/page";
 import { getString } from "tns-core-modules/application-settings";
 import { Store } from '@ngxs/store';
-import { StateResetAll } from 'ngxs-reset-plugin';
+import { StateClear, StateResetAll } from 'ngxs-reset-plugin';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { ProfileState } from '../shared/states/profile/profile.state';
 import { Profile } from '../shared/models/profile.model';
+import { RequestProfile, ResetProfile } from '../shared/states/profile/profile.actions';
 
 @Component({
   selector: 'app-more',
@@ -13,6 +16,8 @@ import { Profile } from '../shared/models/profile.model';
 })
 export class MoreComponent implements OnInit {
   profile: Profile;
+  processing: boolean;
+  private _unsubscribe$ = new Subject();
 
   constructor(
     private _page: Page,
@@ -46,16 +51,38 @@ export class MoreComponent implements OnInit {
   pageOnInit() {
     console.log('More created***');
     this._page.actionBarHidden = true;
-    this.profile = this._store.selectSnapshot(ProfileState.getProfile);
+    this._unsubscribe$ = new Subject();
+    this.callToProfile();
   }
 
   @HostListener('unloaded')
   pageOnDestroy() {
     console.log('more destroy-----');
-    this._store.dispatch(
-      new StateResetAll()
-    );
+    this._unsubscribe$.next();
+    this._unsubscribe$.complete();
+    this._unsubscribe$.unsubscribe();
+    this._store.dispatch(new StateResetAll());
   }
+
+  private callToProfile() {
+    this.processing = true;
+    this._store.select(ProfileState.getProfile)
+      .pipe(takeUntil(this._unsubscribe$))
+      .subscribe(value => {
+        if (value && Object.keys(value).length > 1) {
+          this.profile = value;
+          this.processing = false;
+        } else {
+          this._store.dispatch(new RequestProfile());
+        }
+      }, (error) => {
+        this.processing = false;
+      });
+  }
+
+
+
+
 
 
 }

@@ -7,6 +7,7 @@ import { HistoryFilterModalComponent } from '@src/app/history-filter-modal/histo
 import { LeaveListviewDetailsComponent } from '@src/app/ui-components/leave-listview-details/leave-listview-details.component';
 import { LeaveRequestComponent } from '@src/app/leave-request/leave-request.component';
 import { LeaveTypesComponent } from '@src/app/leave-types/leave-types.component';
+import { PasswordChangeComponent } from '@src/app/password-change/password-change.component';
 export const routes: Routes = [
   {
     path: '',
@@ -41,6 +42,10 @@ export const routes: Routes = [
   {
     path: 'types',
     component: LeaveTypesComponent
+  },
+  {
+    path: 'change-password',
+    component: PasswordChangeComponent
   }
 
 ];

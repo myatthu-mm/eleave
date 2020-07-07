@@ -56,7 +56,7 @@ export class LeaveRequestComponent implements OnInit {
     console.log('Leave request view created***');
     this._page.actionBarHidden = false;
     this._page.actionBar.title = 'Request Leave';
-
+    this._unsubscribe$ = new Subject();
     this._subscriptions.add(
       this._leaveService.getLeaveTypeObs().subscribe(data => {
         if (data) {
@@ -75,6 +75,7 @@ export class LeaveRequestComponent implements OnInit {
     this._subscriptions.unsubscribe();
     this._unsubscribe$.next();
     this._unsubscribe$.complete();
+    this._unsubscribe$.unsubscribe();
   }
 
   private callToLeaveBalance() {

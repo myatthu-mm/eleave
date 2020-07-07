@@ -7,7 +7,6 @@ import { isIOS } from "tns-core-modules/platform"
 import { setString } from "tns-core-modules/application-settings";
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Store } from '@ngxs/store';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -22,8 +21,7 @@ export class LoginComponent implements OnInit {
   private _unsubscribe$ = new Subject();
   constructor(private page: Page,
     private routerExtensions: RouterExtensions,
-    private _backendServie: BackendService,
-    private _store: Store) {
+    private _backendServie: BackendService) {
     this.page.actionBarHidden = true;
 
   }
@@ -31,7 +29,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.user = new User();
     this.user.userId = '007326';
-    this.user.password = '00007326';
+    this.user.password = '000000';
   }
 
   @HostListener('loaded')
@@ -43,8 +41,8 @@ export class LoginComponent implements OnInit {
   @HostListener('unloaded')
   pageOnDestroy() {
     console.log('login destroy-----');
-    this._unsubscribe$.next();
-    this._unsubscribe$.complete();
+    this._unsubscribe$.next(true);
+    this._unsubscribe$.unsubscribe();
   }
 
   login() {
@@ -56,11 +54,11 @@ export class LoginComponent implements OnInit {
     this._backendServie.loginNomfa(bodyPayload)
       .toPromise()
       .then((response) => {
-        this._backendServie.login(bodyPayload, response['access_token'])
+        setString('token', response['access_token']);
+        setString('userId', this.user.userId);
+        this._backendServie.login(bodyPayload)
           .pipe(takeUntil(this._unsubscribe$))
           .subscribe(res => {
-            setString('token', response['access_token']);
-            setString('userId', this.user.userId);
             this.routerExtensions.navigate(['/home'], { clearHistory: true });
           }, (error) => {
             alert("Access Denied");

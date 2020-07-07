@@ -28,6 +28,7 @@ import { HistoryFilterModalComponent } from '@src/app/history-filter-modal/histo
 import { LeaveService } from '@src/app/shared/services/leave.service';
 import { BackendService } from '@src/app/shared/services/backend.service';
 import { MoreComponent } from '@src/app/more/more.component';
+import { PasswordChangeComponent } from '@src/app/password-change/password-change.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,6 +45,7 @@ import { MoreComponent } from '@src/app/more/more.component';
     LeaveTypesComponent,
     HistoryFilterModalComponent,
     MoreComponent,
+    PasswordChangeComponent,
   ],
   imports: [
     NativeScriptModule,

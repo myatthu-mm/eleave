@@ -23,7 +23,8 @@
             <Label col="1" text="Leave Information" textWrap="true" ios:class="m-l-20" android:class="m-l-20 m-y-10"
                 fontSize="20" color="#fff"></Label>
         </GridLayout>
-        <GridLayout row="1" rows="*" columns="auto, *" backgroundColor="#D6142C" class="m-x-15 m-y-2" height="50">
+        <GridLayout row="1" rows="*" columns="auto, *" backgroundColor="#D6142C" class="m-x-15 m-y-2" height="50"
+            [nsRouterLink]="['/change-password']">
             <ios>
                 <Label col="0" text="&#xf13e;" class="far m-l-30" fontSize="20" color="#fff"></Label>
             </ios>
@@ -45,6 +46,7 @@
                 color="#fff"></Label>
         </GridLayout>
     </GridLayout>
+    <ActivityIndicator [busy]="processing"></ActivityIndicator>
     <StackLayout row="2" verticalAlignment="center">
         <Image class="yoma-bank-logo" src="~/assets/images/yoma-bank-logo-white.png" width="250"></Image>
     </StackLayout>
