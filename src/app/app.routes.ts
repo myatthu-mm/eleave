@@ -8,6 +8,7 @@ import { LeaveListviewDetailsComponent } from '@src/app/ui-components/leave-list
 import { LeaveRequestComponent } from '@src/app/leave-request/leave-request.component';
 import { LeaveTypesComponent } from '@src/app/leave-types/leave-types.component';
 import { PasswordChangeComponent } from '@src/app/password-change/password-change.component';
+import { LeaveApprovalComponent } from '@src/app/leave-approval/leave-approval.component';
 export const routes: Routes = [
   {
     path: '',
@@ -46,6 +47,10 @@ export const routes: Routes = [
   {
     path: 'change-password',
     component: PasswordChangeComponent
+  },
+  {
+    path: 'approval',
+    component: LeaveApprovalComponent
   }
 
 ];

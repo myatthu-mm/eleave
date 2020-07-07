@@ -29,6 +29,7 @@ import { LeaveService } from '@src/app/shared/services/leave.service';
 import { BackendService } from '@src/app/shared/services/backend.service';
 import { MoreComponent } from '@src/app/more/more.component';
 import { PasswordChangeComponent } from '@src/app/password-change/password-change.component';
+import { LeaveApprovalComponent } from '@src/app/leave-approval/leave-approval.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,6 +47,7 @@ import { PasswordChangeComponent } from '@src/app/password-change/password-chang
     HistoryFilterModalComponent,
     MoreComponent,
     PasswordChangeComponent,
+    LeaveApprovalComponent,
   ],
   imports: [
     NativeScriptModule,

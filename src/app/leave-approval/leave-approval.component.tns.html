@@ -1,0 +1,8 @@
+<ActionBar title="Leave Approval Request">
+    <NavigationButton android.systemIcon="ic_menu_back"></NavigationButton>
+</ActionBar>
+<StackLayout sdkExampleTitle sdkToggleNavButton class="m-t-20" height="60" backgroundColor="red">
+    <SegmentedBar [items]="mySegmentedBarItems" selectedIndex="0" (selectedIndexChange)="onSelectedIndexChange($event)"
+        height="30" selectedBackgroundColor="#fff" color="#000">
+    </SegmentedBar>
+</StackLayout>

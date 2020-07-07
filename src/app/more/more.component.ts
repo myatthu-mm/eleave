@@ -2,12 +2,12 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { Page } from "tns-core-modules/ui/page";
 import { getString } from "tns-core-modules/application-settings";
 import { Store } from '@ngxs/store';
-import { StateClear, StateResetAll } from 'ngxs-reset-plugin';
+import { StateResetAll } from 'ngxs-reset-plugin';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ProfileState } from '../shared/states/profile/profile.state';
 import { Profile } from '../shared/models/profile.model';
-import { RequestProfile, ResetProfile } from '../shared/states/profile/profile.actions';
+import { RequestProfile } from '../shared/states/profile/profile.actions';
 
 @Component({
   selector: 'app-more',
@@ -52,7 +52,7 @@ export class MoreComponent implements OnInit {
     console.log('More created***');
     this._page.actionBarHidden = true;
     this._unsubscribe$ = new Subject();
-    this.callToProfile();
+    // this.callToProfile();
   }
 
   @HostListener('unloaded')
