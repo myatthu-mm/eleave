@@ -46,7 +46,7 @@ export class MoreComponent implements OnInit {
   pageOnInit() {
     console.log('More created***');
     this._page.actionBarHidden = true;
-    this.profile = this._store.selectSnapshot(ProfileState.profile);
+    this.profile = this._store.selectSnapshot(ProfileState.getProfile);
   }
 
   @HostListener('unloaded')

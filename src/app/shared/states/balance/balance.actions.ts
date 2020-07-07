@@ -1,4 +1,3 @@
-export class UpdateBalanceList {
+export class RequestBalanceList {
     static readonly type = '[List] Update Balance';
-    constructor(public readonly payload: any[]) { }
 }

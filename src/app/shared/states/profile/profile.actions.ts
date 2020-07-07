@@ -1,5 +1,3 @@
-import { Profile } from '../../models/profile.model';
-export class UpdateProfile {
+export class RequestProfile {
     static readonly type = '[Record] Update Profile';
-    constructor(public readonly payload: Profile) { }
 }

@@ -1,6 +1,8 @@
 import { State, Selector, Action, StateContext } from '@ngxs/store';
-import { UpdateProfile } from './profile.actions';
+import { RequestProfile } from './profile.actions';
 import { Profile } from '../../models/profile.model';
+import { BackendService } from '../../services/backend.service';
+import { tap } from 'rxjs/operators';
 
 export interface ProfileStateModel {
     data: Profile;
@@ -14,17 +16,27 @@ export interface ProfileStateModel {
 })
 
 export class ProfileState {
+
+    constructor(private _backendService: BackendService) { }
+
     @Selector()
-    static profile(state: ProfileStateModel): Profile {
+    static getProfile(state: ProfileStateModel): Profile {
         return state.data;
     }
 
-    @Action(UpdateProfile)
-    updateProfile(
-        { setState }: StateContext<ProfileStateModel>,
-        { payload }: UpdateProfile
-    ) {
-        console.log('store profile');
-        setState({ data: payload });
+    @Action(RequestProfile)
+    requestProfile({ getState, setState }: StateContext<ProfileStateModel>) {
+        return this._backendService.getProfile().pipe(tap((response) => {
+            const status = response['status'];
+            if (status.code === 200) {
+                const profile = response['data'];
+                const state = getState();
+                setState({ ...state, data: profile });
+                console.log('profile save state..');
+            }
+        }, (error) => {
+            alert('Profile error');
+            console.error('Error response:', error);
+        }));
     }
 }

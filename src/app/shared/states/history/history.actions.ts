@@ -1,4 +1,3 @@
-export class UpdateHistoryList {
+export class RequestHistoryList {
     static readonly type = '[List] Update History';
-    constructor(public readonly payload: any[]) { }
 }

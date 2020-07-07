@@ -2,15 +2,14 @@ import { Component, OnInit, HostListener, ViewContainerRef } from '@angular/core
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
 import { Page } from "tns-core-modules/ui/page";
 import { Store } from '@ngxs/store';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { HistoryListState } from '../shared/states/history/history.state';
-
 import { ModalComponent } from '../ui-components/modal/modal.component';
 import { History } from '../shared/models/history.model';
 import { LeaveService } from '../shared/services/leave.service';
 import { BackendService } from '../shared/services/backend.service';
-import { MonthName } from '../shared/constants';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { RequestHistoryList } from '../shared/states/history/history.actions';
 @Component({
   selector: 'app-leave-history',
   templateUrl: './leave-history.component.html',
@@ -50,7 +49,7 @@ export class LeaveHistoryComponent implements OnInit {
     this.filterIconVisibility = true;
     this.startDate = new DateModel();
     this.endDate = new DateModel();
-    this.callToLeaveHistory_State();
+    this.callToLeaveHistory();
   }
 
   @HostListener('unloaded')
@@ -81,7 +80,7 @@ export class LeaveHistoryComponent implements OnInit {
         this.startDate.label = result.startLabel;
         this.endDate.value = result.endValue;
         this.endDate.label = result.endLabel;
-        this.callToLeaveHistory(this.startDate.value, this.endDate.value);
+        this.callToLeaveHistoryWithDate(this.startDate.value, this.endDate.value);
       } else {
         console.log('nothing');
       }
@@ -92,35 +91,38 @@ export class LeaveHistoryComponent implements OnInit {
     if ($startEvent) {
       this.startDate = new DateModel();
       if (this.endDate.value) {
-        this.callToLeaveHistory(this.endDate.value, this.endDate.value);
+        this.callToLeaveHistoryWithDate(this.endDate.value, this.endDate.value);
       } else {
-        this.callToLeaveHistory_State();
+        this.callToLeaveHistory();
       }
 
     } else {
       this.endDate = new DateModel();
       if (this.startDate.value) {
-        this.callToLeaveHistory(this.startDate.value, this.startDate.value);
+        this.callToLeaveHistoryWithDate(this.startDate.value, this.startDate.value);
       } else {
-        this.callToLeaveHistory_State();
+        this.callToLeaveHistory();
       }
     }
   }
 
-  private callToLeaveHistory_State() {
-    this._store.select(HistoryListState.historyList)
+  private callToLeaveHistory() {
+    this.processing = true;
+    this._store.select(HistoryListState.getHistories)
       .pipe(takeUntil(this._unsubscribe$))
-      .subscribe(list => {
-        if (list.length) {
-          this.LeaveHistories = list[0];
+      .subscribe(value => {
+        if (value.length) {
+          this.LeaveHistories = value;
+          this.processing = false;
         } else {
-          this.callToLeaveHistory('2019-01-01', '2020-12-31');
+          this._store.dispatch(new RequestHistoryList());
         }
-      });
-
+      }, (error) => {
+        this.processing = false;
+      })
   }
 
-  private callToLeaveHistory(_startDate: string, _endDate: string) {
+  private callToLeaveHistoryWithDate(_startDate: string, _endDate: string) {
     this.processing = true;
     this.isEmpty = false;
     this._backendService.getLeaveHistory(_startDate, _endDate)
@@ -141,9 +143,6 @@ export class LeaveHistoryComponent implements OnInit {
         this.processing = false;
       });
   }
-
-  private getDateLabel = (_dateStr) => `${MonthName[Number(_dateStr.split('-')[1])]} ${_dateStr.split('-')[2]}, ${_dateStr.split('-')[0]}`;
-
 
 }
 

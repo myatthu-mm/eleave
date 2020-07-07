@@ -2,10 +2,16 @@ import { Component, OnInit, EventEmitter, Output, HostListener } from '@angular/
 import { Page } from "tns-core-modules/ui/page";
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { StateService } from '../shared/services/state.service';
 import { Profile } from '../shared/models/profile.model';
 import { Balance } from '../shared/models/balance.model';
 import { History } from '../shared/models/history.model';
+import { Store } from '@ngxs/store';
+import { ProfileState } from '../shared/states/profile/profile.state';
+import { RequestProfile } from '../shared/states/profile/profile.actions';
+import { BalanceListState } from '../shared/states/balance/balance.state';
+import { RequestBalanceList } from '../shared/states/balance/balance.actions';
+import { HistoryListState } from '../shared/states/history/history.state';
+import { RequestHistoryList } from '../shared/states/history/history.actions';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -22,7 +28,7 @@ export class DashboardComponent implements OnInit {
   gotoHistory_event: EventEmitter<Boolean> = new EventEmitter<Boolean>();
 
   constructor(
-    private _stateService: StateService,
+    private _store: Store,
     private _page: Page) {
     this.profile = new Profile();
   }
@@ -78,43 +84,52 @@ export class DashboardComponent implements OnInit {
 
   private callToProfile() {
     this.processing = true;
-    this._stateService.getProfile()
+    this._store.select(ProfileState.getProfile)
       .pipe(takeUntil(this._unsubscribe$))
-      .subscribe(profile => {
-        this.profile = profile;
+      .subscribe(value => {
+        if (Object.keys(value).length > 1) {
+          this.profile = value;
+          this.processing = false;
+          this.callToLeaveBalance();
+        } else {
+          this._store.dispatch(new RequestProfile());
+        }
       }, (error) => {
-      }, () => {
         this.processing = false;
-        console.log("profile complete")
-        this.callToLeaveBalance();
       });
   }
 
   private callToLeaveBalance() {
     this.processing = true;
-    this._stateService.getLeavebalances()
+    this._store.select(BalanceListState.getBalances)
       .pipe(takeUntil(this._unsubscribe$))
-      .subscribe(list => {
-        this.LeaveBalances = list;
+      .subscribe(value => {
+        if (value.length) {
+          this.LeaveBalances = value;
+          this.processing = false;
+          this.callToLeaveHistory();
+        } else {
+          this._store.dispatch(new RequestBalanceList());
+        }
       }, (error) => {
-      }, () => {
         this.processing = false;
-        console.log("balance complete")
-        this.callToLeaveHistory();
       });
   }
 
   private callToLeaveHistory() {
     this.processing = true;
-    this._stateService.getLeavehistories()
+    this._store.select(HistoryListState.getHistories)
       .pipe(takeUntil(this._unsubscribe$))
-      .subscribe(list => {
-        this.LeaveHistories = list.slice(0, 3);
-      }, (error) => { },
-        () => {
+      .subscribe(value => {
+        if (value.length) {
+          this.LeaveHistories = value.slice(0, 3);
           this.processing = false;
-          console.log("history complete")
-        });
+        } else {
+          this._store.dispatch(new RequestHistoryList());
+        }
+      }, (error) => {
+        this.processing = false;
+      });
   }
 
   gotoLeaveHistory() {

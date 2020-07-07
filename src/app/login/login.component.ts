@@ -30,8 +30,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.user = new User();
-    this.user.userId = '006216';
-    this.user.password = '00006216';
+    this.user.userId = '007326';
+    this.user.password = '00007326';
   }
 
   @HostListener('loaded')

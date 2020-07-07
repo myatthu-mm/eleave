@@ -5,12 +5,13 @@ import { EventData } from "tns-core-modules/data/observable";
 import { Switch } from "tns-core-modules/ui/switch";
 import { Store } from '@ngxs/store';
 import { Subscription, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, tap } from 'rxjs/operators';
 import { TextView } from "tns-core-modules/ui/text-view";
 import { BalanceListState } from '../shared/states/balance/balance.state';
 import { LeaveService } from '../shared/services/leave.service';
 import { BackendService } from '../shared/services/backend.service';
-import { StateService } from '../shared/services/state.service';
+import { RequestBalanceList } from '../shared/states/balance/balance.actions';
+import { RequestHistoryList } from '../shared/states/history/history.actions';
 
 @Component({
   selector: 'app-leave-request',
@@ -36,8 +37,7 @@ export class LeaveRequestComponent implements OnInit {
     private _routerExtension: RouterExtensions,
     private _store: Store,
     private _leaveService: LeaveService,
-    private _backendService: BackendService,
-    private _stateService: StateService) { }
+    private _backendService: BackendService) { }
 
   get isValidForm(): boolean {
     return (this.startDate_Value.length != 0) && (this.endDate_Value.length !== 0) && (this.leaveBalance > 0);
@@ -66,17 +66,7 @@ export class LeaveRequestComponent implements OnInit {
       })
     );
 
-    this.processing = true;
-    this._stateService.getLeavebalances()
-      .pipe(takeUntil(this._unsubscribe$))
-      .subscribe(list => {
-        this.balanceList = list;
-        this.leaveBalance = this.getLeaveBalance(this.leaveTypeValue);
-      }, (error) => { },
-        () => {
-          this.processing = false;
-          console.log('balance complete');
-        });
+    this.callToLeaveBalance();
   }
 
   @HostListener('unloaded')
@@ -85,6 +75,23 @@ export class LeaveRequestComponent implements OnInit {
     this._subscriptions.unsubscribe();
     this._unsubscribe$.next();
     this._unsubscribe$.complete();
+  }
+
+  private callToLeaveBalance() {
+    this.processing = true;
+    this._store.select(BalanceListState.getBalances)
+      .pipe(takeUntil(this._unsubscribe$))
+      .subscribe(value => {
+        if (value.length) {
+          this.balanceList = value;
+          this.processing = false;
+          this.leaveBalance = this.getLeaveBalance(this.leaveTypeValue);
+        } else {
+          this._store.dispatch(new RequestBalanceList());
+        }
+      }, (error) => {
+        this.processing = false;
+      })
   }
 
   getLeaveBalance(_leaveCode: String) {
@@ -130,8 +137,11 @@ export class LeaveRequestComponent implements OnInit {
       .subscribe(response => {
         const status = response['status'];
         if (status.code == 200) {
+          this._store.dispatch(new RequestBalanceList()).pipe(tap((res) => {
+            console.log('balance updated...');
+            this._store.dispatch(new RequestHistoryList);
+          }));
           alert(`Leave ${status.message}`);
-          this._stateService.getLeavebalances(true);
           this.formReset();
         } else {
           alert(status.message);

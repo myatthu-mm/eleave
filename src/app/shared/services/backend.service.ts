@@ -20,12 +20,12 @@ export class BackendService {
 
     getProfile() {
         const header = this.createRequestOptions(false, getString('token'));
-        return this.http.post(`${BackendSettings.SERVER_URL}${BackendSettings.PROFILE_ENDPOINT}`, { employeeId: getString('userId') }, { headers: header })
+        return this.http.post<any>(`${BackendSettings.SERVER_URL}${BackendSettings.PROFILE_ENDPOINT}`, { employeeId: getString('userId') }, { headers: header })
     }
 
     getLeaveBalance() {
         const header = this.createRequestOptions(false, getString('token'));
-        return this.http.post(`${BackendSettings.SERVER_URL}${BackendSettings.BALANCE_ENDPOINT}`, { employeeId: getString('userId') }, { headers: header })
+        return this.http.post<any>(`${BackendSettings.SERVER_URL}${BackendSettings.BALANCE_ENDPOINT}`, { employeeId: getString('userId') }, { headers: header })
     }
 
     getLeaveHistory(_startDate: string, _endDate: string) {
@@ -36,7 +36,7 @@ export class BackendService {
             startDate: _startDate,
             endDate: _endDate
         }
-        return this.http.post(`${BackendSettings.SERVER_URL}${BackendSettings.HISTORY_ENDPOINT}`, body, { headers: header });
+        return this.http.post<any>(`${BackendSettings.SERVER_URL}${BackendSettings.HISTORY_ENDPOINT}`, body, { headers: header });
     }
 
     saveLeave(_leaveTypeCode: string, startDate: string, _endDate: string, _duration: string, _remark: string) {

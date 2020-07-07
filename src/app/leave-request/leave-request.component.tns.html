@@ -71,4 +71,5 @@
         <Button text="Submit Request" class="btn -rounded-sm m-b-30 {{isValidForm ? '-primary' : '-disabled'}}"
             [isUserInteractionEnabled]="isValidForm" (tap)="requestLeave()"></Button>
     </StackLayout>
+    <ActivityIndicator [busy]="processing"></ActivityIndicator>
 </StackLayout>
