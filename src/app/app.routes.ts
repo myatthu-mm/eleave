@@ -3,12 +3,14 @@ import { HomeComponent } from '@src/app/home/home.component';
 import { LoginComponent } from '@src/app/login/login.component';
 import { DashboardComponent } from '@src/app/dashboard/dashboard.component';
 import { LeaveHistoryComponent } from '@src/app/leave-history/leave-history.component';
-import { HistoryFilterModalComponent } from '@src/app/history-filter-modal/history-filter-modal.component';
+import { FilterModalComponent } from '@src/app/ui-components/filter-modal/filter-modal.component';
 import { LeaveListviewDetailsComponent } from '@src/app/ui-components/leave-listview-details/leave-listview-details.component';
 import { LeaveRequestComponent } from '@src/app/leave-request/leave-request.component';
 import { LeaveTypesComponent } from '@src/app/leave-types/leave-types.component';
 import { PasswordChangeComponent } from '@src/app/password-change/password-change.component';
 import { LeaveApprovalComponent } from '@src/app/leave-approval/leave-approval.component';
+import { ApproveCommentModalComponent } from '@src/app/approve-comment-modal/approve-comment-modal.component';
+import { LeaveApprovalDetailsComponent } from '@src/app/leave-approval-details/leave-approval-details.component';
 export const routes: Routes = [
   {
     path: '',
@@ -23,7 +25,7 @@ export const routes: Routes = [
     path: 'home',
     component: HomeComponent,
     children: [
-      { path: 'history-filter-modal', component: HistoryFilterModalComponent }
+      { path: 'filter-modal', component: FilterModalComponent }
     ]
   },
   {
@@ -50,7 +52,23 @@ export const routes: Routes = [
   },
   {
     path: 'approval',
-    component: LeaveApprovalComponent
+    component: LeaveApprovalComponent,
+    children: [
+      {
+        path: 'approval-comment-modal',
+        component: ApproveCommentModalComponent
+      },
+
+      {
+        path: 'filter-modal',
+        component: FilterModalComponent
+      }
+    ]
+  },
+  {
+    path: 'approval-details',
+    component: LeaveApprovalDetailsComponent
   }
+
 
 ];

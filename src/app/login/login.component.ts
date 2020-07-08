@@ -28,8 +28,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.user = new User();
-    this.user.userId = '007326';
-    this.user.password = '000000';
+    this.user.userId = '008076';
+    this.user.password = '00008076';
   }
 
   @HostListener('loaded')
@@ -60,6 +60,11 @@ export class LoginComponent implements OnInit {
         this._backendServie.login(bodyPayload)
           .pipe(takeUntil(this._unsubscribe$))
           .subscribe(res => {
+            const status = res['status'];
+            if (status.code === 200) {
+              const isApproval = res['data'].leave_approval;
+              setString('isApproval', isApproval);
+            }
             this.routerExtensions.navigate(['/home'], { clearHistory: true });
           }, (error) => {
             alert("Access Denied");

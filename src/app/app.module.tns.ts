@@ -24,12 +24,15 @@ import { ProfileState } from '@src/app/shared/states/profile/profile.state';
 import { BalanceListState } from '@src/app/shared/states/balance/balance.state';
 import { LeaveRequestComponent } from '@src/app/leave-request/leave-request.component';
 import { LeaveTypesComponent } from '@src/app/leave-types/leave-types.component';
-import { HistoryFilterModalComponent } from '@src/app/history-filter-modal/history-filter-modal.component';
+import { FilterModalComponent } from '@src/app/ui-components/filter-modal/filter-modal.component';
 import { LeaveService } from '@src/app/shared/services/leave.service';
 import { BackendService } from '@src/app/shared/services/backend.service';
 import { MoreComponent } from '@src/app/more/more.component';
 import { PasswordChangeComponent } from '@src/app/password-change/password-change.component';
 import { LeaveApprovalComponent } from '@src/app/leave-approval/leave-approval.component';
+import { NativeScriptUIListViewModule } from "nativescript-ui-listview/angular";
+import { ApproveCommentModalComponent } from '@src/app/approve-comment-modal/approve-comment-modal.component';
+import { LeaveApprovalDetailsComponent } from '@src/app/leave-approval-details/leave-approval-details.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,10 +47,12 @@ import { LeaveApprovalComponent } from '@src/app/leave-approval/leave-approval.c
     LeaveListviewDetailsComponent,
     LeaveRequestComponent,
     LeaveTypesComponent,
-    HistoryFilterModalComponent,
+    FilterModalComponent,
     MoreComponent,
     PasswordChangeComponent,
     LeaveApprovalComponent,
+    ApproveCommentModalComponent,
+    LeaveApprovalDetailsComponent,
   ],
   imports: [
     NativeScriptModule,
@@ -57,7 +62,8 @@ import { LeaveApprovalComponent } from '@src/app/leave-approval/leave-approval.c
     NativeScriptHttpClientModule,
     NativeScriptUIChartModule,
     NgxsModule.forRoot([HistoryListState, ProfileState, BalanceListState], { developmentMode: true }),
-    NgxsResetPluginModule.forRoot()
+    NgxsResetPluginModule.forRoot(),
+    NativeScriptUIListViewModule
   ],
   providers: [
     ModalDialogService, ModalDatetimepicker, LeaveService, BackendService

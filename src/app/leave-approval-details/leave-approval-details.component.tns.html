@@ -1,0 +1,95 @@
+<ActionBar title="Leave Approval Detail">
+</ActionBar>
+
+<ScrollView>
+    <StackLayout orientation="vertical">
+        <GridLayout rows="auto, auto" class="m-t-20 m-x-20">
+            <Label row="0" text="ID" fontSize="15" fontWeight="500"></Label>
+            <Label row="1" text="008076" fontSize="11"></Label>
+        </GridLayout>
+        <StackLayout class="m-x-20">
+            <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
+            </StackLayout>
+        </StackLayout>
+
+        <GridLayout rows="auto, auto" class="m-t-5 m-x-20">
+            <Label row="0" text="Name" fontSize="15" fontWeight="500"></Label>
+            <Label row="1" text="Kyaw Naing Tun" fontSize="11"></Label>
+        </GridLayout>
+        <StackLayout class="m-x-20">
+            <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
+            </StackLayout>
+        </StackLayout>
+
+        <GridLayout rows="auto, auto" class="m-t-5 m-x-20">
+            <Label row="0" text="Designation" fontSize="15" fontWeight="500"></Label>
+            <Label row="1" text="TTMY" fontSize="11"></Label>
+        </GridLayout>
+        <StackLayout class="m-x-20">
+            <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
+            </StackLayout>
+        </StackLayout>
+
+        <GridLayout rows="auto, auto" class="m-t-5 m-x-20">
+            <Label row="0" text="Leave Type" fontSize="15" fontWeight="500"></Label>
+            <Label row="1" text="Sick Leave(SL)" fontSize="11" textWrap="true"></Label>
+        </GridLayout>
+        <StackLayout class="m-x-20">
+            <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
+            </StackLayout>
+        </StackLayout>
+
+        <GridLayout rows="auto, auto" class="m-t-5 m-x-20">
+            <Label row="0" text="Start Date" fontSize="15" fontWeight="500"></Label>
+            <Label row="1" text="Oct 24, 2019" fontSize="11"></Label>
+        </GridLayout>
+        <StackLayout class="m-x-20">
+            <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
+            </StackLayout>
+        </StackLayout>
+
+        <GridLayout rows="auto, auto" class="m-t-5 m-x-20">
+            <Label row="0" text="End Date" fontSize="15" fontWeight="500"></Label>
+            <Label row="1" text="Oct 25, 2019" fontSize="11" textWrap="true"></Label>
+        </GridLayout>
+        <StackLayout class="m-x-20">
+            <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
+            </StackLayout>
+        </StackLayout>
+
+        <GridLayout rows="auto, auto" class="m-t-5 m-x-20">
+            <Label row="0" text="Half-day Leave" fontSize="15" fontWeight="500"></Label>
+            <Label row="1" text="-" fontSize="11" textWrap="true"></Label>
+        </GridLayout>
+        <StackLayout class="m-x-20">
+            <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
+            </StackLayout>
+        </StackLayout>
+
+        <GridLayout rows="auto, auto" class="m-t-5 m-x-20">
+            <Label row="0" text="Duration" fontSize="15" fontWeight="500"></Label>
+            <Label row="1" text="1 day(s)" fontSize="11" textWrap="true"></Label>
+        </GridLayout>
+        <StackLayout class="m-x-20">
+            <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
+            </StackLayout>
+        </StackLayout>
+
+        <GridLayout rows="auto, auto" class="m-t-5 m-x-20">
+            <Label row="0" text="Reason" fontSize="15" fontWeight="500"></Label>
+            <Label row="1" text="I would like to take leave because I am not feeling well." fontSize="11"
+                textWrap="true"></Label>
+        </GridLayout>
+        <StackLayout class="m-x-20">
+            <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
+            </StackLayout>
+        </StackLayout>
+        <GridLayout rows="*" columns="1*, 3*">
+            <GridLayout col="1" rows="*" columns="*, *">
+                <Button col="0" text="Approve" (tap)="onConfirm()" class="btn -rounded-sm" backgroundColor="gray"
+                    color="#fff"></Button>
+                <Button col="1" text="Reject" (tap)="onConfirm()" class="btn -rounded-sm -primary"></Button>
+            </GridLayout>
+        </GridLayout>
+    </StackLayout>
+</ScrollView>

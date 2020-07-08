@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalDialogParams } from 'nativescript-angular/modal-dialog';
 import { Page } from "tns-core-modules/ui/page";
-import { MonthName } from '../shared/constants';
+import { MonthName } from '../../shared/constants';
 
 @Component({
-  selector: 'app-history-filter-modal',
-  templateUrl: './history-filter-modal.component.html',
-  styleUrls: ['./history-filter-modal.component.scss']
+  selector: 'app-filter-modal',
+  templateUrl: './filter-modal.component.html',
+  styleUrls: ['./filter-modal.component.scss']
 })
-export class HistoryFilterModalComponent implements OnInit {
+export class FilterModalComponent implements OnInit {
 
   startDate_Value: string = '';
   endDate_Value: string = '';

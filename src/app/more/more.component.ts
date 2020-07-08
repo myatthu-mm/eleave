@@ -44,7 +44,12 @@ export class MoreComponent implements OnInit {
     return '~/assets/images/employee.png';
   }
 
+  get IsApproval(): boolean {
+    return getString('isApproval') === 'true';
+  }
+
   ngOnInit() {
+
   }
 
   @HostListener('loaded')

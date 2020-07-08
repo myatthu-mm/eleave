@@ -1,8 +1,36 @@
 <ActionBar title="Leave Approval Request">
     <NavigationButton android.systemIcon="ic_menu_back"></NavigationButton>
+    <ActionItem (tap)="onFilter()" icon="font://&#xf0b0;" class="fas" style.color="#fe2f2f" ios.position="right"
+        android.position="actionBar" android.position="actionBar">
+    </ActionItem>
 </ActionBar>
-<StackLayout sdkExampleTitle sdkToggleNavButton class="m-t-20" height="60" backgroundColor="red">
-    <SegmentedBar [items]="mySegmentedBarItems" selectedIndex="0" (selectedIndexChange)="onSelectedIndexChange($event)"
-        height="30" selectedBackgroundColor="#fff" color="#000">
-    </SegmentedBar>
-</StackLayout>
+
+<GridLayout tkExampleTitle tkToggleNavButton rows="auto, *" columns="*">
+    <StackLayout row="0" sdkExampleTitle sdkToggleNavButton class="m-t-20" verticalAlignment="top">
+        <SegmentedBar [items]="mySegmentedBarItems" selectedIndex="0"
+            (selectedIndexChange)="onSelectedIndexChange($event)" height="30" selectedBackgroundColor="#fff"
+            color="#000">
+        </SegmentedBar>
+    </StackLayout>
+    <RadListView row="1" *ngIf="items?.length" [items]="items" swipeActions="true" selectionBehavior="None"
+        (itemSwipeProgressStarted)="onSwipeCellStarted($event)" class="list-group">
+        <ng-template tkListItemTemplate let-item="item">
+            <GridLayout columns="auto, 5*, 1*" rows="auto, auto" class="list-group-item" (tap)="itemClick(item)">
+                <Image row="0" col="0" rowspan="2" src="~/assets/images/employee-men.png" width="60"></Image>
+                <Label text="Hsu Naing - Sick Leave" row="0" col="1" ios:fontSize="17" ios:color="#000"
+                    class="m-t-5"></Label>
+                <Label text="1 day(s), Oct 24 - Oct 25, 2019" row="1" col="1" ios:fontSize="13"></Label>
+                <Label text="&#xf054;" class="far m-r-10" row="0" col="2" rowspan="2" horizontalAlignment="right"
+                    color="silver"></Label>
+            </GridLayout>
+        </ng-template>
+        <GridLayout *tkListItemSwipeTemplate columns="*, auto, auto" class="gridLayoutLayout">
+            <StackLayout id="mark-view" col="1" (tap)="onApproveSwipeClick($event)" width="80" backgroundColor="gray">
+                <Label text="Approve" horizontalAlignment="center" class="action-item" textWrap="true"></Label>
+            </StackLayout>
+            <StackLayout id="delete-view" col="2" (tap)="onRejectSwipeClick($event)" width="80" backgroundColor="red">
+                <Label text="Reject" horizontalAlignment="center" class="action-item" textWrap="true"></Label>
+            </StackLayout>
+        </GridLayout>
+    </RadListView>
+</GridLayout>
