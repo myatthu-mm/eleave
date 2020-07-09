@@ -15,14 +15,14 @@ export class ModalComponent implements OnInit {
     private params: ModalDialogParams,
     private _routerExtensions: RouterExtensions,
     private _activeRoute: ActivatedRoute) {
-    console.log(params.context);
 
   }
 
   ngOnInit() {
     console.log('Modal init');
-    if (this.params.context.page === 'leave-approval') {
-      this._routerExtensions.navigate(['approval-comment-modal'], { relativeTo: this._activeRoute });
+    if (this.params.context.page === 'approval') {
+
+      this._routerExtensions.navigate(['approve-comment-modal'], { queryParams: { status: this.params.context.status }, relativeTo: this._activeRoute });
     } else {
       this._routerExtensions.navigate(['filter-modal'], { relativeTo: this._activeRoute });
     }

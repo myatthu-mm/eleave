@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { History } from '../models/history.model';
 import { Balance } from '../models/balance.model';
 import { PieSource } from '../models/pie-source.model';
+import { Associate } from '../models/associate.model';
 @Injectable()
 export class LeaveService {
 
@@ -49,8 +50,32 @@ export class LeaveService {
         return list;
     }
 
+    getFormattedLeaveRequests(list: Associate[]) {
+        list.map(item => {
+            const startDate = new Date(item.leave_start_date);
+            const endDate = new Date(item.leave_end_date);
+            const date = this.getFormattedDateMonth(startDate) + ' - ' + this.getFormattedDate(endDate);
+            const type = this.getLeaveTypeByCode(item.leave_type_code);
+            const nameAhead = item.employee_name.split(' ')[0];
+            const image = nameAhead === 'U' ? '~/assets/images/employee-men.png' : '~/assets/images/employee.png';
+            Object.assign(item, { date: date });
+            Object.assign(item, { type: `${type}` });
+            Object.assign(item, { startDate: this.getFormattedDate(startDate) });
+            Object.assign(item, { endDate: this.getFormattedDate(endDate) });
+            Object.assign(item, { duration: `${Number(item.duration)} day(s)` });
+            Object.assign(item, { image: image });
+            Object.assign(item, { half_type_description: (item.half_type == '1') ? 'Morning' : (item.half_type == '2') ? 'Evening' : '-' });
+            Object.assign(item, { employee_name: item.employee_name.replace(/(Daw|U)\s+/, '') });
+        });
+        return list;
+    }
+
     private getFormattedDate(_date: Date) {
         return `${MonthName[_date.getMonth()]} ${_date.getDate()}, ${_date.getFullYear()}`
+    }
+
+    private getFormattedDateMonth(_date: Date) {
+        return `${MonthName[_date.getMonth()]} ${_date.getDate()}`;
     }
 
 

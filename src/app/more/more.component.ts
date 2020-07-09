@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { Page } from "tns-core-modules/ui/page";
-import { getString } from "tns-core-modules/application-settings";
+import { getString, clear } from "tns-core-modules/application-settings";
 import { Store } from '@ngxs/store';
 import { StateResetAll } from 'ngxs-reset-plugin';
 import { Subject } from 'rxjs';
@@ -57,12 +57,13 @@ export class MoreComponent implements OnInit {
     console.log('More created***');
     this._page.actionBarHidden = true;
     this._unsubscribe$ = new Subject();
-    // this.callToProfile();
+    this.callToProfile();
   }
 
   @HostListener('unloaded')
   pageOnDestroy() {
     console.log('more destroy-----');
+    // clear();
     this._unsubscribe$.next();
     this._unsubscribe$.complete();
     this._unsubscribe$.unsubscribe();

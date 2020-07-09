@@ -43,22 +43,34 @@ export class BackendService {
         return this.http.post<any>(`${BackendSettings.SERVER_URL}${BackendSettings.HISTORY_ENDPOINT}`, body, { headers: header });
     }
 
-    saveLeave(_leaveTypeCode: string, startDate: string, _endDate: string, _duration: string, _remark: string) {
+    saveLeave(_leaveTypeCode: string, _startDate: string, _endDate: string, _duration: string, _remark: string) {
         const header = this.createHeaderOptions();
         const body = {
             employeeId: getString('userId'),
             leaveTypeCode: _leaveTypeCode,
-            startDate: startDate,
+            startDate: _startDate,
             endDate: _endDate,
             half: "",
             duration: _duration,
             updatedBy: "008164",
             updatedDate: "2020-03-24",
             remarks: _remark,
-            unit: "Security & Risk",
+            unit: getString('unit'),
             status: ''
         };
         return this.http.post(`${BackendSettings.SERVER_URL}${BackendSettings.SAVELEAVE_ENDPOINT}`, body, { headers: header });
+    }
+
+    getAssociateLeave(_status: string, _startDate: string, _endDate: string, _employeeId: string = '') {
+        const header = this.createHeaderOptions();
+        const body = {
+            managerEmployeeId: getString('userId'),
+            leaveStatus: _status,
+            startDate: _startDate,
+            endDate: _endDate,
+            employeeId: _employeeId
+        }
+        return this.http.post<any>(`${BackendSettings.SERVER_URL}${BackendSettings.ASSOCIATELEAVE_ENDPOINT}`, body, { headers: header });
     }
 
     changePassword(_currentPassword: string, _newPassword: string) {

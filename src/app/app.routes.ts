@@ -9,7 +9,7 @@ import { LeaveRequestComponent } from '@src/app/leave-request/leave-request.comp
 import { LeaveTypesComponent } from '@src/app/leave-types/leave-types.component';
 import { PasswordChangeComponent } from '@src/app/password-change/password-change.component';
 import { LeaveApprovalComponent } from '@src/app/leave-approval/leave-approval.component';
-import { ApproveCommentModalComponent } from '@src/app/approve-comment-modal/approve-comment-modal.component';
+import { ApproveCommentModalComponent } from '@src/app/leave-approval/approve-comment-modal/approve-comment-modal.component';
 import { LeaveApprovalDetailsComponent } from '@src/app/leave-approval-details/leave-approval-details.component';
 export const routes: Routes = [
   {
@@ -55,7 +55,7 @@ export const routes: Routes = [
     component: LeaveApprovalComponent,
     children: [
       {
-        path: 'approval-comment-modal',
+        path: 'approve-comment-modal',
         component: ApproveCommentModalComponent
       },
 

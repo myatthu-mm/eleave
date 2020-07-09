@@ -5,7 +5,7 @@
     <StackLayout orientation="vertical">
         <GridLayout rows="auto, auto" class="m-t-20 m-x-20">
             <Label row="0" text="ID" fontSize="15" fontWeight="500"></Label>
-            <Label row="1" text="008076" fontSize="11"></Label>
+            <Label row="1" [text]="data.employee_id" fontSize="13"></Label>
         </GridLayout>
         <StackLayout class="m-x-20">
             <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
@@ -14,7 +14,7 @@
 
         <GridLayout rows="auto, auto" class="m-t-5 m-x-20">
             <Label row="0" text="Name" fontSize="15" fontWeight="500"></Label>
-            <Label row="1" text="Kyaw Naing Tun" fontSize="11"></Label>
+            <Label row="1" [text]="data.employee_name" fontSize="13"></Label>
         </GridLayout>
         <StackLayout class="m-x-20">
             <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
@@ -23,7 +23,7 @@
 
         <GridLayout rows="auto, auto" class="m-t-5 m-x-20">
             <Label row="0" text="Designation" fontSize="15" fontWeight="500"></Label>
-            <Label row="1" text="TTMY" fontSize="11"></Label>
+            <Label row="1" [text]="data.designation" fontSize="13"></Label>
         </GridLayout>
         <StackLayout class="m-x-20">
             <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
@@ -32,7 +32,7 @@
 
         <GridLayout rows="auto, auto" class="m-t-5 m-x-20">
             <Label row="0" text="Leave Type" fontSize="15" fontWeight="500"></Label>
-            <Label row="1" text="Sick Leave(SL)" fontSize="11" textWrap="true"></Label>
+            <Label row="1" text="{{data.type}}({{data.leave_type_code}})" fontSize="13" textWrap="true"></Label>
         </GridLayout>
         <StackLayout class="m-x-20">
             <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
@@ -41,7 +41,7 @@
 
         <GridLayout rows="auto, auto" class="m-t-5 m-x-20">
             <Label row="0" text="Start Date" fontSize="15" fontWeight="500"></Label>
-            <Label row="1" text="Oct 24, 2019" fontSize="11"></Label>
+            <Label row="1" [text]="data.startDate" fontSize="13"></Label>
         </GridLayout>
         <StackLayout class="m-x-20">
             <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
@@ -50,7 +50,7 @@
 
         <GridLayout rows="auto, auto" class="m-t-5 m-x-20">
             <Label row="0" text="End Date" fontSize="15" fontWeight="500"></Label>
-            <Label row="1" text="Oct 25, 2019" fontSize="11" textWrap="true"></Label>
+            <Label row="1" [text]="data.endDate" fontSize="13" textWrap="true"></Label>
         </GridLayout>
         <StackLayout class="m-x-20">
             <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
@@ -59,7 +59,7 @@
 
         <GridLayout rows="auto, auto" class="m-t-5 m-x-20">
             <Label row="0" text="Half-day Leave" fontSize="15" fontWeight="500"></Label>
-            <Label row="1" text="-" fontSize="11" textWrap="true"></Label>
+            <Label row="1" [text]="data.half_type_description" fontSize="13" textWrap="true"></Label>
         </GridLayout>
         <StackLayout class="m-x-20">
             <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
@@ -68,7 +68,7 @@
 
         <GridLayout rows="auto, auto" class="m-t-5 m-x-20">
             <Label row="0" text="Duration" fontSize="15" fontWeight="500"></Label>
-            <Label row="1" text="1 day(s)" fontSize="11" textWrap="true"></Label>
+            <Label row="1" [text]="data.duration" fontSize="13" textWrap="true"></Label>
         </GridLayout>
         <StackLayout class="m-x-20">
             <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
@@ -77,8 +77,7 @@
 
         <GridLayout rows="auto, auto" class="m-t-5 m-x-20">
             <Label row="0" text="Reason" fontSize="15" fontWeight="500"></Label>
-            <Label row="1" text="I would like to take leave because I am not feeling well." fontSize="11"
-                textWrap="true"></Label>
+            <Label row="1" [text]="data.remark" fontSize="13" textWrap="true"></Label>
         </GridLayout>
         <StackLayout class="m-x-20">
             <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">

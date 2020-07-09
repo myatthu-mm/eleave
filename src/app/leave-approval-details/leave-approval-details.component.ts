@@ -18,6 +18,7 @@ export class LeaveApprovalDetailsComponent implements OnInit {
   ngOnInit() {
     if (this._activatedRoute.snapshot.queryParamMap) {
       this.data = this._activatedRoute.snapshot.queryParams;
+      console.log(this.data);
 
     }
   }

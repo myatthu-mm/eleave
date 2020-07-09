@@ -10,13 +10,13 @@
         </android>
         <GridLayout row="1" rows="auto, *, auto" columns="*">
             <StackLayout class="m-x-20 m-t-20" row="0" orientation="vertical">
-                <Label text="Are you sure you want to approve?" class="h3" color="#000"></Label>
+                <Label text="Are you sure you want to {{info.status}}?" class="h3" color="#000"></Label>
                 <Label text="Please write any comment here." class="h3"></Label>
             </StackLayout>
             <!--Add your page content here-->
             <StackLayout row="1">
-                <TextView hint="Add a comment" autocorrect="true" height="200" (textChange)="onTextChange($event)"
-                    backgroundColor="#fafafa" class="text-area">
+                <TextView hint="Add a comment" autocorrect="true" height="200" [text]="tvArea"
+                    (textChange)="onTextChange($event)" backgroundColor="#fafafa" class="text-area">
                 </TextView>
             </StackLayout>
 

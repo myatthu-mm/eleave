@@ -18,7 +18,7 @@ import { FilterModalComponent } from '@src/app/ui-components/filter-modal/filter
 import { MoreComponent } from '@src/app/more/more.component';
 import { PasswordChangeComponent } from '@src/app/password-change/password-change.component';
 import { LeaveApprovalComponent } from '@src/app/leave-approval/leave-approval.component';
-import { ApproveCommentModalComponent } from '@src/app/approve-comment-modal/approve-comment-modal.component';
+import { ApproveCommentModalComponent } from '@src/app/leave-approval/approve-comment-modal/approve-comment-modal.component';
 import { LeaveApprovalDetailsComponent } from '@src/app/leave-approval-details/leave-approval-details.component';
 
 

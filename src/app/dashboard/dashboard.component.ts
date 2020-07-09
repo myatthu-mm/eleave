@@ -2,10 +2,11 @@ import { Component, OnInit, EventEmitter, Output, HostListener } from '@angular/
 import { Page } from "tns-core-modules/ui/page";
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Store } from '@ngxs/store';
+import { setString } from "tns-core-modules/application-settings";
 import { Profile } from '../shared/models/profile.model';
 import { Balance } from '../shared/models/balance.model';
 import { History } from '../shared/models/history.model';
-import { Store } from '@ngxs/store';
 import { ProfileState } from '../shared/states/profile/profile.state';
 import { RequestProfile } from '../shared/states/profile/profile.actions';
 import { BalanceListState } from '../shared/states/balance/balance.state';
@@ -91,6 +92,7 @@ export class DashboardComponent implements OnInit {
       .subscribe(value => {
         if (value && Object.keys(value).length > 1) {
           this.profile = value;
+          setString('unit', value.unit_name);
           this.processing = false;
           this.callToLeaveBalance();
         } else {

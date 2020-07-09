@@ -5,32 +5,114 @@
     </ActionItem>
 </ActionBar>
 
-<GridLayout tkExampleTitle tkToggleNavButton rows="auto, *" columns="*">
-    <StackLayout row="0" sdkExampleTitle sdkToggleNavButton class="m-t-20" verticalAlignment="top">
+<GridLayout tkExampleTitle tkToggleNavButton rows="auto, auto, *, auto" columns="*">
+    <StackLayout row="0" sdkExampleTitle sdkToggleNavButton class="m-t-20 m-b-15" verticalAlignment="top">
         <SegmentedBar [items]="mySegmentedBarItems" selectedIndex="0"
             (selectedIndexChange)="onSelectedIndexChange($event)" height="30" selectedBackgroundColor="#fff"
             color="#000">
         </SegmentedBar>
     </StackLayout>
-    <RadListView row="1" *ngIf="items?.length" [items]="items" swipeActions="true" selectionBehavior="None"
-        (itemSwipeProgressStarted)="onSwipeCellStarted($event)" class="list-group">
+
+    <FlexboxLayout row="1" flexWrap="wrap" flexDirection="row" justifyContent="space-around" height="80" class="p-24"
+        *ngIf="startDate_Applied.label || endDate_Applied.label"
+        visibility="{{ appliedVisibility ? 'visible' : 'collapsed' }}">
+        <app-removable-chip [isStart]="true" [label]="startDate_Applied.label"
+            (removeEvent)="listenRemoveEvent_Applied($event)" *ngIf="startDate_Applied.label">
+        </app-removable-chip>
+        <app-removable-chip [isStart]="false" [label]="endDate_Applied.label"
+            (removeEvent)="listenRemoveEvent_Applied($event)" *ngIf="endDate_Applied.label">
+        </app-removable-chip>
+    </FlexboxLayout>
+
+    <FlexboxLayout row="1" flexWrap="wrap" flexDirection="row" justifyContent="space-around" height="80" class="p-24"
+        *ngIf="startDate_Approved.label || endDate_Approved.label"
+        visibility="{{ approvedVisibility ? 'visible' : 'collapsed' }}">
+        <app-removable-chip [isStart]="true" [label]="startDate_Approved.label"
+            (removeEvent)="listenRemoveEvent_Approved($event)" *ngIf="startDate_Approved.label">
+        </app-removable-chip>
+        <app-removable-chip [isStart]="false" [label]="endDate_Approved.label"
+            (removeEvent)="listenRemoveEvent_Approved($event)" *ngIf="endDate_Approved.label">
+        </app-removable-chip>
+    </FlexboxLayout>
+
+    <FlexboxLayout row="1" flexWrap="wrap" flexDirection="row" justifyContent="space-around" height="80" class="p-24"
+        *ngIf="startDate_Rejected.label || endDate_Rejected.label"
+        visibility="{{ rejectedVisibility ? 'visible' : 'collapsed' }}">
+        <app-removable-chip [isStart]="true" [label]="startDate_Rejected.label"
+            (removeEvent)="listenRemoveEvent_Rejected($event)" *ngIf="startDate_Rejected.label">
+        </app-removable-chip>
+        <app-removable-chip [isStart]="false" [label]="endDate_Rejected.label"
+            (removeEvent)="listenRemoveEvent_Rejected($event)" *ngIf="endDate_Rejected.label">
+        </app-removable-chip>
+    </FlexboxLayout>
+
+    <RadListView visibility="{{ appliedVisibility ? 'visible' : 'collapsed' }}" row="2" *ngIf="AppliedLeaves?.length"
+        [items]="AppliedLeaves" swipeActions="true" selectionBehavior="None"
+        (itemSwipeProgressStarted)="onSwipeCellStarted($event)" class="list-group" (loaded)="onLoaded($event.object)"
+        [isUserInteractionEnabled]="true">
         <ng-template tkListItemTemplate let-item="item">
             <GridLayout columns="auto, 5*, 1*" rows="auto, auto" class="list-group-item" (tap)="itemClick(item)">
-                <Image row="0" col="0" rowspan="2" src="~/assets/images/employee-men.png" width="60"></Image>
-                <Label text="Hsu Naing - Sick Leave" row="0" col="1" ios:fontSize="17" ios:color="#000"
+                <Image row="0" col="0" rowspan="2" [src]="item.image" width="60"></Image>
+                <Label text="{{item.employee_name}} - {{item.type}}" row="0" col="1" ios:fontSize="17" ios:color="#000"
                     class="m-t-5"></Label>
-                <Label text="1 day(s), Oct 24 - Oct 25, 2019" row="1" col="1" ios:fontSize="13"></Label>
+                <Label text="{{item.duration}}, {{item.date}}" row="1" col="1" ios:fontSize="13"></Label>
                 <Label text="&#xf054;" class="far m-r-10" row="0" col="2" rowspan="2" horizontalAlignment="right"
                     color="silver"></Label>
             </GridLayout>
         </ng-template>
-        <GridLayout *tkListItemSwipeTemplate columns="*, auto, auto" class="gridLayoutLayout">
-            <StackLayout id="mark-view" col="1" (tap)="onApproveSwipeClick($event)" width="80" backgroundColor="gray">
+        <GridLayout *tkListItemSwipeTemplate columns="*, auto, auto">
+            <StackLayout col="1" (tap)="onSwipeClick($event, 'approve')" width="80" backgroundColor="gray">
                 <Label text="Approve" horizontalAlignment="center" class="action-item" textWrap="true"></Label>
             </StackLayout>
-            <StackLayout id="delete-view" col="2" (tap)="onRejectSwipeClick($event)" width="80" backgroundColor="red">
+            <StackLayout col="2" (tap)="onSwipeClick($event, 'reject')" width="80" backgroundColor="red">
                 <Label text="Reject" horizontalAlignment="center" class="action-item" textWrap="true"></Label>
             </StackLayout>
         </GridLayout>
     </RadListView>
+
+    <RadListView visibility="{{ approvedVisibility ? 'visible' : 'collapsed' }}" row="2" *ngIf="ApprovedLeaves?.length"
+        [items]="ApprovedLeaves" swipeActions="true" selectionBehavior="None"
+        (itemSwipeProgressStarted)="onResetSwipeCellStarted($event)" class="list-group"
+        (loaded)="onLoaded($event.object)" [isUserInteractionEnabled]="true">
+        <ng-template tkListItemTemplate let-item="item">
+            <GridLayout columns="auto, 5*, 1*" rows="auto, auto" class="list-group-item" (tap)="itemClick(item)">
+                <Image row="0" col="0" rowspan="2" [src]="item.image" width="60"></Image>
+                <Label text="{{item.employee_name}} - {{item.type}}" row="0" col="1" ios:fontSize="17" ios:color="#000"
+                    class="m-t-5"></Label>
+                <Label text="{{item.duration}}, {{item.date}}" row="1" col="1" ios:fontSize="13"></Label>
+                <Label text="&#xf054;" class="far m-r-10" row="0" col="2" rowspan="2" horizontalAlignment="right"
+                    color="silver"></Label>
+            </GridLayout>
+        </ng-template>
+        <GridLayout *tkListItemSwipeTemplate columns="*, auto">
+            <StackLayout col="1" (tap)="onSwipeClick($event, 'approve')" width="80" backgroundColor="gray">
+                <Label text="Reset" horizontalAlignment="center" class="action-item" textWrap="true"></Label>
+            </StackLayout>
+        </GridLayout>
+    </RadListView>
+
+    <RadListView visibility="{{ rejectedVisibility ? 'visible' : 'collapsed' }}" row="2" *ngIf="RejectedLeaves?.length"
+        [items]="RejectedLeaves" swipeActions="true" selectionBehavior="None"
+        (itemSwipeProgressStarted)="onResetSwipeCellStarted($event)" class="list-group"
+        (loaded)="onLoaded($event.object)" [isUserInteractionEnabled]="true">
+        <ng-template tkListItemTemplate let-item="item">
+            <GridLayout columns="auto, 5*, 1*" rows="auto, auto" class="list-group-item" (tap)="itemClick(item)">
+                <Image row="0" col="0" rowspan="2" [src]="item.image" width="60"></Image>
+                <Label text="{{item.employee_name}} - {{item.type}}" row="0" col="1" ios:fontSize="17" ios:color="#000"
+                    class="m-t-5"></Label>
+                <Label text="{{item.duration}}, {{item.date}}" row="1" col="1" ios:fontSize="13"></Label>
+                <Label text="&#xf054;" class="far m-r-10" row="0" col="2" rowspan="2" horizontalAlignment="right"
+                    color="silver"></Label>
+            </GridLayout>
+        </ng-template>
+        <GridLayout *tkListItemSwipeTemplate columns="*, auto">
+            <StackLayout col="1" (tap)="onSwipeClick($event, 'approve')" width="80" backgroundColor="gray">
+                <Label text="Reset" horizontalAlignment="center" class="action-item" textWrap="true"></Label>
+            </StackLayout>
+        </GridLayout>
+    </RadListView>
+
+    <GridLayout row="3" *ngIf="processing">
+        <ActivityIndicator [busy]="processing"></ActivityIndicator>
+    </GridLayout>
 </GridLayout>
