@@ -132,8 +132,12 @@ export class LeaveRequestComponent implements OnInit {
     const endDate = this.endDate_Value;
     const duration = this.getDaysAmount(this.startDate_Value, this.endDate_Value);
     const remark = this.tvtext;
+    let halftype = '';
+    if (this.switchState) {
+      halftype = this.isMorning ? '1' : '2';
+    }
     this.processing = true;
-    this._backendService.saveLeave(leaveTypeCode, startDate, endDate, duration, remark)
+    this._backendService.saveLeave(leaveTypeCode, startDate, endDate, duration, remark, halftype)
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(response => {
         const status = response['status'];

@@ -44,14 +44,14 @@ export class BackendService {
         return this.http.post<any>(`${BackendSettings.SERVER_URL}${BackendSettings.HISTORY_ENDPOINT}`, body, { headers: header });
     }
 
-    saveLeave(_leaveTypeCode: string, _startDate: string, _endDate: string, _duration: string, _remark: string) {
+    saveLeave(_leaveTypeCode: string, _startDate: string, _endDate: string, _duration: string, _remark: string, _half: string) {
         const header = this.createHeaderOptions();
         const body = {
             employeeId: getString('userId'),
             leaveTypeCode: _leaveTypeCode,
             startDate: _startDate,
             endDate: _endDate,
-            half: "",
+            half: _half,
             duration: _duration,
             updatedBy: "008164",
             updatedDate: "2020-03-24",
