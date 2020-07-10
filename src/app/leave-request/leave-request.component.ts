@@ -32,6 +32,7 @@ export class LeaveRequestComponent implements OnInit {
   processing: boolean;
   private _subscriptions = new Subscription();
   private _unsubscribe$ = new Subject();
+  private _resetEventSubject: Subject<void> = new Subject<void>();
   constructor(
     private _page: Page,
     private _routerExtension: RouterExtensions,
@@ -163,6 +164,7 @@ export class LeaveRequestComponent implements OnInit {
     this.startDate_Value = '';
     this.endDate_Value = '';
     this.tvtext = '';
+    this._resetEventSubject.next();
   }
 
   private getDaysAmount(_startDate, _endDate): string {

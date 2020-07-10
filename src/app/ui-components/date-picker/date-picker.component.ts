@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import * as ModalPicker from 'nativescript-modal-datetimepicker';
+import { Subscription, Observable } from 'rxjs';
 import { MonthName } from '../../shared/constants';
 import { Color } from 'tns-core-modules/color';
 @Component({
@@ -7,7 +8,7 @@ import { Color } from 'tns-core-modules/color';
   templateUrl: './date-picker.component.html',
   styleUrls: ['./date-picker.component.scss']
 })
-export class DatePickerComponent implements OnInit {
+export class DatePickerComponent implements OnInit, OnDestroy {
 
   @Input() Title: string;
   @Input() minDate?: string;
@@ -18,10 +19,21 @@ export class DatePickerComponent implements OnInit {
 
   @Output()
   getDate_event: EventEmitter<string> = new EventEmitter<string>();
+
+  private resetEventSubscription: Subscription;
+  @Input() resetEvent: Observable<void>;
+
   constructor() { }
 
   ngOnInit() {
     this.dateLabel = this.Title;
+    this.resetEventSubscription = this.resetEvent.subscribe(() => {
+      this.dateClear();
+    });
+  }
+
+  ngOnDestroy() {
+    this.resetEventSubscription.unsubscribe();
   }
 
   public openDatepicker() {

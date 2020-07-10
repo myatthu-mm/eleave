@@ -18,13 +18,13 @@
 
     <GridLayout rows="auto" class="m-8">
         <app-date-picker [Title]="'Start Date'" [minToay]="true" [maxDate]="endDate_Value"
-            (getDate_event)="listenStartDate_Event($event)">
+            (getDate_event)="listenStartDate_Event($event)" [resetEvent]="_resetEventSubject.asObservable()">
         </app-date-picker>
     </GridLayout>
 
     <GridLayout rows="auto" class="m-8">
         <app-date-picker [Title]="'End Date'" [minToay]="true" [minDate]="startDate_Value"
-            (getDate_event)="listenEndDate_Event($event)">
+            (getDate_event)="listenEndDate_Event($event)" [resetEvent]="_resetEventSubject.asObservable()">
         </app-date-picker>
     </GridLayout>
 
