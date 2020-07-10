@@ -73,6 +73,36 @@ export class BackendService {
         return this.http.post<any>(`${BackendSettings.SERVER_URL}${BackendSettings.ASSOCIATELEAVE_ENDPOINT}`, body, { headers: header });
     }
 
+    approveLeave(_employeeId: string,
+        _leaveTypeCode: string = '',
+        _startDate: string,
+        _endDate: string,
+        _half: string = '',
+        _duration: string,
+        _updatedDate: string,
+        _remark: string,
+        _unit: string,
+        _status: string,
+        _approverComment: string = '') {
+        const header = this.createHeaderOptions();
+        const body = {
+            userId: getString('userId'),
+            employeeId: _employeeId,
+            leaveTypeCode: _leaveTypeCode,
+            startDate: _startDate,
+            endDate: _endDate,
+            half: _half,
+            duration: _duration,
+            updatedBy: _employeeId,
+            updatedDate: _updatedDate,
+            remarks: _remark,
+            unit: _unit,
+            status: _status,
+            approverComment: _approverComment
+        };
+        return this.http.post(`${BackendSettings.SERVER_URL}${BackendSettings.APPROVELEAVE_ENDPOINT}`, body, { headers: header });
+    }
+
     changePassword(_currentPassword: string, _newPassword: string) {
         const header = this.createHeaderOptions();
         const body = {
