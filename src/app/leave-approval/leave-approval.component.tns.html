@@ -55,13 +55,13 @@
                 <Image row="0" col="0" rowspan="2" [src]="item.image" width="60"></Image>
                 <Label text="{{item.employee_name}} - {{item.type}}" row="0" col="1" ios:fontSize="17" ios:color="#000"
                     class="m-t-5"></Label>
-                <Label text="{{item.duration}}, {{item.date}}" row="1" col="1" ios:fontSize="13"></Label>
+                <Label text="{{item.duration}} day(s), {{item.date}}" row="1" col="1" ios:fontSize="13"></Label>
                 <Label text="&#xf054;" class="far m-r-10" row="0" col="2" rowspan="2" horizontalAlignment="right"
                     color="silver"></Label>
             </GridLayout>
         </ng-template>
         <GridLayout *tkListItemSwipeTemplate columns="*, auto, auto">
-            <StackLayout col="1" (tap)="onSwipeClick($event, 'approve')" width="80" backgroundColor="gray">
+            <StackLayout col="1" (tap)="onSwipeClick($event, 'approved')" width="80" backgroundColor="gray">
                 <Label text="Approve" horizontalAlignment="center" class="action-item" textWrap="true"></Label>
             </StackLayout>
             <StackLayout col="2" (tap)="onSwipeClick($event, 'reject')" width="80" backgroundColor="red">

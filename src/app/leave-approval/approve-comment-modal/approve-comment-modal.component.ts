@@ -3,21 +3,27 @@ import { ModalDialogParams } from 'nativescript-angular/modal-dialog';
 import { ActivatedRoute } from '@angular/router';
 import { EventData } from 'tns-core-modules/ui/page';
 import { TextView } from 'tns-core-modules/ui/text-view';
+import { Approval } from '../../shared/models/approval.model';
+import { BackendService } from '../../shared/services/backend.service';
 @Component({
   selector: 'app-approve-comment-modal',
   templateUrl: './approve-comment-modal.component.html',
   styleUrls: ['./approve-comment-modal.component.scss']
 })
 export class ApproveCommentModalComponent implements OnInit {
-  info: any;
+  medium: Approval;
   textArea = "";
   constructor(
     private params: ModalDialogParams,
-    private _activatedRoute: ActivatedRoute) { }
+    private backendService: BackendService,
+    private _activatedRoute: ActivatedRoute) {
+
+  }
 
   ngOnInit() {
     if (this._activatedRoute.snapshot.queryParamMap) {
-      this.info = this._activatedRoute.snapshot.queryParams;
+      this.medium = new Approval();
+      this.medium = this._activatedRoute.snapshot.queryParams as Approval;
     }
   }
 
@@ -27,7 +33,23 @@ export class ApproveCommentModalComponent implements OnInit {
   }
 
   onConfirm() {
-    this.params.closeCallback(this.textArea || '-');
+    const body = { ...this.medium };
+    body.approverComment = this.textArea || '-';
+    this.backendService.approveLeave(body).subscribe(response => {
+      const status = response['status'];
+      const statusLabel = body.status === '2' ? 'Approved' : 'Reject';
+      if (status.code == 200) {
+        alert(`${statusLabel} success!`);
+        this.params.closeCallback('success');
+      } else {
+        alert(`${statusLabel} failed!`);
+        this.onClose();
+      }
+    }, (error) => {
+      alert(`failed!`);
+      this.onClose()
+    });
+
   }
 
   onClose() {

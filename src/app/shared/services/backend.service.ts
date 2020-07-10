@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpBackend } from "@angular/common/http";
 import { getString } from "tns-core-modules/application-settings";
 import { BackendSettings } from '../constants';
 import { User } from '../models/user.model';
+import { Approval } from '../models/approval.model';
 @Injectable()
 export class BackendService {
 
@@ -73,34 +74,9 @@ export class BackendService {
         return this.http.post<any>(`${BackendSettings.SERVER_URL}${BackendSettings.ASSOCIATELEAVE_ENDPOINT}`, body, { headers: header });
     }
 
-    approveLeave(_employeeId: string,
-        _leaveTypeCode: string = '',
-        _startDate: string,
-        _endDate: string,
-        _half: string = '',
-        _duration: string,
-        _updatedDate: string,
-        _remark: string,
-        _unit: string,
-        _status: string,
-        _approverComment: string = '') {
+    approveLeave(_approvedPayload: Approval) {
         const header = this.createHeaderOptions();
-        const body = {
-            userId: getString('userId'),
-            employeeId: _employeeId,
-            leaveTypeCode: _leaveTypeCode,
-            startDate: _startDate,
-            endDate: _endDate,
-            half: _half,
-            duration: _duration,
-            updatedBy: _employeeId,
-            updatedDate: _updatedDate,
-            remarks: _remark,
-            unit: _unit,
-            status: _status,
-            approverComment: _approverComment
-        };
-        return this.http.post(`${BackendSettings.SERVER_URL}${BackendSettings.APPROVELEAVE_ENDPOINT}`, body, { headers: header });
+        return this.http.post(`${BackendSettings.SERVER_URL}${BackendSettings.APPROVELEAVE_ENDPOINT}`, _approvedPayload, { headers: header });
     }
 
     changePassword(_currentPassword: string, _newPassword: string) {

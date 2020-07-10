@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { Page } from "tns-core-modules/ui/page";
-import { getString, clear } from "tns-core-modules/application-settings";
+import { getString, setString, clear } from "tns-core-modules/application-settings";
 import { Store } from '@ngxs/store';
 import { StateResetAll } from 'ngxs-reset-plugin';
 import { Subject } from 'rxjs';
@@ -77,6 +77,7 @@ export class MoreComponent implements OnInit {
       .subscribe(value => {
         if (value && Object.keys(value).length > 1) {
           this.profile = value;
+          setString('unit', value.unit_name);
           this.processing = false;
         } else {
           this._store.dispatch(new RequestProfile());

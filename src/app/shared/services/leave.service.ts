@@ -62,7 +62,7 @@ export class LeaveService {
             Object.assign(item, { type: `${type}` });
             Object.assign(item, { startDate: this.getFormattedDate(startDate) });
             Object.assign(item, { endDate: this.getFormattedDate(endDate) });
-            Object.assign(item, { duration: `${Number(item.duration)} day(s)` });
+            Object.assign(item, { duration: `${Number(item.duration)}` });
             Object.assign(item, { image: image });
             Object.assign(item, { half_type_description: (item.half_type == '1') ? 'Morning' : (item.half_type == '2') ? 'Evening' : '-' });
             Object.assign(item, { employee_name: item.employee_name.replace(/(Daw|U)\s+/, '') });
@@ -71,11 +71,11 @@ export class LeaveService {
     }
 
     private getFormattedDate(_date: Date) {
-        return `${MonthName[_date.getMonth()]} ${_date.getDate()}, ${_date.getFullYear()}`
+        return `${MonthName[_date.getMonth() + 1]} ${_date.getDate()}, ${_date.getFullYear()}`
     }
 
     private getFormattedDateMonth(_date: Date) {
-        return `${MonthName[_date.getMonth()]} ${_date.getDate()}`;
+        return `${MonthName[_date.getMonth() + 1]} ${_date.getDate()}`;
     }
 
 

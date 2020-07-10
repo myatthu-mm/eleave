@@ -3,14 +3,16 @@ import { SegmentedBar, SegmentedBarItem, SelectedIndexChangedEventData } from "t
 import { ListViewEventData } from "nativescript-ui-listview";
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
 import { RouterExtensions } from "nativescript-angular/router";
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
+import { takeUntil, take } from 'rxjs/operators';
 import { ListView } from "tns-core-modules/ui/list-view";
+import { getString } from "tns-core-modules/application-settings";
 import { ModalComponent } from '../ui-components/modal/modal.component';
 import { AssociateService } from '../shared/states/associate/associate.service';
 import { Associate } from '../shared/models/associate.model';
 import { BackendService } from '../shared/services/backend.service';
 import { LeaveService } from '../shared/services/leave.service';
+import { Approval } from '../shared/models/approval.model';
 @Component({
   selector: 'app-leave-approval',
   templateUrl: './leave-approval.component.html',
@@ -22,6 +24,10 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
   private appliedLeaves: Array<Associate>;
   private approvedLeaves: Array<Associate>;
   private rejectedLeaves: Array<Associate>;
+
+  private appliedSourceSubscription: Subscription;
+  private approvedSourceSubscription: Subscription;
+  private rejectedSourceSubscription: Subscription;
 
   startDate_Applied: DateModel;
   endDate_Applied: DateModel;
@@ -93,19 +99,37 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
   }
 
   public onSwipeClick(args, _status: string) {
+    const swipedIndex = this.AppliedLeaves.indexOf(args.object.bindingContext);
+    const swipedItem = this.AppliedLeaves[swipedIndex];
+
+    let approval = new Approval();
+    approval.userId = getString('userId');
+    approval.employeeId = swipedItem.employee_id;
+    approval.leaveTypeCode = swipedItem.leave_type_code;
+    const startDate = this.changeDateFormat(new Date(swipedItem.leave_start_date));
+    const endDate = this.changeDateFormat(new Date(swipedItem.leave_end_date));
+    approval.startDate = startDate;
+    approval.endDate = endDate;
+    approval.half = swipedItem.half_type;
+    approval.duration = swipedItem.duration;
+    approval.updatedBy = getString('userId');
+    approval.updatedDate = this.changeDateFormat(new Date());
+    approval.remarks = swipedItem.remark;
+    approval.unit = getString('unit');
+    approval.status = _status === 'approved' ? '2' : '3'; // 2 - approved, 3 - rejected status
     const options: ModalDialogOptions = {
       viewContainerRef: this.viewContainerRef,
       fullscreen: false,
-      context: { page: 'approval', status: _status }
+      context: { page: 'approval', data: approval }
     };
-    this.modalService.showModal(ModalComponent, options).then((result: any) => {
+    this.modalService.showModal(ModalComponent, options).then(result => {
       if (result) {
-        if (this.appliedVisibility) {
-          this.AppliedLeaves.splice(this.AppliedLeaves.indexOf(args.object.bindingContext), 1);
-        } else if (this.approvedVisibility) {
-          this.ApprovedLeaves.splice(this.ApprovedLeaves.indexOf(args.object.bindingContext), 1);
+        this.AppliedLeaves.splice(swipedIndex, 1);
+        this.associateService.requestAppliedLeaves();
+        if (_status == 'approved') {
+          this.associateService.setNeedRequestApproved(true);
         } else {
-          this.RejectedLeaves.splice(this.RejectedLeaves.indexOf(args.object.bindingContext), 1);
+          this.associateService.setNeedRequestRejected(true);
         }
       } else {
         console.log('nothing');
@@ -194,6 +218,25 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
     swipeLimits.left = 0;
   }
 
+  public onFilter() {
+    const options: ModalDialogOptions = {
+      viewContainerRef: this.viewContainerRef,
+      fullscreen: false,
+      context: { page: 'approval-filter' }
+    };
+    this.modalService.showModal(ModalComponent, options).then((result: any) => {
+      if (result) {
+        switch (this.selectedSegmentedIndex) {
+          case 0: this.setDateApplied(result); break;
+          case 1: this.setDateApproved(result); break;
+          case 2: this.setDateRejected(result); break;
+        }
+      } else {
+        console.log('nothing');
+      }
+    });
+  }
+
   private setVisibility(_index) {
     this.appliedVisibility = false;
     this.approvedVisibility = false;
@@ -207,13 +250,14 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
 
   private callToAppliedLeaves() {
     this.processing = true;
-    this.associateService.appliedLeaves
+    this.closeSubscription(this.approvedSourceSubscription);
+    this.closeSubscription(this.rejectedSourceSubscription);
+    this.appliedSourceSubscription = this.associateService.appliedLeaves
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(value => {
         if (value.length) {
           this.AppliedLeaves = value;
           this.processing = false;
-          console.log(this.AppliedLeaves);
         } else {
           this.associateService.requestAppliedLeaves();
         }
@@ -244,13 +288,20 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
 
   private callToApprovedLeaves() {
     this.processing = true;
-    this.associateService.approvedLeaves
+    this.associateService.getNeedtoRequestApproved()
+      .pipe(take(1))
+      .subscribe(flag => {
+        console.log('Flag:', flag);
+      });
+    this.closeSubscription(this.appliedSourceSubscription);
+    this.closeSubscription(this.rejectedSourceSubscription);
+    console.log('approve subscribe');
+    this.approvedSourceSubscription = this.associateService.approvedLeaves
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(value => {
         if (value.length) {
           this.ApprovedLeaves = value;
           this.processing = false;
-          console.log(this.ApprovedLeaves);
         } else {
           this.associateService.requestApprovedLeaves();
         }
@@ -281,13 +332,14 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
 
   private callToRejectedLeaves() {
     this.processing = true;
-    this.associateService.rejectedLeaves
+    this.closeSubscription(this.appliedSourceSubscription);
+    this.closeSubscription(this.approvedSourceSubscription);
+    this.rejectedSourceSubscription = this.associateService.rejectedLeaves
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(value => {
         if (value.length) {
           this.RejectedLeaves = value;
           this.processing = false;
-          console.log(this.RejectedLeaves);
         } else {
           this.associateService.requestRejectedLeaves();
         }
@@ -316,24 +368,7 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
       })
   }
 
-  public onFilter() {
-    const options: ModalDialogOptions = {
-      viewContainerRef: this.viewContainerRef,
-      fullscreen: false,
-      context: { page: 'approval-filter' }
-    };
-    this.modalService.showModal(ModalComponent, options).then((result: any) => {
-      if (result) {
-        switch (this.selectedSegmentedIndex) {
-          case 0: this.setDateApplied(result); break;
-          case 1: this.setDateApproved(result); break;
-          case 2: this.setDateRejected(result); break;
-        }
-      } else {
-        console.log('nothing');
-      }
-    });
-  }
+
 
   private setDateApplied(_date: any) {
     this.startDate_Applied.value = _date.startValue;
@@ -359,6 +394,19 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
     this.callToAppliedLeavesWithDate(this.startDate_Rejected.value, this.endDate_Rejected.value);
   }
 
+  private changeDateFormat(_date: Date) {
+    const year = _date.getFullYear();
+    const month = ('0' + (_date.getMonth() + 1)).slice(-2);
+    const date = ('0' + _date.getDate()).slice(-2);
+    return `${year}-${month}-${date}`;
+  }
+
+  private closeSubscription(subObj$: Subscription) {
+    if (subObj$) {
+      subObj$.unsubscribe();
+    }
+  }
+
   ngOnInit() {
     console.log('leave approval preloading...');
     this.startDate_Applied = new DateModel();
@@ -367,9 +415,15 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
     this.endDate_Approved = new DateModel();
     this.startDate_Rejected = new DateModel();
     this.endDate_Rejected = new DateModel();
+    this.associateService.getNeedtoRequestApplied().pipe(takeUntil(this._unsubscribe$)).subscribe(flag => flag);
+    this.associateService.getNeedtoRequestApproved().pipe(takeUntil(this._unsubscribe$)).subscribe(flag => flag);
+    this.associateService.getNeedtoRequestRejected().pipe(takeUntil(this._unsubscribe$)).subscribe(flag => flag);
   }
 
   ngOnDestroy() {
+    this._unsubscribe$.next();
+    this._unsubscribe$.complete();
+    this._unsubscribe$.unsubscribe();
   }
 
 }

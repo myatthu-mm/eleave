@@ -22,7 +22,7 @@ export class ModalComponent implements OnInit {
     console.log('Modal init');
     if (this.params.context.page === 'approval') {
 
-      this._routerExtensions.navigate(['approve-comment-modal'], { queryParams: { status: this.params.context.status }, relativeTo: this._activeRoute });
+      this._routerExtensions.navigate(['approve-comment-modal'], { queryParams: this.params.context.data, relativeTo: this._activeRoute });
     } else {
       this._routerExtensions.navigate(['filter-modal'], { relativeTo: this._activeRoute });
     }
