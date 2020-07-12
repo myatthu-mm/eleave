@@ -35,6 +35,8 @@ import { ApproveCommentModalComponent } from '@src/app/leave-approval/approve-co
 import { LeaveApprovalDetailsComponent } from '@src/app/leave-approval-details/leave-approval-details.component';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { MemoryServiceService } from '@src/app/shared/services/memory-service.service';
+import { registerElement } from "nativescript-angular";
+registerElement("PreviousNextView", () => require("nativescript-iqkeyboardmanager").PreviousNextView);
 @NgModule({
   declarations: [
     AppComponent,

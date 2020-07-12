@@ -1,6 +1,9 @@
 <ActionBar title="Leave Approval Detail">
 </ActionBar>
 
+
+
+
 <ScrollView>
     <StackLayout orientation="vertical">
         <GridLayout rows="auto, auto" class="m-t-20 m-x-20">
@@ -90,13 +93,14 @@
                 *ngIf="!resetShow"></Label>
             <Label row="1" [text]="textArea ||  '-'" fontSize="13" textWrap="true" *ngIf="resetShow"></Label>
         </GridLayout>
-        <StackLayout *ngIf="!resetShow">
-            <TextView hint="Add a comment" [text]="textArea" (textChange)="onTextChange($event)"
-                backgroundColor="#fafafa" class="text-area">
-            </TextView>
-        </StackLayout>
 
-
+        <PreviousNextView>
+            <StackLayout *ngIf="!resetShow">
+                <TextView hint="Add a comment" returnKeyType="done" [text]="textArea"
+                    (textChange)="onTextChange($event)" backgroundColor="#fafafa" class="text-area">
+                </TextView>
+            </StackLayout>
+        </PreviousNextView>
         <GridLayout rows="*" columns="1*, 3*" class="m-y-20">
             <GridLayout col="1" rows="*" columns="*, *">
                 <Button col="0" text="Approve" (tap)="onApprove('2')"
@@ -110,5 +114,6 @@
                     [isUserInteractionEnabled]="!resetDisabled"></Button>
             </GridLayout>
         </GridLayout>
+
     </StackLayout>
 </ScrollView>

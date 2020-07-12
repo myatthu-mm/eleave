@@ -1,4 +1,5 @@
 <StackLayout orientation="vertical" class="m-t-20">
+
     <GridLayout rows="auto, *" columns="*">
         <ios>
             <Label row="0" text="&#xf00d;" class="far close-button m-r-20" horizontalAlignment="right"
@@ -8,20 +9,26 @@
             <Image row="0" src="font://&#xf00d;" stretch="none" class="fas close-button m-r-20"
                 horizontalAlignment="right" (tap)="onClose()"></Image>
         </android>
+
         <GridLayout row="1" rows="auto, *, auto" columns="*">
+
             <StackLayout class="m-x-20 m-t-20" row="0" orientation="vertical">
                 <Label text="Are you sure you want to {{status}}?" class="h3" color="#000"></Label>
                 <Label text="Please write any comment here." class="h3"></Label>
             </StackLayout>
             <!--Add your page content here-->
+
             <StackLayout row="1">
-                <TextView hint="Add a comment" autocorrect="true" height="200" [text]="tvArea"
-                    (textChange)="onTextChange($event)" backgroundColor="#fafafa" class="text-area">
+                <TextView hint="Add a comment" autocorrect="true" [text]="tvArea" (textChange)="onTextChange($event)"
+                    backgroundColor="#fafafa" class="text-area" height="200">
                 </TextView>
             </StackLayout>
 
+
             <Button row="2" text="Confirm" (tap)="onConfirm()" class="btn -rounded-sm -primary"></Button>
+
         </GridLayout>
+
     </GridLayout>
 
 </StackLayout>
