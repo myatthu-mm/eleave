@@ -98,4 +98,12 @@ export class BackendService {
         const headers = new HttpHeaders(headerData);
         return headers;
     }
+
+    getMockAssociateLeave(_status) {
+        return this.http.get<any>(`api/${_status}`);
+    }
+
+    approveMockLeave(_approvedPayload: Approval) {
+        return this.http.get<any>('api/success');
+    }
 }

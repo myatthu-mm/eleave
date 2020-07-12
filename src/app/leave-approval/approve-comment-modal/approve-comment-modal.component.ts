@@ -13,6 +13,7 @@ import { BackendService } from '../../shared/services/backend.service';
 export class ApproveCommentModalComponent implements OnInit {
   medium: Approval;
   textArea = "";
+  status: string = '';
   constructor(
     private params: ModalDialogParams,
     private backendService: BackendService,
@@ -24,6 +25,7 @@ export class ApproveCommentModalComponent implements OnInit {
     if (this._activatedRoute.snapshot.queryParamMap) {
       this.medium = new Approval();
       this.medium = this._activatedRoute.snapshot.queryParams as Approval;
+      this.status = this.medium.status === '2' ? 'Approved' : 'Reject';
     }
   }
 
@@ -33,11 +35,11 @@ export class ApproveCommentModalComponent implements OnInit {
   }
 
   onConfirm() {
-    const body = { ...this.medium };
-    body.approverComment = this.textArea || '-';
-    this.backendService.approveLeave(body).subscribe(response => {
+    const bodyPayload = { ...this.medium };
+    bodyPayload.approverComment = this.textArea || '-';
+    this.backendService.approveMockLeave(bodyPayload).subscribe(response => {
       const status = response['status'];
-      const statusLabel = body.status === '2' ? 'Approved' : 'Reject';
+      const statusLabel = this.status;
       if (status.code == 200) {
         alert(`${statusLabel} success!`);
         this.params.closeCallback('success');
@@ -47,7 +49,7 @@ export class ApproveCommentModalComponent implements OnInit {
       }
     }, (error) => {
       alert(`failed!`);
-      this.onClose()
+      this.onClose();
     });
 
   }

@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { Page } from "tns-core-modules/ui/page";
-import { getString, setString, clear } from "tns-core-modules/application-settings";
+import { getString, setString } from "tns-core-modules/application-settings";
 import { Store } from '@ngxs/store';
 import { StateResetAll } from 'ngxs-reset-plugin';
 import { Subject } from 'rxjs';

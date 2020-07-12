@@ -1,1 +1,12 @@
 /* Add mobile styles for the component here.  */
+.text-area {
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    border-bottom-color: #e4e4e4;
+}
+
+.-gray-primary {
+    background-color: gray;
+    color: #fff;
+}

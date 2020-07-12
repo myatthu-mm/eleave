@@ -85,7 +85,7 @@
             </GridLayout>
         </ng-template>
         <GridLayout *tkListItemSwipeTemplate columns="*, auto">
-            <StackLayout col="1" (tap)="onSwipeClick($event, 'approve')" width="80" backgroundColor="gray">
+            <StackLayout col="1" (tap)="onSwipeReset($event)" width="80" backgroundColor="gray">
                 <Label text="Reset" horizontalAlignment="center" class="action-item" textWrap="true"></Label>
             </StackLayout>
         </GridLayout>
@@ -106,7 +106,7 @@
             </GridLayout>
         </ng-template>
         <GridLayout *tkListItemSwipeTemplate columns="*, auto">
-            <StackLayout col="1" (tap)="onSwipeClick($event, 'approve')" width="80" backgroundColor="gray">
+            <StackLayout col="1" (tap)="onSwipeReset($event)" width="80" backgroundColor="gray">
                 <Label text="Reset" horizontalAlignment="center" class="action-item" textWrap="true"></Label>
             </StackLayout>
         </GridLayout>

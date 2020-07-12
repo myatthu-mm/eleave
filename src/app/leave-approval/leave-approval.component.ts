@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, HostListener, OnDestroy, ChangeDetectionStrategy, ViewContainerRef } from '@angular/core';
 import { SegmentedBar, SegmentedBarItem, SelectedIndexChangedEventData } from "tns-core-modules/ui/segmented-bar";
 import { ListViewEventData } from "nativescript-ui-listview";
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
@@ -7,6 +7,7 @@ import { Subject, Subscription } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { ListView } from "tns-core-modules/ui/list-view";
 import { getString } from "tns-core-modules/application-settings";
+import { confirm } from "tns-core-modules/ui/dialogs";
 import { ModalComponent } from '../ui-components/modal/modal.component';
 import { AssociateService } from '../shared/states/associate/associate.service';
 import { Associate } from '../shared/models/associate.model';
@@ -87,7 +88,22 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
     this.rejectedLeaves = value;
   }
 
+  @HostListener('loaded')
+  pageOnInit() {
+    this.associateService.getPreviousViewIndex().pipe(take(1)).subscribe(index => {
+      console.log('Index:', index);
+      switch (index) {
+        case 0: this.associateService.requestAppliedLeaves(); break;
+        case 1: this.associateService.requestApprovedLeaves(); break;
+        case 2: this.associateService.requestRejectedLeaves(); break;
+      }
+      this.associateService.setPreviousViewIndex(-1);
+    });
+  }
+
   public onSelectedIndexChange(args: SelectedIndexChangedEventData) {
+    console.log('selected Index change');
+
     const segmentedBar = args.object as SegmentedBar;
     this.setVisibility(segmentedBar.selectedIndex);
     this.selectedSegmentedIndex = segmentedBar.selectedIndex;
@@ -101,40 +117,104 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
   public onSwipeClick(args, _status: string) {
     const swipedIndex = this.AppliedLeaves.indexOf(args.object.bindingContext);
     const swipedItem = this.AppliedLeaves[swipedIndex];
-
-    let approval = new Approval();
-    approval.userId = getString('userId');
-    approval.employeeId = swipedItem.employee_id;
-    approval.leaveTypeCode = swipedItem.leave_type_code;
-    const startDate = this.changeDateFormat(new Date(swipedItem.leave_start_date));
-    const endDate = this.changeDateFormat(new Date(swipedItem.leave_end_date));
-    approval.startDate = startDate;
-    approval.endDate = endDate;
-    approval.half = swipedItem.half_type;
-    approval.duration = swipedItem.duration;
-    approval.updatedBy = getString('userId');
-    approval.updatedDate = this.changeDateFormat(new Date());
-    approval.remarks = swipedItem.remark;
-    approval.unit = getString('unit');
-    approval.status = _status === 'approved' ? '2' : '3'; // 2 - approved, 3 - rejected status
+    const approval = this.createPayload(swipedItem, _status);
     const options: ModalDialogOptions = {
       viewContainerRef: this.viewContainerRef,
       fullscreen: false,
       context: { page: 'approval', data: approval }
     };
-    this.modalService.showModal(ModalComponent, options).then(result => {
-      if (result) {
-        this.AppliedLeaves.splice(swipedIndex, 1);
-        this.associateService.requestAppliedLeaves();
-        if (_status == 'approved') {
-          this.associateService.setNeedRequestApproved(true);
+
+    this.modalService.showModal(ModalComponent, options)
+      .then(result => {
+        if (result) {
+          setTimeout(() => {
+            this.AppliedLeaves.splice(swipedIndex, 1);
+          }, 800);
+          setTimeout(() => {
+            this.associateService.requestAppliedLeaves();
+          }, 1200); // temporay , remove timeout later
+
+          if (_status == 'approved') {
+            console.log('set need approved');
+
+            this.associateService.setNeedRequestApproved(true);
+          } else {
+            console.log('set need reject');
+            this.associateService.setNeedRequestRejected(true);
+          }
         } else {
-          this.associateService.setNeedRequestRejected(true);
+          console.log('nothing');
         }
-      } else {
-        console.log('nothing');
+      });
+  }
+
+  public onSwipeReset(args) {
+    let swipedIndex = 0;
+    let swipedItem = null;
+    let statusLabel = '';
+    if (this.selectedSegmentedIndex == 1) { // 1 is approved page
+      swipedIndex = this.ApprovedLeaves.indexOf(args.object.bindingContext);
+      swipedItem = this.ApprovedLeaves[swipedIndex];
+      statusLabel = 'Approved';
+    } else { // 2 is reject page
+      swipedIndex = this.RejectedLeaves.indexOf(args.object.bindingContext);
+      swipedItem = this.RejectedLeaves[swipedIndex];
+      statusLabel = 'Rejected';
+    }
+    const approvalPayload = this.createPayload(swipedItem);
+    const options = {
+      title: "Reset Warning",
+      message: `Are you sure to reset the ${statusLabel}?`,
+      okButtonText: "Yes",
+      cancelButtonText: "Cancel",
+    };
+    confirm(options).then((choose: boolean) => {
+      if (choose) {
+        const payload = { ...approvalPayload };
+        payload.status = '1';
+        this.backendService.approveMockLeave(payload).subscribe(response => {
+          const status = response['status'];
+          if (status.code == 200) {
+            alert(`Reset success!`);
+            this.associateService.setNeedRequestApplied(true);
+            if (this.selectedSegmentedIndex == 1) {
+              this.ApprovedLeaves.splice(swipedIndex, 1);
+              this.associateService.requestApprovedLeaves();
+            } else {
+              this.RejectedLeaves.splice(swipedIndex, 1);
+              this.associateService.requestRejectedLeaves();
+            }
+
+          } else {
+            alert(`Reset failed!`);
+          }
+        }, (error) => {
+          alert(`failed!`);
+        });
       }
     });
+
+
+
+  }
+
+  private createPayload(param: Associate, _status?: string): Approval {
+    let approval = new Approval();
+    approval.userId = getString('userId');
+    approval.employeeId = param.employee_id;
+    approval.leaveTypeCode = param.leave_type_code;
+    const startDate = this.changeDateFormat(new Date(param.leave_start_date));
+    const endDate = this.changeDateFormat(new Date(param.leave_end_date));
+    approval.startDate = startDate;
+    approval.endDate = endDate;
+    approval.half = param.half_type;
+    approval.duration = param.duration;
+    approval.updatedBy = getString('userId');
+    approval.updatedDate = this.changeDateFormat(new Date());
+    approval.remarks = param.remark;
+    approval.unit = getString('unit');
+    approval.status = (_status === 'approved') ? '2' : (_status === 'reject') ? '3' : '1'; // 2 - approved, 3 - rejected status, 1 - reset
+    return approval;
   }
 
   public onLoaded(lst: ListView) {
@@ -145,9 +225,11 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
     }
   }
 
-  public itemClick(_item) {
+  public itemClick(_item: Associate) {
+    const dataPayload = this.createPayload(_item);
+    const parcel = { payload: JSON.stringify(dataPayload), data: JSON.stringify(_item) };
     this.routerExtension.navigate(['/approval-details'], {
-      queryParams: _item,
+      queryParams: parcel,
       animated: true,
       transition: { name: 'slideTop' }
     });
@@ -249,17 +331,24 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
   }
 
   private callToAppliedLeaves() {
+    let needtoUpdate = true;
+    this.associateService.getNeedtoRequestApplied().pipe(takeUntil(this._unsubscribe$)).subscribe(flag => {
+      needtoUpdate = flag;
+    });
     this.processing = true;
     this.closeSubscription(this.approvedSourceSubscription);
     this.closeSubscription(this.rejectedSourceSubscription);
     this.appliedSourceSubscription = this.associateService.appliedLeaves
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(value => {
-        if (value.length) {
+        if (value.length && !needtoUpdate) {
+          console.log('reuse applied');
           this.AppliedLeaves = value;
           this.processing = false;
         } else {
+          console.log('new applied');
           this.associateService.requestAppliedLeaves();
+          this.associateService.setNeedRequestApplied(false);
         }
       }, (error) => this.processing = false);
   }
@@ -287,23 +376,24 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
   }
 
   private callToApprovedLeaves() {
+    let needtoUpdate = true;
+    this.associateService.getNeedtoRequestApproved().pipe(takeUntil(this._unsubscribe$)).subscribe(flag => {
+      needtoUpdate = flag;
+    });
     this.processing = true;
-    this.associateService.getNeedtoRequestApproved()
-      .pipe(take(1))
-      .subscribe(flag => {
-        console.log('Flag:', flag);
-      });
     this.closeSubscription(this.appliedSourceSubscription);
     this.closeSubscription(this.rejectedSourceSubscription);
-    console.log('approve subscribe');
     this.approvedSourceSubscription = this.associateService.approvedLeaves
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(value => {
-        if (value.length) {
+        if (value.length && !needtoUpdate) {
+          console.log('reuse approved');
           this.ApprovedLeaves = value;
           this.processing = false;
         } else {
+          console.log('new approved');
           this.associateService.requestApprovedLeaves();
+          this.associateService.setNeedRequestApproved(false);
         }
       }, (error) => this.processing = false);
   }
@@ -331,17 +421,24 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
   }
 
   private callToRejectedLeaves() {
+    let needtoUpdate = true;
+    this.associateService.getNeedtoRequestRejected().pipe(takeUntil(this._unsubscribe$)).subscribe(flag => {
+      needtoUpdate = flag;
+    });
     this.processing = true;
     this.closeSubscription(this.appliedSourceSubscription);
     this.closeSubscription(this.approvedSourceSubscription);
     this.rejectedSourceSubscription = this.associateService.rejectedLeaves
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(value => {
-        if (value.length) {
+        if (value.length && !needtoUpdate) {
+          console.log('resuse reject');
           this.RejectedLeaves = value;
           this.processing = false;
         } else {
+          console.log('new rejected');
           this.associateService.requestRejectedLeaves();
+          this.associateService.setNeedRequestRejected(false);
         }
       }, (error) => this.processing = false);
   }
@@ -367,8 +464,6 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
         this.processing = false;
       })
   }
-
-
 
   private setDateApplied(_date: any) {
     this.startDate_Applied.value = _date.startValue;
@@ -415,9 +510,6 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
     this.endDate_Approved = new DateModel();
     this.startDate_Rejected = new DateModel();
     this.endDate_Rejected = new DateModel();
-    this.associateService.getNeedtoRequestApplied().pipe(takeUntil(this._unsubscribe$)).subscribe(flag => flag);
-    this.associateService.getNeedtoRequestApproved().pipe(takeUntil(this._unsubscribe$)).subscribe(flag => flag);
-    this.associateService.getNeedtoRequestRejected().pipe(takeUntil(this._unsubscribe$)).subscribe(flag => flag);
   }
 
   ngOnDestroy() {

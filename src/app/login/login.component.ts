@@ -4,7 +4,7 @@ import { Page } from "tns-core-modules/ui/page";
 import { RouterExtensions } from "nativescript-angular/router";
 import { BackendService } from '../shared/services/backend.service';
 import { isIOS } from "tns-core-modules/platform"
-import { setString } from "tns-core-modules/application-settings";
+import { setString, clear } from "tns-core-modules/application-settings";
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 @Component({
@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    clear();
     this.user = new User();
     this.user.userId = '008076';
     this.user.password = '00008076';

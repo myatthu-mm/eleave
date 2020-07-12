@@ -33,6 +33,8 @@ import { LeaveApprovalComponent } from '@src/app/leave-approval/leave-approval.c
 import { NativeScriptUIListViewModule } from "nativescript-ui-listview/angular";
 import { ApproveCommentModalComponent } from '@src/app/leave-approval/approve-comment-modal/approve-comment-modal.component';
 import { LeaveApprovalDetailsComponent } from '@src/app/leave-approval-details/leave-approval-details.component';
+import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { MemoryServiceService } from '@src/app/shared/services/memory-service.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,6 +62,7 @@ import { LeaveApprovalDetailsComponent } from '@src/app/leave-approval-details/l
     NativeScriptFormsModule,
     NativeScriptUICalendarModule,
     NativeScriptHttpClientModule,
+    HttpClientInMemoryWebApiModule.forRoot(MemoryServiceService),
     NativeScriptUIChartModule,
     NgxsModule.forRoot([HistoryListState, ProfileState, BalanceListState], { developmentMode: true }),
     NgxsResetPluginModule.forRoot(),

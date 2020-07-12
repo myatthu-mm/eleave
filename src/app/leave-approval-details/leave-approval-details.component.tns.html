@@ -77,17 +77,37 @@
 
         <GridLayout rows="auto, auto" class="m-t-5 m-x-20">
             <Label row="0" text="Reason" fontSize="15" fontWeight="500"></Label>
-            <Label row="1" [text]="data.remark" fontSize="13" textWrap="true"></Label>
+            <Label row="1" [text]="data.remark || '-'" fontSize="13" textWrap="true"></Label>
         </GridLayout>
         <StackLayout class="m-x-20">
             <StackLayout class="hr" backgroundColor="#E4E4E4" height="2">
             </StackLayout>
         </StackLayout>
-        <GridLayout rows="*" columns="1*, 3*">
+
+        <GridLayout rows="auto, auto" class="m-t-5 m-x-20">
+            <Label row="0" text="Approver Comment" fontSize="15" fontWeight="500"></Label>
+            <Label row="1" text="Please write any comment here" fontSize="13" textWrap="true"
+                *ngIf="!resetShow"></Label>
+            <Label row="1" [text]="textArea ||  '-'" fontSize="13" textWrap="true" *ngIf="resetShow"></Label>
+        </GridLayout>
+        <StackLayout *ngIf="!resetShow">
+            <TextView hint="Add a comment" [text]="textArea" (textChange)="onTextChange($event)"
+                backgroundColor="#fafafa" class="text-area">
+            </TextView>
+        </StackLayout>
+
+
+        <GridLayout rows="*" columns="1*, 3*" class="m-y-20">
             <GridLayout col="1" rows="*" columns="*, *">
-                <Button col="0" text="Approve" (tap)="onConfirm()" class="btn -rounded-sm" backgroundColor="gray"
-                    color="#fff"></Button>
-                <Button col="1" text="Reject" (tap)="onConfirm()" class="btn -rounded-sm -primary"></Button>
+                <Button col="0" text="Approve" (tap)="onApprove('2')"
+                    class="btn -rounded-sm {{approvalDisabled ? '-disabled' : '-gray-primary'}}" *ngIf="!resetShow"
+                    [isUserInteractionEnabled]="!approvalDisabled"></Button>
+                <Button col="1" text="Reject" (tap)="onApprove('3')"
+                    class="btn -rounded-sm {{approvalDisabled ? '-disabled' : '-primary'}}" *ngIf="!resetShow"
+                    [isUserInteractionEnabled]="!approvalDisabled"></Button>
+                <Button col="1" text="Reset" (tap)="onReset()"
+                    class="btn -rounded-sm {{resetDisabled ? '-disabled' : '-primary'}}" *ngIf="resetShow"
+                    [isUserInteractionEnabled]="!resetDisabled"></Button>
             </GridLayout>
         </GridLayout>
     </StackLayout>
