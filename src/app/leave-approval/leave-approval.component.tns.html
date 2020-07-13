@@ -69,6 +69,9 @@
             </StackLayout>
         </GridLayout>
     </RadListView>
+    <GridLayout row="2" *ngIf="!processing && appliedLeavesEmpty">
+        <Label text="There is no applied leaves." class="h2" textWrap="true" horizontalAlignment="center"></Label>
+    </GridLayout>
 
     <RadListView visibility="{{ approvedVisibility ? 'visible' : 'collapsed' }}" row="2" *ngIf="ApprovedLeaves?.length"
         [items]="ApprovedLeaves" swipeActions="true" selectionBehavior="None"
@@ -90,6 +93,9 @@
             </StackLayout>
         </GridLayout>
     </RadListView>
+    <GridLayout row="2" *ngIf="!processing && approvedLeavesEmpty">
+        <Label text="There is no approved leaves." class="h2" textWrap="true" horizontalAlignment="center"></Label>
+    </GridLayout>
 
     <RadListView visibility="{{ rejectedVisibility ? 'visible' : 'collapsed' }}" row="2" *ngIf="RejectedLeaves?.length"
         [items]="RejectedLeaves" swipeActions="true" selectionBehavior="None"
@@ -111,6 +117,9 @@
             </StackLayout>
         </GridLayout>
     </RadListView>
+    <GridLayout row="2" *ngIf="!processing && rejectedLeavesEmpty">
+        <Label text="There is no rejected leaves." class="h2" textWrap="true" horizontalAlignment="center"></Label>
+    </GridLayout>
 
     <GridLayout row="3" *ngIf="processing">
         <ActivityIndicator [busy]="processing"></ActivityIndicator>

@@ -37,7 +37,7 @@ export class ApproveCommentModalComponent implements OnInit {
   onConfirm() {
     const bodyPayload = { ...this.medium };
     bodyPayload.approverComment = this.textArea || '-';
-    this.backendService.approveMockLeave(bodyPayload).subscribe(response => {
+    this.backendService.approveLeave(bodyPayload).subscribe(response => {
       const status = response['status'];
       const statusLabel = this.status;
       if (status.code == 200) {

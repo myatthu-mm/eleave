@@ -21,19 +21,23 @@ export class DatePickerComponent implements OnInit, OnDestroy {
   getDate_event: EventEmitter<string> = new EventEmitter<string>();
 
   private resetEventSubscription: Subscription;
-  @Input() resetEvent: Observable<void>;
+  @Input() resetEvent?: Observable<void>;
 
   constructor() { }
 
   ngOnInit() {
     this.dateLabel = this.Title;
-    this.resetEventSubscription = this.resetEvent.subscribe(() => {
-      this.dateClear();
-    });
+    if (this.resetEvent) {
+      this.resetEventSubscription = this.resetEvent.subscribe(() => {
+        this.dateClear();
+      });
+    }
   }
 
   ngOnDestroy() {
-    this.resetEventSubscription.unsubscribe();
+    if (this.resetEventSubscription) {
+      this.resetEventSubscription.unsubscribe();
+    }
   }
 
   public openDatepicker() {

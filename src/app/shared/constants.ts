@@ -13,7 +13,7 @@ export enum LeaveType {
 }
 
 export enum LeaveStatus {
-    Applied = 'Processing',
+    Applied = 'Applied',
     Rejected = 'Rejected',
     Approved = 'Approved'
 }

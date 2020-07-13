@@ -17,8 +17,10 @@ export class LoginComponent implements OnInit {
   isLoggingIn = true;
   user: User;
   processing = false;
+  enabledButton: boolean = true;
   public isIOS = isIOS;
   private _unsubscribe$ = new Subject();
+
   constructor(private page: Page,
     private routerExtensions: RouterExtensions,
     private _backendServie: BackendService) {
@@ -47,7 +49,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.routerExtensions.navigate(['/home'], { clearHistory: true }); return;
+    this.enabledButton = false;
     this.processing = true;
     const bodyPayload = {
       userId: this.user.userId,
@@ -71,12 +73,14 @@ export class LoginComponent implements OnInit {
             alert("Access Denied");
             console.error('Error response:', error);
             this.processing = false;
+            this.enabledButton = true;
           })
       })
       .catch((err) => {
         alert("Access Denied Nomfa");
         console.error('Error response:', err);
         this.processing = false;
+        this.enabledButton = true;
       })
   }
 

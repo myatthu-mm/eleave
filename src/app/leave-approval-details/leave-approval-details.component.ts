@@ -39,7 +39,7 @@ export class LeaveApprovalDetailsComponent implements OnInit {
     const payload = { ...this.payload };
     payload.status = _status;
     payload.approverComment = this.textArea;
-    this._backendService.approveMockLeave(payload).subscribe(response => {
+    this._backendService.approveLeave(payload).subscribe(response => {
       const status = response['status'];
       const statusLabel = _status === '2' ? 'Approved' : 'Reject';
       this.data.status = _status;
@@ -75,7 +75,7 @@ export class LeaveApprovalDetailsComponent implements OnInit {
       if (choose) {
         const payload = { ...this.payload };
         payload.status = '1';
-        this._backendService.approveMockLeave(payload).subscribe(response => {
+        this._backendService.approveLeave(payload).subscribe(response => {
           const status = response['status'];
           if (status.code == 200) {
             alert(`Reset success!`);

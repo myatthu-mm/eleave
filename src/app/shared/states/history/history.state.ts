@@ -34,6 +34,10 @@ export class HistoryListState {
                 const state = getState();
                 setState({ ...state, list: leaveHistories });
                 console.log('histories save state..');
+            } else {
+                const state = getState();
+                setState({ ...state, list: [] });
+                console.log('empty histoy');
             }
         }, (error) => {
             alert('history error');

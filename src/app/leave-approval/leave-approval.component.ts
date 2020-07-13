@@ -44,9 +44,9 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
   appliedVisibility: boolean;
   approvedVisibility: boolean;
   rejectedVisibility: boolean;
-  appliedEmpty: boolean;
-  approvedEmpty: boolean;
-  rejectedEmpty: boolean;
+  appliedLeavesEmpty: boolean;
+  approvedLeavesEmpty: boolean;
+  rejectedLeavesEmpty: boolean;
   mySegmentedBarItems: Array<SegmentedBarItem> = [];
   private _unsubscribe$ = new Subject();
   constructor(
@@ -129,11 +129,8 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
         if (result) {
           setTimeout(() => {
             this.AppliedLeaves.splice(swipedIndex, 1);
-          }, 800);
-          setTimeout(() => {
-            this.associateService.requestAppliedLeaves();
-          }, 1200); // temporay , remove timeout later
-
+          }, 1000);
+          this.associateService.requestAppliedLeaves();
           if (_status == 'approved') {
             console.log('set need approved');
 
@@ -172,7 +169,7 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
       if (choose) {
         const payload = { ...approvalPayload };
         payload.status = '1';
-        this.backendService.approveMockLeave(payload).subscribe(response => {
+        this.backendService.approveLeave(payload).subscribe(response => {
           const status = response['status'];
           if (status.code == 200) {
             alert(`Reset success!`);
@@ -193,29 +190,8 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
         });
       }
     });
-
-
-
   }
 
-  private createPayload(param: Associate, _status?: string): Approval {
-    let approval = new Approval();
-    approval.userId = getString('userId');
-    approval.employeeId = param.employee_id;
-    approval.leaveTypeCode = param.leave_type_code;
-    const startDate = this.changeDateFormat(new Date(param.leave_start_date));
-    const endDate = this.changeDateFormat(new Date(param.leave_end_date));
-    approval.startDate = startDate;
-    approval.endDate = endDate;
-    approval.half = param.half_type;
-    approval.duration = param.duration;
-    approval.updatedBy = getString('userId');
-    approval.updatedDate = this.changeDateFormat(new Date());
-    approval.remarks = param.remark;
-    approval.unit = getString('unit');
-    approval.status = (_status === 'approved') ? '2' : (_status === 'reject') ? '3' : '1'; // 2 - approved, 3 - rejected status, 1 - reset
-    return approval;
-  }
 
   public onLoaded(lst: ListView) {
     if (lst.ios) {
@@ -250,6 +226,7 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
       }
     }
     this.callToAppliedLeaves();
+    this.appliedLeavesEmpty = false;
   }
 
   public listenRemoveEvent_Approved($startEvent) {
@@ -267,6 +244,7 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
       }
     }
     this.callToApprovedLeaves();
+    this.approvedLeavesEmpty = false;
   }
 
   public listenRemoveEvent_Rejected($startEvent) {
@@ -284,6 +262,7 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
       }
     }
     this.callToRejectedLeaves();
+    this.rejectedLeavesEmpty = false;
   }
 
   public onSwipeCellStarted(args: ListViewEventData) {
@@ -318,6 +297,7 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
       }
     });
   }
+
 
   private setVisibility(_index) {
     this.appliedVisibility = false;
@@ -355,17 +335,20 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
 
   private callToAppliedLeavesWithDate(_startDate: string, _endDate: string) {
     this.processing = true;
-    this.appliedEmpty = true;
+    this.appliedLeavesEmpty = true;
     this.backendService.getAssociateLeave('Applied', _startDate, _endDate)
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(response => {
         const status = response['status'];
-        if (status.code === 200) {
+        if (status && status.code === 200) {
           this.AppliedLeaves = this.leaveService.getFormattedLeaveRequests(response['leave_associate_list']);
           this.processing = false;
+          this.appliedLeavesEmpty = false;
         } else {
+          console.log('not leaves found');
+
           this.AppliedLeaves = [];
-          this.appliedEmpty = true;
+          this.appliedLeavesEmpty = true;
           this.processing = false;
         }
       }, (error) => {
@@ -400,17 +383,18 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
 
   private callToApprovedLeavesWithDate(_startDate: string, _endDate: string) {
     this.processing = true;
-    this.approvedEmpty = true;
+    this.approvedLeavesEmpty = true;
     this.backendService.getAssociateLeave('Approved', _startDate, _endDate)
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(response => {
         const status = response['status'];
-        if (status.code === 200) {
+        if (status && status.code === 200) {
           this.ApprovedLeaves = this.leaveService.getFormattedLeaveRequests(response['leave_associate_list']);
           this.processing = false;
+          this.approvedLeavesEmpty = false;
         } else {
           this.ApprovedLeaves = [];
-          this.approvedEmpty = true;
+          this.approvedLeavesEmpty = true;
           this.processing = false;
         }
       }, (error) => {
@@ -445,17 +429,18 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
 
   private callToRejectedLeavesWithDate(_startDate: string, _endDate: string) {
     this.processing = true;
-    this.rejectedEmpty = true;
+    this.rejectedLeavesEmpty = true;
     this.backendService.getAssociateLeave('Rejected', _startDate, _endDate)
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(response => {
         const status = response['status'];
-        if (status.code === 200) {
+        if (status && status.code === 200) {
           this.RejectedLeaves = this.leaveService.getFormattedLeaveRequests(response['leave_associate_list']);
           this.processing = false;
+          this.rejectedLeavesEmpty = false;
         } else {
-          this.RejectedLeaves = [];
-          this.rejectedEmpty = true;
+          this.RejectedLeaves.length = 0;
+          this.rejectedLeavesEmpty = true;
           this.processing = false;
         }
       }, (error) => {
@@ -486,7 +471,7 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
     this.startDate_Rejected.label = _date.startLabel;
     this.endDate_Rejected.value = _date.endValue;
     this.endDate_Rejected.label = _date.endLabel;
-    this.callToAppliedLeavesWithDate(this.startDate_Rejected.value, this.endDate_Rejected.value);
+    this.callToRejectedLeavesWithDate(this.startDate_Rejected.value, this.endDate_Rejected.value);
   }
 
   private changeDateFormat(_date: Date) {
@@ -494,6 +479,25 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
     const month = ('0' + (_date.getMonth() + 1)).slice(-2);
     const date = ('0' + _date.getDate()).slice(-2);
     return `${year}-${month}-${date}`;
+  }
+
+  private createPayload(param: Associate, _status?: string): Approval {
+    let approval = new Approval();
+    approval.userId = getString('userId');
+    approval.employeeId = param.employee_id;
+    approval.leaveTypeCode = param.leave_type_code;
+    const startDate = this.changeDateFormat(new Date(param.leave_start_date));
+    const endDate = this.changeDateFormat(new Date(param.leave_end_date));
+    approval.startDate = startDate;
+    approval.endDate = endDate;
+    approval.half = param.half_type;
+    approval.duration = param.duration;
+    approval.updatedBy = getString('userId');
+    approval.updatedDate = this.changeDateFormat(new Date());
+    approval.remarks = param.remark;
+    approval.unit = getString('unit');
+    approval.status = (_status === 'approved') ? '2' : (_status === 'reject') ? '3' : '1'; // 2 - approved, 3 - rejected status, 1 - reset
+    return approval;
   }
 
   private closeSubscription(subObj$: Subscription) {

@@ -20,7 +20,8 @@
                 </StackLayout>
 
                 <StackLayout row="2">
-                    <Button text="Login" (tap)="login()" class="btn base-bg -rounded-sm m-b-30"></Button>
+                    <Button text="Login" (tap)="login()" class="btn base-bg -rounded-sm m-b-30"
+                        [isUserInteractionEnabled]="enabledButton"></Button>
                 </StackLayout>
                 <ActivityIndicator rowSpan="3" [busy]="processing"></ActivityIndicator>
             </GridLayout>

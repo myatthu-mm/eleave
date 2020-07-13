@@ -34,7 +34,7 @@ import { NativeScriptUIListViewModule } from "nativescript-ui-listview/angular";
 import { ApproveCommentModalComponent } from '@src/app/leave-approval/approve-comment-modal/approve-comment-modal.component';
 import { LeaveApprovalDetailsComponent } from '@src/app/leave-approval-details/leave-approval-details.component';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { MemoryServiceService } from '@src/app/shared/services/memory-service.service';
+// import { MemoryServiceService } from '@src/app/shared/services/memory-service.service';
 import { registerElement } from "nativescript-angular";
 registerElement("PreviousNextView", () => require("nativescript-iqkeyboardmanager").PreviousNextView);
 @NgModule({
@@ -64,7 +64,7 @@ registerElement("PreviousNextView", () => require("nativescript-iqkeyboardmanage
     NativeScriptFormsModule,
     NativeScriptUICalendarModule,
     NativeScriptHttpClientModule,
-    HttpClientInMemoryWebApiModule.forRoot(MemoryServiceService),
+    // HttpClientInMemoryWebApiModule.forRoot(MemoryServiceService),
     NativeScriptUIChartModule,
     NgxsModule.forRoot([HistoryListState, ProfileState, BalanceListState], { developmentMode: true }),
     NgxsResetPluginModule.forRoot(),
