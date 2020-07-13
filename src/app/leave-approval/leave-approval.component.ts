@@ -9,6 +9,7 @@ import { ListView } from "tns-core-modules/ui/list-view";
 import { getString } from "tns-core-modules/application-settings";
 import { confirm } from "tns-core-modules/ui/dialogs";
 import { ModalComponent } from '../ui-components/modal/modal.component';
+import { CommentModalComponent } from '../ui-components/comment-modal/comment-modal.component';
 import { AssociateService } from '../shared/states/associate/associate.service';
 import { Associate } from '../shared/models/associate.model';
 import { BackendService } from '../shared/services/backend.service';
@@ -134,10 +135,10 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
     const options: ModalDialogOptions = {
       viewContainerRef: this.viewContainerRef,
       fullscreen: false,
-      context: { page: 'approval', data: approval }
+      context: { data: approval }
     };
 
-    this.modalService.showModal(ModalComponent, options)
+    this.modalService.showModal(CommentModalComponent, options)
       .then(result => {
         if (result) {
           setTimeout(() => {
@@ -297,7 +298,7 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
     const options: ModalDialogOptions = {
       viewContainerRef: this.viewContainerRef,
       fullscreen: false,
-      context: { page: 'approval-filter' }
+      context: {}
     };
     this.modalService.showModal(ModalComponent, options).then((result: any) => {
       if (result) {
@@ -410,6 +411,8 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
       }, (error) => {
         alert('error');
         console.error('Error response:', error);
+        this.AppliedLeaves = [];
+        this.appliedLeavesEmpty = true;
         this.processing = false;
       })
   }
@@ -456,6 +459,8 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
       }, (error) => {
         alert('error');
         console.error('Error response:', error);
+        this.ApprovedLeaves = [];
+        this.approvedLeavesEmpty = true;
         this.processing = false;
       })
   }
@@ -498,13 +503,15 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
           this.processing = false;
           this.rejectedLeavesEmpty = false;
         } else {
-          this.RejectedLeaves.length = 0;
+          this.RejectedLeaves = [];
           this.rejectedLeavesEmpty = true;
           this.processing = false;
         }
       }, (error) => {
         alert('error');
         console.error('Error response:', error);
+        this.RejectedLeaves = [];
+        this.rejectedLeavesEmpty = true;
         this.processing = false;
       })
   }

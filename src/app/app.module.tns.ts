@@ -34,8 +34,9 @@ import { NativeScriptUIListViewModule } from "nativescript-ui-listview/angular";
 import { ApproveCommentModalComponent } from '@src/app/leave-approval/approve-comment-modal/approve-comment-modal.component';
 import { LeaveApprovalDetailsComponent } from '@src/app/leave-approval-details/leave-approval-details.component';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
-// import { MemoryServiceService } from '@src/app/shared/services/memory-service.service';
+import { MemoryServiceService } from '@src/app/shared/services/memory-service.service';
 import { registerElement } from "nativescript-angular";
+import { CommentModalComponent } from '@src/app/ui-components/comment-modal/comment-modal.component';
 registerElement("PreviousNextView", () => require("nativescript-iqkeyboardmanager").PreviousNextView);
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ registerElement("PreviousNextView", () => require("nativescript-iqkeyboardmanage
     LeaveApprovalComponent,
     ApproveCommentModalComponent,
     LeaveApprovalDetailsComponent,
+    CommentModalComponent,
   ],
   imports: [
     NativeScriptModule,
@@ -64,7 +66,7 @@ registerElement("PreviousNextView", () => require("nativescript-iqkeyboardmanage
     NativeScriptFormsModule,
     NativeScriptUICalendarModule,
     NativeScriptHttpClientModule,
-    // HttpClientInMemoryWebApiModule.forRoot(MemoryServiceService),
+    HttpClientInMemoryWebApiModule.forRoot(MemoryServiceService),
     NativeScriptUIChartModule,
     NgxsModule.forRoot([HistoryListState, ProfileState, BalanceListState], { developmentMode: true }),
     NgxsResetPluginModule.forRoot(),
@@ -73,7 +75,7 @@ registerElement("PreviousNextView", () => require("nativescript-iqkeyboardmanage
   providers: [
     ModalDialogService, ModalDatetimepicker, LeaveService, BackendService
   ],
-  entryComponents: [ModalComponent],
+  entryComponents: [ModalComponent, CommentModalComponent],
   bootstrap: [AppComponent],
   schemas: [NO_ERRORS_SCHEMA]
 })

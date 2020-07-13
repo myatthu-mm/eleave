@@ -3,21 +3,21 @@ import { ModalDialogParams } from "nativescript-angular/modal-dialog";
 import { ActivatedRoute } from '@angular/router';
 import { RouterExtensions } from 'nativescript-angular/router';
 
-
 @Component({
-  selector: 'app-modal',
-  templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.scss']
+  selector: 'app-comment-modal',
+  templateUrl: './comment-modal.component.html',
+  styleUrls: ['./comment-modal.component.scss']
 })
-export class ModalComponent implements OnInit {
+export class CommentModalComponent implements OnInit {
+
   constructor(
     private params: ModalDialogParams,
     private _routerExtensions: RouterExtensions,
-    private _activeRoute: ActivatedRoute) {
-  }
+    private _activeRoute: ActivatedRoute
+  ) { }
 
   ngOnInit() {
-    this._routerExtensions.navigate(['filter-modal'], { relativeTo: this._activeRoute });
+    this._routerExtensions.navigate(['approve-comment-modal'], { queryParams: this.params.context.data, relativeTo: this._activeRoute });
   }
 
   close() {

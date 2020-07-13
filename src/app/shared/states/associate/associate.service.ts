@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Associate } from '../../models/associate.model';
 import { BackendService } from '../../services/backend.service';
 import { LeaveService } from '../../services/leave.service';
+import { LeaveStatus } from '../../constants';
 @Injectable({
   providedIn: 'root'
 })
@@ -63,16 +64,7 @@ export class AssociateService {
   requestAppliedLeaves() {
     console.log('applied api calling');
 
-    this._backendService.getAssociateLeave('Applied', '2020-01-01', '2020-12-31').subscribe(response => {
-      const status = response['status'];
-      if (status.code === 200) {
-        this.appliedLeavesStore.leaves = this._leaveService.getFormattedLeaveRequests(response['leave_associate_list']);
-        this._appliedLeaves.next(Object.assign({}, this.appliedLeavesStore).leaves);
-        return this.appliedLeaves;
-      }
-    }, (error) => console.log('Could not load applied leaves.')
-    );
-    // this._backendService.getMockAssociateLeave('applied').subscribe(response => {
+    // this._backendService.getAssociateLeave('Applied', '2020-01-01', '2020-12-31').subscribe(response => {
     //   const status = response['status'];
     //   if (status.code === 200) {
     //     this.appliedLeavesStore.leaves = this._leaveService.getFormattedLeaveRequests(response['leave_associate_list']);
@@ -81,6 +73,15 @@ export class AssociateService {
     //   }
     // }, (error) => console.log('Could not load applied leaves.')
     // );
+    this._backendService.getMockAssociateLeave('applied').subscribe(response => {
+      const status = response['status'];
+      if (status.code === 200) {
+        this.appliedLeavesStore.leaves = this._leaveService.getFormattedLeaveRequests(response['leave_associate_list']);
+        this._appliedLeaves.next(Object.assign({}, this.appliedLeavesStore).leaves);
+        return this.appliedLeaves;
+      }
+    }, (error) => console.log('Could not load applied leaves.')
+    );
   }
 
   requestApprovedLeaves() {
@@ -93,7 +94,7 @@ export class AssociateService {
     //   }
     // }, (error) => console.log('Could not load approved leaves.')
     // );
-    this._backendService.getAssociateLeave('Approved', '2020-01-01', '2020-12-31').subscribe(response => {
+    this._backendService.getAssociateLeave(LeaveStatus.Approved, '2020-01-01', '2020-12-31').subscribe(response => {
       const status = response['status'];
       if (status.code === 200) {
         this.approvedLeavesStore.leaves = this._leaveService.getFormattedLeaveRequests(response['leave_associate_list']);
@@ -105,7 +106,7 @@ export class AssociateService {
 
   requestRejectedLeaves() {
     console.log('reject api calling');
-    this._backendService.getAssociateLeave('Rejected', '2020-01-01', '2020-12-31').subscribe(response => {
+    this._backendService.getAssociateLeave(LeaveStatus.Rejected, '2020-01-01', '2020-12-31').subscribe(response => {
       const status = response['status'];
       if (status.code === 200) {
         this.rejectedLeavesStore.leaves = this._leaveService.getFormattedLeaveRequests(response['leave_associate_list']);

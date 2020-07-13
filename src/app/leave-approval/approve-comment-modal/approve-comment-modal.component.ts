@@ -3,6 +3,7 @@ import { ModalDialogParams } from 'nativescript-angular/modal-dialog';
 import { ActivatedRoute } from '@angular/router';
 import { EventData } from 'tns-core-modules/ui/page';
 import { TextView } from 'tns-core-modules/ui/text-view';
+import { Page } from "tns-core-modules/ui/page";
 import { Approval } from '../../shared/models/approval.model';
 import { BackendService } from '../../shared/services/backend.service';
 import { LeaveStatus } from '../../shared/constants';
@@ -18,11 +19,13 @@ export class ApproveCommentModalComponent implements OnInit {
   constructor(
     private params: ModalDialogParams,
     private backendService: BackendService,
-    private _activatedRoute: ActivatedRoute) {
+    private _activatedRoute: ActivatedRoute,
+    private _page: Page) {
 
   }
 
   ngOnInit() {
+    this._page.actionBarHidden = true;
     if (this._activatedRoute.snapshot.queryParamMap) {
       this.medium = new Approval();
       this.medium = this._activatedRoute.snapshot.queryParams as Approval;

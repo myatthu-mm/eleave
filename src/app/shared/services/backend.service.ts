@@ -99,9 +99,9 @@ export class BackendService {
         return headers;
     }
 
-    // getMockAssociateLeave(_status) {
-    //     return this.http.get<any>(`api/${_status}`);
-    // }
+    getMockAssociateLeave(_status) {
+        return this.http.get<any>(`api/${_status}`);
+    }
 
     // approveMockLeave(_approvedPayload: Approval) {
     //     return this.http.get<any>('api/success');
