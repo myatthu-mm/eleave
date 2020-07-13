@@ -103,7 +103,7 @@ export class BackendService {
         return this.http.get<any>(`api/${_status}`);
     }
 
-    // approveMockLeave(_approvedPayload: Approval) {
-    //     return this.http.get<any>('api/success');
-    // }
+    approveMockLeave(_approvedPayload: Approval) {
+        return this.http.get<any>('api/success');
+    }
 }
