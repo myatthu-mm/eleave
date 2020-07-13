@@ -5,6 +5,7 @@ import { EventData } from 'tns-core-modules/ui/page';
 import { TextView } from 'tns-core-modules/ui/text-view';
 import { Approval } from '../../shared/models/approval.model';
 import { BackendService } from '../../shared/services/backend.service';
+import { LeaveStatus } from '../../shared/constants';
 @Component({
   selector: 'app-approve-comment-modal',
   templateUrl: './approve-comment-modal.component.html',
@@ -25,7 +26,7 @@ export class ApproveCommentModalComponent implements OnInit {
     if (this._activatedRoute.snapshot.queryParamMap) {
       this.medium = new Approval();
       this.medium = this._activatedRoute.snapshot.queryParams as Approval;
-      this.status = this.medium.status === '2' ? 'Approved' : 'Reject';
+      this.status = this.medium.status === '2' ? LeaveStatus.Approved : LeaveStatus.Rejected;
     }
   }
 

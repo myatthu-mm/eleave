@@ -105,7 +105,6 @@ export class AssociateService {
 
   requestRejectedLeaves() {
     console.log('reject api calling');
-
     this._backendService.getAssociateLeave('Rejected', '2020-01-01', '2020-12-31').subscribe(response => {
       const status = response['status'];
       if (status.code === 200) {

@@ -14,6 +14,7 @@ import { Associate } from '../shared/models/associate.model';
 import { BackendService } from '../shared/services/backend.service';
 import { LeaveService } from '../shared/services/leave.service';
 import { Approval } from '../shared/models/approval.model';
+import { LeaveStatus } from '../shared/constants';
 @Component({
   selector: 'app-leave-approval',
   templateUrl: './leave-approval.component.html',
@@ -88,14 +89,26 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
     this.rejectedLeaves = value;
   }
 
+  get AppliedLeaveEmptyShow() {
+    return this.appliedLeavesEmpty && this.appliedVisibility;
+  }
+
+  get ApprovedLeaveEmptyShow() {
+    return this.approvedLeavesEmpty && this.approvedVisibility;
+  }
+
+  get RejectedLeaveEmptyShow() {
+    return this.rejectedLeavesEmpty && this.rejectedVisibility;
+  }
+
   @HostListener('loaded')
   pageOnInit() {
     this.associateService.getPreviousViewIndex().pipe(take(1)).subscribe(index => {
       console.log('Index:', index);
       switch (index) {
-        case 0: this.associateService.requestAppliedLeaves(); break;
-        case 1: this.associateService.requestApprovedLeaves(); break;
-        case 2: this.associateService.requestRejectedLeaves(); break;
+        case 0: this.callApplied(); break;
+        case 1: this.callApproved(); break;
+        case 2: this.callRejected(); break;
       }
       this.associateService.setPreviousViewIndex(-1);
     });
@@ -108,9 +121,9 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
     this.setVisibility(segmentedBar.selectedIndex);
     this.selectedSegmentedIndex = segmentedBar.selectedIndex;
     switch (segmentedBar.selectedIndex) {
-      case 0: this.callToAppliedLeaves(); break;
-      case 1: this.callToApprovedLeaves(); break;
-      case 2: this.callToRejectedLeaves(); break;
+      case 0: (!this.startDate_Applied.value && !this.endDate_Applied.value) && this.callToAppliedLeaves(); break;
+      case 1: (!this.startDate_Approved.value && !this.endDate_Approved.value) && this.callToApprovedLeaves(); break;
+      case 2: (!this.startDate_Rejected.value && !this.endDate_Rejected.value) && this.callToRejectedLeaves(); break;
     }
   }
 
@@ -131,7 +144,7 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
             this.AppliedLeaves.splice(swipedIndex, 1);
           }, 1000);
           this.associateService.requestAppliedLeaves();
-          if (_status == 'approved') {
+          if (_status == LeaveStatus.Approved) {
             console.log('set need approved');
 
             this.associateService.setNeedRequestApproved(true);
@@ -152,11 +165,11 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
     if (this.selectedSegmentedIndex == 1) { // 1 is approved page
       swipedIndex = this.ApprovedLeaves.indexOf(args.object.bindingContext);
       swipedItem = this.ApprovedLeaves[swipedIndex];
-      statusLabel = 'Approved';
+      statusLabel = LeaveStatus.Approved;
     } else { // 2 is reject page
       swipedIndex = this.RejectedLeaves.indexOf(args.object.bindingContext);
       swipedItem = this.RejectedLeaves[swipedIndex];
-      statusLabel = 'Rejected';
+      statusLabel = LeaveStatus.Rejected;
     }
     const approvalPayload = this.createPayload(swipedItem);
     const options = {
@@ -175,11 +188,9 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
             alert(`Reset success!`);
             this.associateService.setNeedRequestApplied(true);
             if (this.selectedSegmentedIndex == 1) {
-              this.ApprovedLeaves.splice(swipedIndex, 1);
-              this.associateService.requestApprovedLeaves();
+              this.callApproved();
             } else {
-              this.RejectedLeaves.splice(swipedIndex, 1);
-              this.associateService.requestRejectedLeaves();
+              this.callRejected();
             }
 
           } else {
@@ -225,7 +236,8 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
         return;
       }
     }
-    this.callToAppliedLeaves();
+    this.processing = true;
+    this.associateService.requestAppliedLeaves();
     this.appliedLeavesEmpty = false;
   }
 
@@ -243,7 +255,8 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
         return;
       }
     }
-    this.callToApprovedLeaves();
+    this.processing = true;
+    this.associateService.requestApprovedLeaves();
     this.approvedLeavesEmpty = false;
   }
 
@@ -261,7 +274,8 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
         return;
       }
     }
-    this.callToRejectedLeaves();
+    this.processing = true;
+    this.associateService.requestRejectedLeaves();
     this.rejectedLeavesEmpty = false;
   }
 
@@ -310,6 +324,48 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
     }
   }
 
+  private callApplied() {
+    if (this.startDate_Applied.value && this.endDate_Applied.value) {
+      this.callToAppliedLeavesWithDate(this.startDate_Applied.value, this.endDate_Applied.value);
+    } else {
+      if (this.startDate_Applied.value) {
+        this.callToAppliedLeavesWithDate(this.startDate_Applied.value, this.startDate_Applied.value);
+      } else if (this.endDate_Applied.value) {
+        this.callToAppliedLeavesWithDate(this.endDate_Applied.value, this.endDate_Applied.value);
+      } else {
+        this.associateService.requestAppliedLeaves();
+      }
+    }
+  }
+
+  private callApproved() {
+    if (this.startDate_Approved.value && this.endDate_Approved.value) {
+      this.callToApprovedLeavesWithDate(this.startDate_Approved.value, this.endDate_Approved.value);
+    } else {
+      if (this.startDate_Approved.value) {
+        this.callToApprovedLeavesWithDate(this.startDate_Approved.value, this.startDate_Approved.value);
+      } else if (this.endDate_Approved.value) {
+        this.callToApprovedLeavesWithDate(this.endDate_Approved.value, this.endDate_Approved.value);
+      } else {
+        this.associateService.requestApprovedLeaves();
+      }
+    }
+  }
+
+  private callRejected() {
+    if (this.startDate_Rejected.value && this.endDate_Rejected.value) {
+      this.callToRejectedLeavesWithDate(this.startDate_Rejected.value, this.endDate_Rejected.value);
+    } else {
+      if (this.startDate_Rejected.value) {
+        this.callToRejectedLeavesWithDate(this.startDate_Rejected.value, this.startDate_Rejected.value);
+      } else if (this.endDate_Rejected.value) {
+        this.callToRejectedLeavesWithDate(this.endDate_Rejected.value, this.endDate_Rejected.value);
+      } else {
+        this.associateService.requestRejectedLeaves();
+      }
+    }
+  }
+
   private callToAppliedLeaves() {
     let needtoUpdate = true;
     this.associateService.getNeedtoRequestApplied().pipe(takeUntil(this._unsubscribe$)).subscribe(flag => {
@@ -336,7 +392,7 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
   private callToAppliedLeavesWithDate(_startDate: string, _endDate: string) {
     this.processing = true;
     this.appliedLeavesEmpty = true;
-    this.backendService.getAssociateLeave('Applied', _startDate, _endDate)
+    this.backendService.getAssociateLeave(LeaveStatus.Applied, _startDate, _endDate)
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(response => {
         const status = response['status'];
@@ -384,7 +440,7 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
   private callToApprovedLeavesWithDate(_startDate: string, _endDate: string) {
     this.processing = true;
     this.approvedLeavesEmpty = true;
-    this.backendService.getAssociateLeave('Approved', _startDate, _endDate)
+    this.backendService.getAssociateLeave(LeaveStatus.Approved, _startDate, _endDate)
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(response => {
         const status = response['status'];
@@ -421,8 +477,9 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
           this.processing = false;
         } else {
           console.log('new rejected');
-          this.associateService.requestRejectedLeaves();
           this.associateService.setNeedRequestRejected(false);
+          this.associateService.requestRejectedLeaves();
+
         }
       }, (error) => this.processing = false);
   }
@@ -430,7 +487,9 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
   private callToRejectedLeavesWithDate(_startDate: string, _endDate: string) {
     this.processing = true;
     this.rejectedLeavesEmpty = true;
-    this.backendService.getAssociateLeave('Rejected', _startDate, _endDate)
+    console.log('called rejected date:', _startDate, _endDate);
+
+    this.backendService.getAssociateLeave(LeaveStatus.Rejected, _startDate, _endDate)
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(response => {
         const status = response['status'];
@@ -496,7 +555,12 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
     approval.updatedDate = this.changeDateFormat(new Date());
     approval.remarks = param.remark;
     approval.unit = getString('unit');
-    approval.status = (_status === 'approved') ? '2' : (_status === 'reject') ? '3' : '1'; // 2 - approved, 3 - rejected status, 1 - reset
+    switch (_status) {
+      case LeaveStatus.Approved: approval.status = '2'; break;
+      case LeaveStatus.Rejected: approval.status = '3'; break;
+      default: approval.status = '1';
+    }
+    // approval.status = (_status === 'approved') ? '2' : (_status === 'reject') ? '3' : '1'; // 2 - approved, 3 - rejected status, 1 - reset
     return approval;
   }
 

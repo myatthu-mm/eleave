@@ -7,6 +7,7 @@ import { Approval } from '../shared/models/approval.model';
 import { Associate } from '../shared/models/associate.model';
 import { BackendService } from '../shared/services/backend.service';
 import { AssociateService } from '../shared/states/associate/associate.service';
+import { LeaveStatus } from '../shared/constants';
 @Component({
   selector: 'app-leave-approval-details',
   templateUrl: './leave-approval-details.component.html',
@@ -41,7 +42,7 @@ export class LeaveApprovalDetailsComponent implements OnInit {
     payload.approverComment = this.textArea;
     this._backendService.approveLeave(payload).subscribe(response => {
       const status = response['status'];
-      const statusLabel = _status === '2' ? 'Approved' : 'Reject';
+      const statusLabel = _status === '2' ? LeaveStatus.Approved : LeaveStatus.Rejected;
       this.data.status = _status;
       if (status.code == 200) {
         alert(`${statusLabel} success!`);
@@ -64,7 +65,7 @@ export class LeaveApprovalDetailsComponent implements OnInit {
   onReset() {
     this.resetDisabled = true;
     console.log(this.data.status);
-    const statusLabel = this.data.status === '2' ? 'Approved' : 'Reject';
+    const statusLabel = this.data.status === '2' ? LeaveStatus.Approved : LeaveStatus.Rejected;
     let options = {
       title: "Reset Warning",
       message: `Are you sure to reset the ${statusLabel}?`,

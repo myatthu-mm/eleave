@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     clear();
     this.user = new User();
-    this.user.userId = '008076';
+    this.user.userId = '008076'; // kyawgyi - 007361
     this.user.password = '00008076';
   }
 
