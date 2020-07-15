@@ -61,7 +61,7 @@ export class MoreComponent implements OnInit {
     console.log('More created***');
     this._page.actionBarHidden = true;
     this._unsubscribe$ = new Subject();
-    this.callToProfile();
+    // this.callToProfile();
   }
 
   @HostListener('unloaded')

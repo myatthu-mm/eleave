@@ -7,7 +7,7 @@
                 <Label row="1" [text]="JobPosition" textWrap="true" class="employee-position"></Label>
             </GridLayout>
         </StackLayout>
-        <AbsoluteLayout row="1" ios:height="30" android:height="55" horizontalAlignment="center">
+        <AbsoluteLayout row="1" ios:height="30" android:height="50" horizontalAlignment="center" android:marginTop="-2">
             <StackLayout width="100%" height="55" backgroundColor="#8b0013">
             </StackLayout>
             <StackLayout top="20" class="clip-path" horizontalAlignment="center"></StackLayout>
@@ -26,11 +26,9 @@
                                     [items]="item.pieSource">
                                 </DonutSeries>
                                 <Palette tkPiePalette seriesName="myPieSeries">
-                                    <PaletteEntry tkPiePaletteEntry strokeWidth="29" fillColor="#F44334"
-                                        strokeColor="#F44334">
+                                    <PaletteEntry tkPiePaletteEntry fillColor="#F44334" strokeColor="#F44334">
                                     </PaletteEntry>
-                                    <PaletteEntry tkPiePaletteEntry strokeWidth="29" fillColor="#D8D8D8"
-                                        strokeColor="#D8D8D8">
+                                    <PaletteEntry tkPiePaletteEntry fillColor="#D8D8D8" strokeColor="#D8D8D8">
                                     </PaletteEntry>
                                 </Palette>
                             </RadPieChart>
@@ -47,13 +45,8 @@
                 </ScrollView>
 
 
-                <GridLayout row="1" ios:rows="auto, auto" android:rows="*, auto" android:class="m-t-10">
+                <GridLayout row="1" android:class="m-t-10">
                     <app-leave-listview [items]="LeaveHistories"></app-leave-listview>
-                    <StackLayout row="1" horizontalAlignment="center" android:class="m-b-15">
-                        <Label text="View all leave history" textWrap="true" class="h3 m-20"
-                            (tap)="gotoLeaveHistory()"></Label>
-                    </StackLayout>
-
                 </GridLayout>
 
                 <ActivityIndicator [busy]="processing"></ActivityIndicator>

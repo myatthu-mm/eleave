@@ -1,4 +1,4 @@
-<GridLayout rows="*,auto,*" columns="*" class="page">
+<GridLayout ios:rows="*,auto,*" android:rows="3*,auto,2*" columns="*" class="page">
     <GridLayout row="0" rows="*,*" columns="*" class="m-t-30" android:marginTop="60">
         <StackLayout row="0">
             <Image [src]="ProfileImage" ios:width="120" android:width="110"></Image>
@@ -22,7 +22,7 @@
                 <Image col="0" src="font://&#xf05a;" class="fas m-l-30" height="20" color="#fff"></Image>
             </android>
             <Label col="1" text="Leave Information" textWrap="true" ios:class="m-l-20" android:class="m-l-20 m-y-10"
-                fontSize="19" color="#fff"></Label>
+                ios:fontSize="19" android:fontSize="17" color="#fff"></Label>
         </GridLayout>
         <GridLayout row="1" rows="*" columns="auto, *" backgroundColor="#D6142C" class="m-x-15 m-y-2" height="50"
             [nsRouterLink]="['/change-password']">
@@ -33,7 +33,7 @@
                 <Image col="0" src="font://&#xf13e;" class="fas m-l-30" height="20" color="#fff"></Image>
             </android>
             <Label col="1" text="Change Password" textWrap="true" ios:class="m-l-20" android:class="m-l-20 m-y-10"
-                fontSize="19" color="#fff"></Label>
+                ios:fontSize="19" android:fontSize="17" color="#fff"></Label>
         </GridLayout>
         <GridLayout row="2" rows="*" columns="auto, *" backgroundColor="#D6142C" class="m-x-15 m-y-2" height="50"
             (tap)="logout()" pageTransition="slideBottom" clearHistory="true">
@@ -43,8 +43,8 @@
             <android>
                 <Image col="0" src="font://&#xf152;" class="fas m-l-30" height="20" color="#fff"></Image>
             </android>
-            <Label col="1" text="Logout" textWrap="true" ios:class="m-l-20" android:class="m-l-20 m-y-10" fontSize="19"
-                color="#fff"></Label>
+            <Label col="1" text="Logout" textWrap="true" ios:class="m-l-20" android:class="m-l-20 m-y-10"
+                ios:fontSize="19" android:fontSize="17" color="#fff"></Label>
         </GridLayout>
     </GridLayout>
     <ActivityIndicator [busy]="processing"></ActivityIndicator>

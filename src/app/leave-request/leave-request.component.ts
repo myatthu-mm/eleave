@@ -7,12 +7,16 @@ import { Store } from '@ngxs/store';
 import { Subscription, Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 import { TextView } from "tns-core-modules/ui/text-view";
+import { isAndroid } from "tns-core-modules/platform";
 import { BalanceListState } from '../shared/states/balance/balance.state';
 import { LeaveService } from '../shared/services/leave.service';
 import { BackendService } from '../shared/services/backend.service';
 import { RequestBalanceList } from '../shared/states/balance/balance.actions';
 import { RequestHistoryList } from '../shared/states/history/history.actions';
 import { AlertService } from '../shared/services/alert.service';
+
+import * as app from "tns-core-modules/application";
+declare var android: any;
 
 @Component({
   selector: 'app-leave-request',
@@ -40,7 +44,8 @@ export class LeaveRequestComponent implements OnInit {
     private _store: Store,
     private _leaveService: LeaveService,
     private _backendService: BackendService,
-    private _alertService: AlertService) { }
+    private _alertService: AlertService) {
+  }
 
   get isValidForm(): boolean {
     return (this.startDate_Value.length != 0) && (this.endDate_Value.length !== 0) && (this.leaveBalance > 0);
@@ -52,6 +57,12 @@ export class LeaveRequestComponent implements OnInit {
 
   ngOnInit() {
     console.log('Leave request preloading...');
+    if (isAndroid) {
+      let window = app.android.startActivity.getWindow();
+      window.setSoftInputMode(
+        android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
+      );
+    }
   }
 
   @HostListener('loaded')
@@ -69,7 +80,7 @@ export class LeaveRequestComponent implements OnInit {
       })
     );
 
-    this.callToLeaveBalance();
+    // this.callToLeaveBalance();
   }
 
   @HostListener('unloaded')

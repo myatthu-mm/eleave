@@ -66,16 +66,18 @@
                 </StackLayout>
             </android>
         </GridLayout>
+        <ActivityIndicator [busy]="processing"></ActivityIndicator>
 
-        <StackLayout class="m-t-20">
-            <TextView hint="Add a reason" autocorrect="true" [text]="tvtext" (textChange)="onTextChange($event)"
-                backgroundColor="#F9F9F9" class="text-area">
+        <StackLayout class="m-t-5">
+            <TextView hint="Add a reason" [text]="tvtext" (textChange)="onTextChange($event)" backgroundColor="#F9F9F9"
+                class="text-area">
             </TextView>
         </StackLayout>
+
         <StackLayout class="m-t-20">
             <Button text="Submit Request" class="btn -rounded-sm m-b-30 {{isValidForm ? '-primary' : '-disabled'}}"
                 [isUserInteractionEnabled]="isValidForm" (tap)="requestLeave()"></Button>
         </StackLayout>
-        <ActivityIndicator [busy]="processing"></ActivityIndicator>
+
     </StackLayout>
 </ScrollView>
