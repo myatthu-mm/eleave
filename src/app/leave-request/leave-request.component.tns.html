@@ -1,75 +1,81 @@
 <ActionBar title="Request Leave">
     <NavigationButton visibility="collapsed"></NavigationButton>
 </ActionBar>
-<StackLayout orientation="vertical">
-    <GridLayout rows="auto, auto, auto" columns="*, auto" class="m-20" (tap)="chooseLeaveType()">
-        <Label row="0" col="0" [text]="leaveTypeLabel" class="label" textWrap="true"></Label>
-        <Label row="1" col="0" text="{{leaveBalance}} days left" fontSize="12" textWrap="true"></Label>
-        <ios>
-            <Label row="0" col="1" rowSpan="2" text="&#xf054;" class="far m-r-10" horizontalAlignment="right"></Label>
-        </ios>
-        <android>
-            <Image row="0" col="1" rowSpan="2" src="font://&#xf054;" class="fas m-r-10" horizontalAlignment="right"
-                height="10">
-            </Image>
-        </android>
-        <StackLayout row="2" col="0" colSpan="2" class="hr" height="2"></StackLayout>
-    </GridLayout>
+<ScrollView>
+    <StackLayout orientation="vertical">
+        <GridLayout rows="auto, auto, auto" columns="*, auto" class="m-20" (tap)="chooseLeaveType()">
+            <Label row="0" col="0" [text]="leaveTypeLabel" class="label" textWrap="true"></Label>
+            <Label row="1" col="0" text="{{leaveBalance}} days left" fontSize="12" textWrap="true"></Label>
+            <ios>
+                <Label row="0" col="1" rowSpan="2" text="&#xf054;" class="far m-r-10"
+                    horizontalAlignment="right"></Label>
+            </ios>
+            <android>
+                <Image row="0" col="1" rowSpan="2" src="font://&#xf054;" class="fas m-r-10" horizontalAlignment="right"
+                    height="10">
+                </Image>
+            </android>
+            <StackLayout row="2" col="0" colSpan="2" class="hr" height="2"></StackLayout>
+        </GridLayout>
 
-    <GridLayout rows="auto" class="m-8">
-        <app-date-picker [Title]="'Start Date'" [minToay]="true" [maxDate]="endDate_Value"
-            (getDate_event)="listenStartDate_Event($event)" [resetEvent]="_resetEventSubject.asObservable()">
-        </app-date-picker>
-    </GridLayout>
+        <GridLayout rows="auto" class="m-8">
+            <app-date-picker [Title]="'Start Date'" [minToay]="true" [maxDate]="endDate_Value"
+                (getDate_event)="listenStartDate_Event($event)" [resetEvent]="_resetEventSubject.asObservable()">
+            </app-date-picker>
+        </GridLayout>
 
-    <GridLayout rows="auto" class="m-8">
-        <app-date-picker [Title]="'End Date'" [minToay]="true" [minDate]="startDate_Value"
-            (getDate_event)="listenEndDate_Event($event)" [resetEvent]="_resetEventSubject.asObservable()">
-        </app-date-picker>
-    </GridLayout>
+        <GridLayout rows="auto" class="m-8">
+            <app-date-picker [Title]="'End Date'" [minToay]="true" [minDate]="startDate_Value"
+                (getDate_event)="listenEndDate_Event($event)" [resetEvent]="_resetEventSubject.asObservable()">
+            </app-date-picker>
+        </GridLayout>
 
 
-    <GridLayout rows="auto, auto" columns="*, auto" class="m-t-20 m-x-20" *ngIf="isSameDates">
-        <Label row="0" col="0" text="Half Day" class="label" textWrap="true"></Label>
-        <Switch row="0" col="1" (checkedChange)="onCheckedChange($event)" [checked]="switchState"></Switch>
-        <StackLayout class="hr" row="1" colSpan="2" height="2"></StackLayout>
-    </GridLayout>
+        <GridLayout rows="auto, auto" columns="*, auto" class="m-t-20 m-x-20" *ngIf="isSameDates">
+            <Label row="0" col="0" text="Half Day" class="label" textWrap="true"></Label>
+            <Switch row="0" col="1" (checkedChange)="onCheckedChange($event)" [checked]="switchState"></Switch>
+            <StackLayout class="hr" row="1" colSpan="2" height="2"></StackLayout>
+        </GridLayout>
 
-    <GridLayout rows="*" columns="*,*" height="40" class="m-20" *ngIf="isSameDates && switchState">
-        <ios>
-            <StackLayout col="0" class="left-option {{ isMorning ? 'border-select' : 'border-unselect' }}"
-                (tap)="isMorning = true">
-                <Label text="Morning" class="m-x-auto m-y-5" textWrap="true" fontSize="17"></Label>
-            </StackLayout>
-            <StackLayout col="1" class="right-option {{ isMorning ? 'border-unselect' : 'border-select' }}"
-                (tap)="isMorning = false">
-                <Label text="Evening" class="m-x-auto m-y-5" textWrap="true" fontSize="17"></Label>
-            </StackLayout>
-        </ios>
-        <android>
-            <StackLayout col="0" class="left-option left-option-select" (tap)="isMorning = true" *ngIf="isMorning">
-                <Label text="Morning" class="m-x-auto m-y-4" textWrap="true" fontSize="17"></Label>
-            </StackLayout>
-            <StackLayout col="0" class="left-option left-option-unselect" (tap)="isMorning = true" *ngIf="!isMorning">
-                <Label text="Morning" class="m-x-auto m-y-4" textWrap="true" fontSize="17"></Label>
-            </StackLayout>
-            <StackLayout col="1" class="right-option right-option-select" (tap)="isMorning = false" *ngIf="!isMorning">
-                <Label text="Evening" class="m-x-auto m-y-5" textWrap="true" fontSize="17"></Label>
-            </StackLayout>
-            <StackLayout col="1" class="right-option right-option-unselect" (tap)="isMorning = false" *ngIf="isMorning">
-                <Label text="Evening" class="m-x-auto m-y-5" textWrap="true" fontSize="17"></Label>
-            </StackLayout>
-        </android>
-    </GridLayout>
+        <GridLayout rows="*" columns="*,*" height="40" class="m-20" *ngIf="isSameDates && switchState">
+            <ios>
+                <StackLayout col="0" class="left-option {{ isMorning ? 'border-select' : 'border-unselect' }}"
+                    (tap)="isMorning = true">
+                    <Label text="Morning" class="m-x-auto m-y-5" textWrap="true" fontSize="17"></Label>
+                </StackLayout>
+                <StackLayout col="1" class="right-option {{ isMorning ? 'border-unselect' : 'border-select' }}"
+                    (tap)="isMorning = false">
+                    <Label text="Evening" class="m-x-auto m-y-5" textWrap="true" fontSize="17"></Label>
+                </StackLayout>
+            </ios>
+            <android>
+                <StackLayout col="0" class="left-option left-option-select" (tap)="isMorning = true" *ngIf="isMorning">
+                    <Label text="Morning" class="m-x-auto m-y-4" textWrap="true" fontSize="17"></Label>
+                </StackLayout>
+                <StackLayout col="0" class="left-option left-option-unselect" (tap)="isMorning = true"
+                    *ngIf="!isMorning">
+                    <Label text="Morning" class="m-x-auto m-y-4" textWrap="true" fontSize="17"></Label>
+                </StackLayout>
+                <StackLayout col="1" class="right-option right-option-select" (tap)="isMorning = false"
+                    *ngIf="!isMorning">
+                    <Label text="Evening" class="m-x-auto m-y-5" textWrap="true" fontSize="17"></Label>
+                </StackLayout>
+                <StackLayout col="1" class="right-option right-option-unselect" (tap)="isMorning = false"
+                    *ngIf="isMorning">
+                    <Label text="Evening" class="m-x-auto m-y-5" textWrap="true" fontSize="17"></Label>
+                </StackLayout>
+            </android>
+        </GridLayout>
 
-    <StackLayout class="m-t-20">
-        <TextView hint="Add a reason" autocorrect="true" [text]="tvtext" (textChange)="onTextChange($event)"
-            backgroundColor="#F9F9F9" class="text-area">
-        </TextView>
+        <StackLayout class="m-t-20">
+            <TextView hint="Add a reason" autocorrect="true" [text]="tvtext" (textChange)="onTextChange($event)"
+                backgroundColor="#F9F9F9" class="text-area">
+            </TextView>
+        </StackLayout>
+        <StackLayout class="m-t-20">
+            <Button text="Submit Request" class="btn -rounded-sm m-b-30 {{isValidForm ? '-primary' : '-disabled'}}"
+                [isUserInteractionEnabled]="isValidForm" (tap)="requestLeave()"></Button>
+        </StackLayout>
+        <ActivityIndicator [busy]="processing"></ActivityIndicator>
     </StackLayout>
-    <StackLayout class="m-t-20">
-        <Button text="Submit Request" class="btn -rounded-sm m-b-30 {{isValidForm ? '-primary' : '-disabled'}}"
-            [isUserInteractionEnabled]="isValidForm" (tap)="requestLeave()"></Button>
-    </StackLayout>
-    <ActivityIndicator [busy]="processing"></ActivityIndicator>
-</StackLayout>
+</ScrollView>

@@ -11,7 +11,7 @@
     background: rgb(2, 0, 36);
     background: linear-gradient(0deg, rgba(2, 0, 36, 1) 0%, rgba(139, 0, 19, 1) 0%, rgba(237, 27, 52, 1) 100%);
     vertical-align: middle;
-    height: 60%;
+    height: 65%;
 }
 
 .form-inputs {
@@ -26,14 +26,15 @@
 }
 
 .clip-path {
-    clip-path: circle(145% at -69.5% 20.5%);
+    clip-path: circle(155% at -72.5% 9.5%);
     background: rgba(139, 0, 19, 1);
     height: 1000;
-    width: 1000;
+    width: 2000;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
+    align-self: stretch;
 }
 
 .input {

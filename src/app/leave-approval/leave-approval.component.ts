@@ -16,6 +16,7 @@ import { BackendService } from '../shared/services/backend.service';
 import { LeaveService } from '../shared/services/leave.service';
 import { Approval } from '../shared/models/approval.model';
 import { LeaveStatus } from '../shared/constants';
+import { AlertService } from '../shared/services/alert.service';
 @Component({
   selector: 'app-leave-approval',
   templateUrl: './leave-approval.component.html',
@@ -57,7 +58,8 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
     private routerExtension: RouterExtensions,
     private associateService: AssociateService,
     private backendService: BackendService,
-    private leaveService: LeaveService
+    private leaveService: LeaveService,
+    private _alertService: AlertService
   ) {
     this.tabTitles.forEach(tab => {
       const item = new SegmentedBarItem();
@@ -186,19 +188,18 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
         this.backendService.approveLeave(payload).subscribe(response => {
           const status = response['status'];
           if (status.code == 200) {
-            alert(`Reset success!`);
+            this._alertService.showSuccess('Reset');
             this.associateService.setNeedRequestApplied(true);
             if (this.selectedSegmentedIndex == 1) {
               this.callApproved();
             } else {
               this.callRejected();
             }
-
           } else {
-            alert(`Reset failed!`);
+            this._alertService.showError('Reset');
           }
         }, (error) => {
-          alert(`failed!`);
+          this._alertService.showServerError();
         });
       }
     });
@@ -409,7 +410,7 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
           this.processing = false;
         }
       }, (error) => {
-        alert('error');
+        this._alertService.showServerError();
         console.error('Error response:', error);
         this.AppliedLeaves = [];
         this.appliedLeavesEmpty = true;
@@ -457,7 +458,7 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
           this.processing = false;
         }
       }, (error) => {
-        alert('error');
+        this._alertService.showServerError()
         console.error('Error response:', error);
         this.ApprovedLeaves = [];
         this.approvedLeavesEmpty = true;
@@ -508,7 +509,7 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
           this.processing = false;
         }
       }, (error) => {
-        alert('error');
+        this._alertService.showServerError();
         console.error('Error response:', error);
         this.RejectedLeaves = [];
         this.rejectedLeavesEmpty = true;

@@ -8,6 +8,7 @@ import { Associate } from '../shared/models/associate.model';
 import { BackendService } from '../shared/services/backend.service';
 import { AssociateService } from '../shared/states/associate/associate.service';
 import { LeaveStatus } from '../shared/constants';
+import { AlertService } from '../shared/services/alert.service';
 @Component({
   selector: 'app-leave-approval-details',
   templateUrl: './leave-approval-details.component.html',
@@ -23,7 +24,8 @@ export class LeaveApprovalDetailsComponent implements OnInit {
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _backendService: BackendService,
-    private _associateService: AssociateService
+    private _associateService: AssociateService,
+    private _alertService: AlertService
   ) { }
 
   ngOnInit() {
@@ -45,19 +47,18 @@ export class LeaveApprovalDetailsComponent implements OnInit {
       const statusLabel = _status === '2' ? LeaveStatus.Approved : LeaveStatus.Rejected;
       this.data.status = _status;
       if (status.code == 200) {
-        alert(`${statusLabel} success!`);
+        this._alertService.showSuccess(`${statusLabel} status`);
         this._associateService.setPreviousViewIndex(0);
-        // this._associateService.setNeedRequestApplied(true);
         switch (_status) {
           case '2': this._associateService.setNeedRequestApproved(true); break;
           default: this._associateService.setNeedRequestRejected(true); break;
         }
       } else {
-        alert(`${statusLabel} failed!`);
+        this._alertService.showError(`${statusLabel} status`);
         this.approvalDisabled = false;
       }
     }, (error) => {
-      alert(`failed!`);
+      this._alertService.showServerError();
       this.approvalDisabled = false;
     });
   }
@@ -79,26 +80,23 @@ export class LeaveApprovalDetailsComponent implements OnInit {
         this._backendService.approveLeave(payload).subscribe(response => {
           const status = response['status'];
           if (status.code == 200) {
-            alert(`Reset success!`);
-
+            this._alertService.showSuccess('Reset');
             if (this.data.status === '2') {
               this._associateService.setPreviousViewIndex(1);
               this._associateService.setNeedRequestApplied(true);
-              // this._associateService.setNeedRequestApproved(true);
             } else if (this.data.status === '3') {
               this._associateService.setPreviousViewIndex(2);
               this._associateService.setNeedRequestApplied(true);
-              // this._associateService.setNeedRequestRejected(true);
             } else {
               this._associateService.setPreviousViewIndex(0);
             }
 
           } else {
-            alert(`Reset failed!`);
+            this._alertService.showError('Reset');
             this.resetDisabled = false;
           }
         }, (error) => {
-          alert(`failed!`);
+          this._alertService.showServerError();
           this.resetDisabled = false;
         });
       } else {

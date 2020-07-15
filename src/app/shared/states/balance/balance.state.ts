@@ -38,7 +38,6 @@ export class BalanceListState {
                 console.log('balance save state..');
             }
         }, (error) => {
-            alert('balance error');
             console.error('Error response:', error);
         }));
     }

@@ -54,7 +54,7 @@ export class DatePickerComponent implements OnInit, OnDestroy {
     if (this.maxDate) {
       Object.assign(pickerOptions, { maxDate: new Date(this.maxDate) });
     }
-    if ((!this.minDate && !this.maxDate) && this.minToay) {
+    if (this.minToay) {
       Object.assign(pickerOptions, { minDate: new Date() });
     }
     picker.pickDate(pickerOptions).then((result) => {

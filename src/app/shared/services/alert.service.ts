@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TNSFancyAlert } from "nativescript-fancyalert";
+import { isIOS } from "tns-core-modules/platform";
 @Injectable({
   providedIn: 'root'
 })
@@ -7,36 +8,81 @@ export class AlertService {
 
   constructor() { }
 
-  showSuccess(_title: string, _subtible: string) {
-    TNSFancyAlert.showCustomImage(
-      "check.png",
-      "red",
-      `${_title}`,
-      `${_subtible}`,
-      "Ok",
-      1.2
-    );
+  showSuccess(_subtible: string) {
+    if (isIOS) {
+      TNSFancyAlert.showCustomImage(
+        "check.png",
+        "#fe2f2f",
+        `Success`,
+        `${_subtible} has been succeeded!`,
+        "Done",
+        1.2
+      );
+    } else {
+      TNSFancyAlert.showSuccess(
+        "Success!", `${_subtible} has been succeeded!`, "Done"
+      ).then(() => {
+        /* user pressed the button */
+      });
+
+    }
+
   }
 
-  showError(_title: string, _subtible: string) {
-    TNSFancyAlert.showCustomImage(
-      "error.png",
-      "blue",
-      `${_title}`,
-      `${_subtible}`,
-      "Ok",
-      1.2
-    );
+  showError(_subtible: string) {
+    if (isIOS) {
+      TNSFancyAlert.showCustomImage(
+        "error.png",
+        "#2d73f5",
+        `Failed`,
+        `${_subtible} has been failed!`,
+        "Ok",
+      );
+    } else {
+      TNSFancyAlert.showError(
+        "Failed!", `${_subtible} has been failed!`, "Ok"
+      ).then(() => {
+        /* user pressed the button */
+      });
+    }
+
   }
 
   showServerError() {
-    TNSFancyAlert.showCustomImage(
-      "server.png",
-      "orange",
-      `Failed`,
-      `Server error!`,
-      "Ok",
-      1.2
-    );
+    if (isIOS) {
+      TNSFancyAlert.showCustomImage(
+        "server.png",
+        "#F3941D",
+        `Error`,
+        `Internal Server Error!`,
+        "Ok",
+      );
+    } else {
+      TNSFancyAlert.showNotice(
+        "Error", `Internal Server Error!`, "Ok"
+      ).then(() => {
+        /* user pressed the button */
+      });
+    }
+
+  }
+
+  showCustomError(_subtible: string) {
+    if (isIOS) {
+      TNSFancyAlert.showCustomImage(
+        "service.png",
+        "#F15A2A",
+        `Error`,
+        `${_subtible}`,
+        "Ok",
+      );
+    } else {
+      TNSFancyAlert.showWarning(
+        "Error", `${_subtible}`, "Ok"
+      ).then(() => {
+        /* user pressed the button */
+      });
+    }
+
   }
 }

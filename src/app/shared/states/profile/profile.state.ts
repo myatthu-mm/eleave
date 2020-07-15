@@ -35,7 +35,6 @@ export class ProfileState {
                 console.log('profile save state..');
             }
         }, (error) => {
-            alert('Profile error');
             console.error('Error response:', error);
         }));
     }

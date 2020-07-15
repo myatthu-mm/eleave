@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ViewContainerRef } from '@angular/core';
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
 import { Page } from "tns-core-modules/ui/page";
 import { Store } from '@ngxs/store';
@@ -10,12 +10,13 @@ import { History } from '../shared/models/history.model';
 import { LeaveService } from '../shared/services/leave.service';
 import { BackendService } from '../shared/services/backend.service';
 import { RequestHistoryList } from '../shared/states/history/history.actions';
+import { AlertService } from '../shared/services/alert.service';
 @Component({
   selector: 'app-leave-history',
   templateUrl: './leave-history.component.html',
   styleUrls: ['./leave-history.component.scss']
 })
-export class LeaveHistoryComponent implements OnInit {
+export class LeaveHistoryComponent implements OnInit, OnDestroy {
 
   private historyList: Array<History>;
   startDate: DateModel;
@@ -30,7 +31,8 @@ export class LeaveHistoryComponent implements OnInit {
     private _page: Page,
     private modalService: ModalDialogService,
     private viewContainerRef: ViewContainerRef,
-    private _store: Store) {
+    private _store: Store,
+    private _alertService: AlertService) {
   }
 
   get LeaveHistories(): Array<History> {
@@ -47,10 +49,11 @@ export class LeaveHistoryComponent implements OnInit {
     this._page.actionBarHidden = false;
     this._page.actionBar.title = 'Leave History';
     this.filterIconVisibility = true;
-    this.startDate = new DateModel();
-    this.endDate = new DateModel();
     this._unsubscribe$ = new Subject();
-    this.callToLeaveHistory();
+    if (!this.startDate.value && !this.endDate.value) {
+      this.callToLeaveHistory();
+    }
+
   }
 
   @HostListener('unloaded')
@@ -67,6 +70,10 @@ export class LeaveHistoryComponent implements OnInit {
     console.log('leave history preloading...');
     this.startDate = new DateModel();
     this.endDate = new DateModel();
+  }
+
+  ngOnDestroy() {
+    // unsubscrive destory
   }
 
   onFilter() {
@@ -94,18 +101,19 @@ export class LeaveHistoryComponent implements OnInit {
       this.startDate = new DateModel();
       if (this.endDate.value) {
         this.callToLeaveHistoryWithDate(this.endDate.value, this.endDate.value);
-      } else {
-        this.callToLeaveHistory();
+        return;
       }
 
     } else {
       this.endDate = new DateModel();
       if (this.startDate.value) {
         this.callToLeaveHistoryWithDate(this.startDate.value, this.startDate.value);
-      } else {
-        this.callToLeaveHistory();
+        return;
       }
     }
+    console.log('call to history');
+
+    this.callToLeaveHistory();
   }
 
   private callToLeaveHistory() {
@@ -113,9 +121,12 @@ export class LeaveHistoryComponent implements OnInit {
     this._store.select(HistoryListState.getHistories)
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(value => {
+        console.log('value length:', value.length);
+
         if (value.length) {
           this.LeaveHistories = value;
           this.processing = false;
+          this.isEmpty = false;
         } else {
           this._store.dispatch(new RequestHistoryList());
         }
@@ -140,7 +151,7 @@ export class LeaveHistoryComponent implements OnInit {
           this.processing = false;
         }
       }, (error) => {
-        alert('history error');
+        this._alertService.showCustomError('History Service Error!');
         console.error('Error response:', error);
         this.processing = false;
       });

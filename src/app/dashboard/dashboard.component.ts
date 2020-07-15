@@ -13,6 +13,7 @@ import { BalanceListState } from '../shared/states/balance/balance.state';
 import { RequestBalanceList } from '../shared/states/balance/balance.actions';
 import { HistoryListState } from '../shared/states/history/history.state';
 import { RequestHistoryList } from '../shared/states/history/history.actions';
+import { AlertService } from '../shared/services/alert.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -30,7 +31,8 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private _store: Store,
-    private _page: Page) {
+    private _page: Page,
+    private _alertService: AlertService) {
     this.profile = new Profile();
   }
 
@@ -86,7 +88,6 @@ export class DashboardComponent implements OnInit {
   }
 
   private callToProfile() {
-    this.processing = true;
     this._store.select(ProfileState.getProfile)
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(value => {
@@ -97,16 +98,16 @@ export class DashboardComponent implements OnInit {
           this.callToLeaveBalance();
         } else {
           console.log('call profile');
-
+          this.processing = true;
           this._store.dispatch(new RequestProfile());
         }
       }, (error) => {
         this.processing = false;
+        this._alertService.showCustomError('Profile Service Error!');
       });
   }
 
   private callToLeaveBalance() {
-    this.processing = true;
     this._store.select(BalanceListState.getBalances)
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(value => {
@@ -115,15 +116,16 @@ export class DashboardComponent implements OnInit {
           this.processing = false;
           this.callToLeaveHistory();
         } else {
+          this.processing = true;
           this._store.dispatch(new RequestBalanceList());
         }
       }, (error) => {
         this.processing = false;
+        this._alertService.showCustomError('Balance Service Error!');
       });
   }
 
   private callToLeaveHistory() {
-    this.processing = true;
     this._store.select(HistoryListState.getHistories)
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(value => {
@@ -131,10 +133,12 @@ export class DashboardComponent implements OnInit {
           this.LeaveHistories = value.slice(0, 3);
           this.processing = false;
         } else {
+          this.processing = true;
           this._store.dispatch(new RequestHistoryList());
         }
       }, (error) => {
         this.processing = false;
+        this._alertService.showCustomError('History Service Error!');
       });
   }
 

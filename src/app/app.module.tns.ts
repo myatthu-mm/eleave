@@ -1,5 +1,6 @@
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { NativeScriptModule } from 'nativescript-angular/nativescript.module';
+import { ReactiveFormsModule } from '@angular/forms';
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
 import { ModalDialogService } from "nativescript-angular/modal-dialog";
 import { ModalDatetimepicker } from "nativescript-modal-datetimepicker";
@@ -34,7 +35,8 @@ import { NativeScriptUIListViewModule } from "nativescript-ui-listview/angular";
 import { ApproveCommentModalComponent } from '@src/app/leave-approval/approve-comment-modal/approve-comment-modal.component';
 import { LeaveApprovalDetailsComponent } from '@src/app/leave-approval-details/leave-approval-details.component';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { MemoryServiceService } from '@src/app/shared/services/memory-service.service';
+// import { MemoryServiceService } from '@src/app/shared/services/memory-service.service';
+import { environment } from '../environments/environment.prod';
 import { registerElement } from "nativescript-angular";
 import { CommentModalComponent } from '@src/app/ui-components/comment-modal/comment-modal.component';
 registerElement("PreviousNextView", () => require("nativescript-iqkeyboardmanager").PreviousNextView);
@@ -63,12 +65,13 @@ registerElement("PreviousNextView", () => require("nativescript-iqkeyboardmanage
   imports: [
     NativeScriptModule,
     AppRoutingModule,
+    ReactiveFormsModule,
     NativeScriptFormsModule,
     NativeScriptUICalendarModule,
     NativeScriptHttpClientModule,
-    HttpClientInMemoryWebApiModule.forRoot(MemoryServiceService),
+    // HttpClientInMemoryWebApiModule.forRoot(MemoryServiceService),
     NativeScriptUIChartModule,
-    NgxsModule.forRoot([HistoryListState, ProfileState, BalanceListState], { developmentMode: true }),
+    NgxsModule.forRoot([HistoryListState, ProfileState, BalanceListState], { developmentMode: !environment.production }),
     NgxsResetPluginModule.forRoot(),
     NativeScriptUIListViewModule
   ],

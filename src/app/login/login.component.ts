@@ -7,6 +7,8 @@ import { isIOS } from "tns-core-modules/platform"
 import { setString, clear } from "tns-core-modules/application-settings";
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Store } from '@ngxs/store';
+import { AlertService } from '../shared/services/alert.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -23,7 +25,9 @@ export class LoginComponent implements OnInit {
 
   constructor(private page: Page,
     private routerExtensions: RouterExtensions,
-    private _backendServie: BackendService) {
+    private _backendServie: BackendService,
+    private _alertService: AlertService,
+    private _store: Store) {
     this.page.actionBarHidden = true;
 
   }
@@ -38,7 +42,6 @@ export class LoginComponent implements OnInit {
   @HostListener('loaded')
   pageOnInit() {
     console.log('login created***');
-
   }
 
   @HostListener('unloaded')
@@ -49,7 +52,6 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.routerExtensions.navigate(['/home'], { clearHistory: true }); return;
     this.enabledButton = false;
     this.processing = true;
     const bodyPayload = {
@@ -71,14 +73,14 @@ export class LoginComponent implements OnInit {
             }
             this.routerExtensions.navigate(['/home'], { clearHistory: true });
           }, (error) => {
-            alert("Access Denied");
+            this._alertService.showCustomError('Access Denied');
             console.error('Error response:', error);
             this.processing = false;
             this.enabledButton = true;
           })
       })
       .catch((err) => {
-        alert("Access Denied Nomfa");
+        this._alertService.showServerError();
         console.error('Error response:', err);
         this.processing = false;
         this.enabledButton = true;

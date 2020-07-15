@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BackendService } from '../shared/services/backend.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { AlertService } from '../shared/services/alert.service';
 @Component({
   selector: 'app-password-change',
   templateUrl: './password-change.component.html',
@@ -9,17 +10,17 @@ import { Subject } from 'rxjs';
 })
 export class PasswordChangeComponent implements OnInit, OnDestroy {
   password: Password;
-  private _unsubscribe$ = new Subject();
-  constructor(private _backendService: BackendService) { }
+  _unsubscribe$: Subject<boolean> = new Subject();
+  constructor(private _backendService: BackendService, private _alertService: AlertService) { }
 
-  isValidNewPassword(): boolean {
-    return this.password.new == this.password.confirm;
+
+  get isConfirmPasswordValid(): boolean {
+    return this.password.newpsw === this.password.confirm;
   }
+
 
   ngOnInit() {
     this.password = new Password();
-    console.log('change password created***');
-
   }
 
   ngOnDestroy() {
@@ -30,19 +31,20 @@ export class PasswordChangeComponent implements OnInit, OnDestroy {
 
   changePassword() {
     console.log('change password');
-    this._backendService.changePassword(this.password.current, this.password.new)
+    this._backendService.changePassword(this.password.current, this.password.newpsw)
+    this._backendService.changePassword('123', '123')
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(response => {
         const data = response['data'];
         if (data.changed_status == 'true') {
-          alert('Success password change!')
+          this._alertService.showSuccess('Password change');
           this.password = new Password();
         } else {
-          alert('Change password error!..')
+          this._alertService.showError('Password change');
         }
 
       }, (error) => {
-        console.log('Error password');
+        this._alertService.showCustomError('Password Change Service Error!')
         console.error('Error response:', error)
       });
 
@@ -52,6 +54,6 @@ export class PasswordChangeComponent implements OnInit, OnDestroy {
 
 class Password {
   current: string;
-  new: string;
+  newpsw: string;
   confirm: string;
 }

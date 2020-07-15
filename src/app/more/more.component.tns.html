@@ -8,13 +8,13 @@
                 horizontalAlignment="center"></Label>
             <Label text="Employee ID {{EmployeeID}}" textWrap="true" height="auto" horizontalAlignment="center"
                 fontSize="17" color="#fff"></Label>
-            <Label [text]="JobPosition" textWrap="true" height="auto" horizontalAlignment="center" fontSize="14"
+            <Label [text]="JobPosition" textWrap="true" height="auto" horizontalAlignment="center" fontSize="12"
                 color="#fff"></Label>
         </StackLayout>
     </GridLayout>
     <GridLayout row="1" rows="auto, auto, auto">
         <GridLayout row="0" rows="*" columns="auto, *" backgroundColor="#D6142C" class="m-x-15 m-y-2" height="50"
-            [nsRouterLink]="['/approval']" *ngIf="!IsApproval">
+            [nsRouterLink]="['/approval']" *ngIf="IsApproval">
             <ios>
                 <Label col="0" text="&#xf05a;" class="far m-l-30" fontSize="20" color="#fff"></Label>
             </ios>
@@ -22,7 +22,7 @@
                 <Image col="0" src="font://&#xf05a;" class="fas m-l-30" height="20" color="#fff"></Image>
             </android>
             <Label col="1" text="Leave Information" textWrap="true" ios:class="m-l-20" android:class="m-l-20 m-y-10"
-                fontSize="20" color="#fff"></Label>
+                fontSize="19" color="#fff"></Label>
         </GridLayout>
         <GridLayout row="1" rows="*" columns="auto, *" backgroundColor="#D6142C" class="m-x-15 m-y-2" height="50"
             [nsRouterLink]="['/change-password']">
@@ -33,17 +33,17 @@
                 <Image col="0" src="font://&#xf13e;" class="fas m-l-30" height="20" color="#fff"></Image>
             </android>
             <Label col="1" text="Change Password" textWrap="true" ios:class="m-l-20" android:class="m-l-20 m-y-10"
-                fontSize="20" color="#fff"></Label>
+                fontSize="19" color="#fff"></Label>
         </GridLayout>
         <GridLayout row="2" rows="*" columns="auto, *" backgroundColor="#D6142C" class="m-x-15 m-y-2" height="50"
-            [nsRouterLink]="['/']" pageTransition="slideBottom" clearHistory="true">
+            (tap)="logout()" pageTransition="slideBottom" clearHistory="true">
             <ios>
                 <Label col="0" text="&#xf152;" class="far m-l-30" fontSize="20" color="#fff"></Label>
             </ios>
             <android>
                 <Image col="0" src="font://&#xf152;" class="fas m-l-30" height="20" color="#fff"></Image>
             </android>
-            <Label col="1" text="Logout" textWrap="true" ios:class="m-l-20" android:class="m-l-20 m-y-10" fontSize="20"
+            <Label col="1" text="Logout" textWrap="true" ios:class="m-l-20" android:class="m-l-20 m-y-10" fontSize="19"
                 color="#fff"></Label>
         </GridLayout>
     </GridLayout>

@@ -64,16 +64,7 @@ export class AssociateService {
   requestAppliedLeaves() {
     console.log('applied api calling');
 
-    // this._backendService.getAssociateLeave(LeaveStatus.Applied, '2020-01-01', '2020-12-31').subscribe(response => {
-    //   const status = response['status'];
-    //   if (status.code === 200) {
-    //     this.appliedLeavesStore.leaves = this._leaveService.getFormattedLeaveRequests(response['leave_associate_list']);
-    //     this._appliedLeaves.next(Object.assign({}, this.appliedLeavesStore).leaves);
-    //     return this.appliedLeaves;
-    //   }
-    // }, (error) => console.log('Could not load applied leaves.')
-    // );
-    this._backendService.getMockAssociateLeave('applied').subscribe(response => {
+    this._backendService.getAssociateLeave(LeaveStatus.Applied, '2020-01-01', '2020-12-31').subscribe(response => {
       const status = response['status'];
       if (status.code === 200) {
         this.appliedLeavesStore.leaves = this._leaveService.getFormattedLeaveRequests(response['leave_associate_list']);
@@ -82,6 +73,15 @@ export class AssociateService {
       }
     }, (error) => console.log('Could not load applied leaves.')
     );
+    // this._backendService.getMockAssociateLeave('applied').subscribe(response => {
+    //   const status = response['status'];
+    //   if (status.code === 200) {
+    //     this.appliedLeavesStore.leaves = this._leaveService.getFormattedLeaveRequests(response['leave_associate_list']);
+    //     this._appliedLeaves.next(Object.assign({}, this.appliedLeavesStore).leaves);
+    //     return this.appliedLeaves;
+    //   }
+    // }, (error) => console.log('Could not load applied leaves.')
+    // );
   }
 
   requestApprovedLeaves() {

@@ -12,6 +12,7 @@ import { LeaveService } from '../shared/services/leave.service';
 import { BackendService } from '../shared/services/backend.service';
 import { RequestBalanceList } from '../shared/states/balance/balance.actions';
 import { RequestHistoryList } from '../shared/states/history/history.actions';
+import { AlertService } from '../shared/services/alert.service';
 
 @Component({
   selector: 'app-leave-request',
@@ -38,7 +39,8 @@ export class LeaveRequestComponent implements OnInit {
     private _routerExtension: RouterExtensions,
     private _store: Store,
     private _leaveService: LeaveService,
-    private _backendService: BackendService) { }
+    private _backendService: BackendService,
+    private _alertService: AlertService) { }
 
   get isValidForm(): boolean {
     return (this.startDate_Value.length != 0) && (this.endDate_Value.length !== 0) && (this.leaveBalance > 0);
@@ -147,14 +149,14 @@ export class LeaveRequestComponent implements OnInit {
             console.log('balance updated...');
             this._store.dispatch(new RequestHistoryList);
           }));
-          alert(`Leave ${status.message}`);
+          this._alertService.showSuccess('Leave request');
           this.formReset();
         } else {
-          alert(status.message);
+          this._alertService.showError('Leave request');
         }
         this.processing = false;
       }, error => {
-        alert('Save leave Error');
+        this._alertService.showCustomError('Leave Request Service Error!')
         console.error('Error response:', error);
         this.processing = false;
       })

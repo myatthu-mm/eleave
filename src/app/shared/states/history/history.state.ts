@@ -40,7 +40,6 @@ export class HistoryListState {
                 console.log('empty histoy');
             }
         }, (error) => {
-            alert('history error');
             console.error('Error response:', error);
         }));
     }

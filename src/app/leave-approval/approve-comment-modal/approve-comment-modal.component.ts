@@ -44,19 +44,18 @@ export class ApproveCommentModalComponent implements OnInit {
   onConfirm() {
     const bodyPayload = { ...this.medium };
     bodyPayload.approverComment = this.textArea || '-';
-    this.backendService.approveMockLeave(bodyPayload).subscribe(response => {
+    this.backendService.approveLeave(bodyPayload).subscribe(response => {
       const status = response['status'];
       const statusLabel = this.status;
       if (status.code == 200) {
-        this._alertService.showServerError();
-        // this._alertService.showError('Success', `${statusLabel} status successed!`)
+        this._alertService.showSuccess(`${statusLabel} status`)
         this.params.closeCallback('success');
       } else {
-        alert(`${statusLabel} failed!`);
+        this._alertService.showError(`${statusLabel} status`);
         this.onClose();
       }
     }, (error) => {
-      alert(`failed!`);
+      this._alertService.showServerError();
       this.onClose();
     });
 

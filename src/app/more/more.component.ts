@@ -2,12 +2,14 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { Page } from "tns-core-modules/ui/page";
 import { getString, setString } from "tns-core-modules/application-settings";
 import { Store } from '@ngxs/store';
-import { StateResetAll } from 'ngxs-reset-plugin';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { RouterExtensions } from "nativescript-angular/router";
+import { StateResetAll } from 'ngxs-reset-plugin';
 import { ProfileState } from '../shared/states/profile/profile.state';
 import { Profile } from '../shared/models/profile.model';
 import { RequestProfile } from '../shared/states/profile/profile.actions';
+import { AlertService } from '../shared/services/alert.service';
 
 @Component({
   selector: 'app-more',
@@ -21,7 +23,9 @@ export class MoreComponent implements OnInit {
 
   constructor(
     private _page: Page,
-    private _store: Store) {
+    private _store: Store,
+    private _alertService: AlertService,
+    private _routerExtension: RouterExtensions) {
     this.profile = new Profile();
   }
 
@@ -57,7 +61,7 @@ export class MoreComponent implements OnInit {
     console.log('More created***');
     this._page.actionBarHidden = true;
     this._unsubscribe$ = new Subject();
-    // this.callToProfile();
+    this.callToProfile();
   }
 
   @HostListener('unloaded')
@@ -66,7 +70,16 @@ export class MoreComponent implements OnInit {
     this._unsubscribe$.next();
     this._unsubscribe$.complete();
     this._unsubscribe$.unsubscribe();
-    this._store.dispatch(new StateResetAll());
+  }
+
+  logout() {
+    this._store.dispatch(
+      new StateResetAll()
+    );
+    this._routerExtension.navigate(['/'], { clearHistory: true });
+    this._store.dispatch(
+      new StateResetAll()
+    );
   }
 
   private callToProfile() {
@@ -83,6 +96,7 @@ export class MoreComponent implements OnInit {
         }
       }, (error) => {
         this.processing = false;
+        this._alertService.showCustomError('Profile Service Error!');
       });
   }
 
