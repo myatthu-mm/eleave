@@ -39,12 +39,10 @@ export class LoginComponent implements OnInit {
 
   @HostListener('loaded')
   pageOnInit() {
-    console.log('login created***');
   }
 
   @HostListener('unloaded')
   pageOnDestroy() {
-    console.log('login destroy-----');
     this._unsubscribe$.next(true);
     this._unsubscribe$.unsubscribe();
   }
@@ -79,9 +77,6 @@ export class LoginComponent implements OnInit {
       })
       .catch((err) => {
         this._alertService.showServerError();
-        console.log('Catch error');
-
-        console.error('Error response:', err);
         this.processing = false;
         this.enabledButton = true;
       })

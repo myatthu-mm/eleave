@@ -107,7 +107,6 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
   @HostListener('loaded')
   pageOnInit() {
     this.associateService.getPreviousViewIndex().pipe(take(1)).subscribe(index => {
-      console.log('Index:', index);
       switch (index) {
         case 0: this.callApplied(); break;
         case 1: this.callApproved(); break;
@@ -118,8 +117,6 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
   }
 
   public onSelectedIndexChange(args: SelectedIndexChangedEventData) {
-    console.log('selected Index change');
-
     const segmentedBar = args.object as SegmentedBar;
     this.setVisibility(segmentedBar.selectedIndex);
     this.selectedSegmentedIndex = segmentedBar.selectedIndex;
@@ -148,15 +145,12 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
           }, 1000);
           this.associateService.requestAppliedLeaves();
           if (_status == LeaveStatus.Approved) {
-            console.log('set need approved');
-
             this.associateService.setNeedRequestApproved(true);
           } else {
-            console.log('set need reject');
             this.associateService.setNeedRequestRejected(true);
           }
         } else {
-          console.log('nothing');
+          console.log('close event');
         }
       });
   }
@@ -309,7 +303,7 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
           case 2: this.setDateRejected(result); break;
         }
       } else {
-        console.log('nothing');
+        console.log('close event');
       }
     });
   }
@@ -380,11 +374,9 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(value => {
         if (value.length && !needtoUpdate) {
-          console.log('reuse applied');
           this.AppliedLeaves = value;
           this.processing = false;
         } else {
-          console.log('new applied');
           this.associateService.requestAppliedLeaves();
           this.associateService.setNeedRequestApplied(false);
         }
@@ -403,8 +395,6 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
           this.processing = false;
           this.appliedLeavesEmpty = false;
         } else {
-          console.log('not leaves found');
-
           this.AppliedLeaves = [];
           this.appliedLeavesEmpty = true;
           this.processing = false;
@@ -430,11 +420,9 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(value => {
         if (value.length && !needtoUpdate) {
-          console.log('reuse approved');
           this.ApprovedLeaves = value;
           this.processing = false;
         } else {
-          console.log('new approved');
           this.associateService.requestApprovedLeaves();
           this.associateService.setNeedRequestApproved(false);
         }
@@ -478,11 +466,9 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(value => {
         if (value.length && !needtoUpdate) {
-          console.log('resuse reject');
           this.RejectedLeaves = value;
           this.processing = false;
         } else {
-          console.log('new rejected');
           this.associateService.setNeedRequestRejected(false);
           this.associateService.requestRejectedLeaves();
 
@@ -493,7 +479,6 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
   private callToRejectedLeavesWithDate(_startDate: string, _endDate: string) {
     this.processing = true;
     this.rejectedLeavesEmpty = true;
-    console.log('called rejected date:', _startDate, _endDate);
 
     this.backendService.getAssociateLeave(LeaveStatus.Rejected, _startDate, _endDate)
       .pipe(takeUntil(this._unsubscribe$))
@@ -579,7 +564,6 @@ export class LeaveApprovalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log('leave approval preloading...');
     this.startDate_Applied = new DateModel();
     this.endDate_Applied = new DateModel();
     this.startDate_Approved = new DateModel();

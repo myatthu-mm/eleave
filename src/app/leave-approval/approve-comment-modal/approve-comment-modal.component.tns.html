@@ -12,7 +12,7 @@
 
         <GridLayout row="1" rows="auto, *, auto" columns="*">
 
-            <StackLayout class="m-x-20 m-t-20" row="0" orientation="vertical">
+            <StackLayout ios:class="m-x-20 m-t-20" android:class="m-x-30 m-t-20" row="0" orientation="vertical">
                 <Label text="Are you sure you want to {{status}}?" class="h3" color="#000"></Label>
                 <Label text="Please write any comment here." class="h3"></Label>
             </StackLayout>
@@ -20,12 +20,12 @@
 
             <StackLayout row="1">
                 <TextView hint="Add a comment" autocorrect="true" [text]="tvArea" (textChange)="onTextChange($event)"
-                    backgroundColor="#fafafa" class="text-area">
+                    backgroundColor="#fafafa" ios:class="text-area" android:class="text-area m-x-30">
                 </TextView>
             </StackLayout>
 
 
-            <Button row="2" text="Confirm" (tap)="onConfirm()" class="btn -rounded-sm -primary"></Button>
+            <Button row="2" text="Confirm" (tap)="onConfirm()" class="btn -rounded-sm -primary m-x-30"></Button>
 
         </GridLayout>
 

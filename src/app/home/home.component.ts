@@ -21,7 +21,6 @@ export class HomeComponent implements OnInit {
   }
 
   onLoaded(index) {
-    console.log(`Tab ${index} loaded`);
   }
 
   listenHistoryEvent($event) {

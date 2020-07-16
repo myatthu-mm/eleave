@@ -46,6 +46,10 @@
         </app-removable-chip>
     </FlexboxLayout>
 
+    <GridLayout row="2" *ngIf="processing">
+        <ActivityIndicator [busy]="processing"></ActivityIndicator>
+    </GridLayout>
+
     <RadListView visibility="{{ appliedVisibility ? 'visible' : 'collapsed' }}" row="2" *ngIf="AppliedLeaves?.length"
         [items]="AppliedLeaves" swipeActions="true" selectionBehavior="None"
         (itemSwipeProgressStarted)="onSwipeCellStarted($event)" class="list-group" (loaded)="onLoaded($event.object)"
@@ -136,7 +140,4 @@
         <Label text="There is no rejected leaves." class="h2" textWrap="true" horizontalAlignment="center"></Label>
     </GridLayout>
 
-    <GridLayout row="3" *ngIf="processing">
-        <ActivityIndicator [busy]="processing"></ActivityIndicator>
-    </GridLayout>
 </GridLayout>

@@ -17,7 +17,6 @@ export class LeaveListviewComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('list preloading.....');
   }
 
   onLoaded(lst: ListView) {
@@ -32,7 +31,7 @@ export class LeaveListviewComponent implements OnInit {
     this.routerExtensions.navigate(['/history-details'], {
       queryParams: this.items[args.index],
       animated: true,
-      transition: { name: isIOS ? 'curl' : 'explode', duration: 650 }
+      transition: { name: isIOS ? 'curl' : 'flip', duration: isIOS ? 650 : 300 }
     });
   }
 

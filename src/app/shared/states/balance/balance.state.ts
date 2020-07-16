@@ -35,7 +35,6 @@ export class BalanceListState {
                 const leaveBalances = this._leaveService.getFormattedLeaveBalances(response['leave_balance_list']);
                 const state = getState();
                 setState({ ...state, list: leaveBalances });
-                console.log('balance save state..');
             }
         }, (error) => {
             console.error('Error response:', error);

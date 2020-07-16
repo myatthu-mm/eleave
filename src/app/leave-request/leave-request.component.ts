@@ -56,7 +56,6 @@ export class LeaveRequestComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('Leave request preloading...');
     if (isAndroid) {
       let window = app.android.startActivity.getWindow();
       window.setSoftInputMode(
@@ -67,7 +66,6 @@ export class LeaveRequestComponent implements OnInit {
 
   @HostListener('loaded')
   pageOnInit() {
-    console.log('Leave request view created***');
     this._page.actionBarHidden = false;
     this._page.actionBar.title = 'Request Leave';
     this._unsubscribe$ = new Subject();
@@ -85,7 +83,6 @@ export class LeaveRequestComponent implements OnInit {
 
   @HostListener('unloaded')
   pageOnDestroy() {
-    console.log('request destroy-----');
     this._subscriptions.unsubscribe();
     this._unsubscribe$.next();
     this._unsubscribe$.complete();
@@ -140,7 +137,6 @@ export class LeaveRequestComponent implements OnInit {
   }
 
   requestLeave() {
-    console.log('request');
     const leaveTypeCode = this.leaveTypeValue;
     const startDate = this.startDate_Value;
     const endDate = this.endDate_Value;
@@ -157,7 +153,6 @@ export class LeaveRequestComponent implements OnInit {
         const status = response['status'];
         if (status.code == 200) {
           this._store.dispatch(new RequestBalanceList()).pipe(tap((res) => {
-            console.log('balance updated...');
             this._store.dispatch(new RequestHistoryList);
           }));
           this._alertService.showSuccess('Leave request');

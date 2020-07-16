@@ -45,7 +45,6 @@ export class LeaveHistoryComponent implements OnInit, OnDestroy {
 
   @HostListener('loaded')
   pageOnInit() {
-    console.log('Leave history created................');
     this._page.actionBarHidden = false;
     this._page.actionBar.title = 'Leave History';
     this.filterIconVisibility = true;
@@ -58,7 +57,6 @@ export class LeaveHistoryComponent implements OnInit, OnDestroy {
 
   @HostListener('unloaded')
   pageOnDestroy() {
-    console.log('history destroy-----');
     this.filterIconVisibility = false;
     this._unsubscribe$.next();
     this._unsubscribe$.complete();
@@ -67,7 +65,6 @@ export class LeaveHistoryComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    console.log('leave history preloading...');
     this.startDate = new DateModel();
     this.endDate = new DateModel();
   }
@@ -77,7 +74,6 @@ export class LeaveHistoryComponent implements OnInit, OnDestroy {
   }
 
   onFilter() {
-    console.log('filter start');
     const options: ModalDialogOptions = {
       viewContainerRef: this.viewContainerRef,
       fullscreen: false,
@@ -91,7 +87,7 @@ export class LeaveHistoryComponent implements OnInit, OnDestroy {
         this.endDate.label = result.endLabel;
         this.callToLeaveHistoryWithDate(this.startDate.value, this.endDate.value);
       } else {
-        console.log('nothing');
+        console.log('close event');
       }
     });
   }
@@ -111,8 +107,6 @@ export class LeaveHistoryComponent implements OnInit, OnDestroy {
         return;
       }
     }
-    console.log('call to history');
-
     this.callToLeaveHistory();
   }
 
@@ -121,8 +115,6 @@ export class LeaveHistoryComponent implements OnInit, OnDestroy {
     this._store.select(HistoryListState.getHistories)
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(value => {
-        console.log('value length:', value.length);
-
         if (value.length) {
           this.LeaveHistories = value;
           this.processing = false;

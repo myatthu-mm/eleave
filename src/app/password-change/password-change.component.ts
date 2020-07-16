@@ -24,13 +24,11 @@ export class PasswordChangeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log('password change destoryed---');
     this._unsubscribe$.next(true);
     this._unsubscribe$.unsubscribe();
   }
 
   changePassword() {
-    console.log('change password');
     this._backendService.changePassword(this.password.current, this.password.newpsw)
     this._backendService.changePassword('123', '123')
       .pipe(takeUntil(this._unsubscribe$))

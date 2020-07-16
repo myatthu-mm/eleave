@@ -15,8 +15,7 @@ export class AlertService {
         "#fe2f2f",
         `Success`,
         `${_subtible} has been succeeded!`,
-        "Done",
-        1.2
+        "Done"
       );
     } else {
       TNSFancyAlert.showSuccess(

@@ -65,43 +65,29 @@ export class LeaveApprovalDetailsComponent implements OnInit {
 
   onReset() {
     this.resetDisabled = true;
-    console.log(this.data.status);
-    const statusLabel = this.data.status === '2' ? LeaveStatus.Approved : LeaveStatus.Rejected;
-    let options = {
-      title: "Reset Warning",
-      message: `Are you sure to reset the ${statusLabel}?`,
-      okButtonText: "Yes",
-      cancelButtonText: "Cancel",
-    };
-    confirm(options).then((choose: boolean) => {
-      if (choose) {
-        const payload = { ...this.payload };
-        payload.status = '1';
-        this._backendService.approveLeave(payload).subscribe(response => {
-          const status = response['status'];
-          if (status.code == 200) {
-            this._alertService.showSuccess('Reset');
-            if (this.data.status === '2') {
-              this._associateService.setPreviousViewIndex(1);
-              this._associateService.setNeedRequestApplied(true);
-            } else if (this.data.status === '3') {
-              this._associateService.setPreviousViewIndex(2);
-              this._associateService.setNeedRequestApplied(true);
-            } else {
-              this._associateService.setPreviousViewIndex(0);
-            }
+    const payload = { ...this.payload };
+    payload.status = '1';
+    this._backendService.approveLeave(payload).subscribe(response => {
+      const status = response['status'];
+      if (status.code == 200) {
+        this._alertService.showSuccess('Reset');
+        if (this.data.status === '2') {
+          this._associateService.setPreviousViewIndex(1);
+          this._associateService.setNeedRequestApplied(true);
+        } else if (this.data.status === '3') {
+          this._associateService.setPreviousViewIndex(2);
+          this._associateService.setNeedRequestApplied(true);
+        } else {
+          this._associateService.setPreviousViewIndex(0);
+        }
 
-          } else {
-            this._alertService.showError('Reset');
-            this.resetDisabled = false;
-          }
-        }, (error) => {
-          this._alertService.showServerError();
-          this.resetDisabled = false;
-        });
       } else {
+        this._alertService.showError('Reset');
         this.resetDisabled = false;
       }
+    }, (error) => {
+      this._alertService.showServerError();
+      this.resetDisabled = false;
     });
   }
 

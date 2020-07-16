@@ -27,8 +27,6 @@ export class LeaveTypesComponent implements OnInit, OnDestroy {
     private _leaveServie: LeaveService) { }
 
   ngOnInit() {
-    console.log('leave type created***');
-
     const list = [];
     Object.keys(LeaveType).forEach(item => {
       list.push({ id: item, name: LeaveType[item] });

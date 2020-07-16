@@ -32,7 +32,6 @@ export class ProfileState {
                 const profile = response['data'];
                 const state = getState();
                 setState({ ...state, data: profile });
-                console.log('profile save state..');
             }
         }, (error) => {
             console.error('Error response:', error);

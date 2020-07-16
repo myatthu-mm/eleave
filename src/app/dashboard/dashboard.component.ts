@@ -68,12 +68,10 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('dashboard preloading....');
   }
 
   @HostListener('loaded')
   pageOnInit() {
-    console.log('Dashboard created***');
     this._page.actionBarHidden = true;
     this._unsubscribe$ = new Subject();
     this.callToProfile();
@@ -81,7 +79,6 @@ export class DashboardComponent implements OnInit {
 
   @HostListener('unloaded')
   pageOnDestroy() {
-    console.log('dashboard destroy-----');
     this._unsubscribe$.next();
     this._unsubscribe$.complete();
     this._unsubscribe$.unsubscribe();
@@ -97,7 +94,6 @@ export class DashboardComponent implements OnInit {
           this.processing = false;
           this.callToLeaveBalance();
         } else {
-          console.log('call profile');
           this.processing = true;
           this._store.dispatch(new RequestProfile());
         }

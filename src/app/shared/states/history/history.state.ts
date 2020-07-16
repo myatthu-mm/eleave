@@ -33,11 +33,9 @@ export class HistoryListState {
                 const leaveHistories = this._leaveService.getFormattedLeaveHistories(response['leave_history_list']);
                 const state = getState();
                 setState({ ...state, list: leaveHistories });
-                console.log('histories save state..');
             } else {
                 const state = getState();
                 setState({ ...state, list: [] });
-                console.log('empty histoy');
             }
         }, (error) => {
             console.error('Error response:', error);
