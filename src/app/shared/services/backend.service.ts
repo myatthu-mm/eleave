@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders, HttpBackend } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { getString } from "tns-core-modules/application-settings";
 import { BackendSettings } from '../constants';
 import { User } from '../models/user.model';
@@ -99,11 +99,4 @@ export class BackendService {
         return headers;
     }
 
-    getMockAssociateLeave(_status) {
-        return this.http.get<any>(`api/${_status}`);
-    }
-
-    approveMockLeave(_approvedPayload: Approval) {
-        return this.http.get<any>('api/success');
-    }
 }

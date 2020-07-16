@@ -71,7 +71,7 @@ registerElement("PullToRefresh", () => require("@nstudio/nativescript-pulltorefr
     NativeScriptUIChartModule,
     NgxsModule.forRoot([HistoryListState, ProfileState, BalanceListState], { developmentMode: !environment.production }),
     NgxsResetPluginModule.forRoot(),
-    NativeScriptUIListViewModule
+    NativeScriptUIListViewModule,
   ],
   providers: [
     ModalDialogService, ModalDatetimepicker, LeaveService, BackendService

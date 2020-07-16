@@ -49,7 +49,7 @@ export class HistoryListState {
     ) {
         const state = getState();
         setState({
-            list: [...state.list, payload]
+            list: [payload, ...state.list]
         });
     }
 }

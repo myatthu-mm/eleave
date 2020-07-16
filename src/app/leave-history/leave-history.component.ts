@@ -65,8 +65,7 @@ export class LeaveHistoryComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    this.startDate = new DateModel();
-    this.endDate = new DateModel();
+    this.clearDateFilter();
   }
 
   ngOnDestroy() {
@@ -120,6 +119,7 @@ export class LeaveHistoryComponent implements OnInit, OnDestroy {
           this.processing = false;
           this.isEmpty = false;
           this._leaveService.setPullingStrategy_Obs(false);
+          this.clearDateFilter();
         } else {
           this._store.dispatch(new RequestHistoryList());
         }
@@ -148,6 +148,11 @@ export class LeaveHistoryComponent implements OnInit, OnDestroy {
         console.error('Error response:', error);
         this.processing = false;
       });
+  }
+
+  private clearDateFilter() {
+    this.startDate = new DateModel();
+    this.endDate = new DateModel();
   }
 
 }

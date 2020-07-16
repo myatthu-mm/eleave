@@ -155,16 +155,14 @@ export class LeaveRequestComponent implements OnInit {
         const status = response['status'];
         if (status.code == 200) {
           // update balance
-          for (let i = 0; i < this.balanceList.length; i++) {
-            if (this.balanceList[i].leave_type_code === leaveTypeCode) {
-              this.balanceList[i].balance -= Number(duration);
-              break;
-            }
-          }
-          this._store.dispatch(new UpdateBalanceList(this.balanceList));
-          // this._store.dispatch(new RequestBalanceList()).pipe(tap((res) => {
-          //   this._store.dispatch(new RequestHistoryList);
-          // }));
+          const index = this.balanceList.findIndex(item => item.leave_type_code === leaveTypeCode);
+          const updatedBalance = { ...this.balanceList[index], balance: this.balanceList[index].balance - Number(duration) };
+          const updatedBalanceList = [
+            ...this.balanceList.slice(0, index), updatedBalance,
+            ...this.balanceList.slice(index + 1),
+          ];
+          this._store.dispatch(new UpdateBalanceList(updatedBalanceList));
+
           //  update history list
           const appliedItem = this._leaveService.getPreparedAppliedHistory(leaveTypeCode, startDate, endDate, duration, remark);
           this._store.dispatch(new AddHistoryItem(appliedItem));

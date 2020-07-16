@@ -33,29 +33,34 @@ export class LeaveService {
 
     getFormattedLeaveHistories(list: History[]) {
         list.map(item => {
-            const startDate = new Date(item.leave_start_date);
-            const endDate = new Date(item.leave_end_date);
-            const date = this.getFormattedDate(startDate) + ' - ' + this.getFormattedDate(endDate);
-            const type = this.getLeaveTypeByCode(item.leave_type_code);
-            Object.assign(item, { date: date });
-            Object.assign(item, { type: `${type}` });
-            Object.assign(item, { duration: `${Number(item.duration)} day(s)` })
-            Object.assign(item, { leave_status: item.leave_status.toLowerCase() });
+            this.preparedCustomHistory(item);
         });
         return list;
     }
 
-    getPreparedAppliedHistory(leaveTypeCode, startDate, endDate, duration, remark) {
+    getPreparedAppliedHistory(_leaveTypeCode, _startDate, _endDate, _duration, _remark) {
         const updatedItem = {
-            leave_type_code: leaveTypeCode,
-            leave_start_date: startDate,
-            leave_end_date: endDate,
-            duration: duration,
-            remark: remark,
+            leave_type_code: _leaveTypeCode,
+            leave_start_date: _startDate,
+            leave_end_date: _endDate,
+            duration: _duration,
+            remark: _remark,
             leave_status: LeaveStatus.Applied,
             approver_name: 'no approver authorizes this leave yet.'
-        }
-        return updatedItem;
+        };
+        return this.preparedCustomHistory(updatedItem);
+    }
+
+    private preparedCustomHistory(item) {
+        const startDate = new Date(item.leave_start_date);
+        const endDate = new Date(item.leave_end_date);
+        const date = this.getFormattedDate(startDate) + ' - ' + this.getFormattedDate(endDate);
+        const type = this.getLeaveTypeByCode(item.leave_type_code);
+        Object.assign(item, { date: date });
+        Object.assign(item, { type: `${type}` });
+        Object.assign(item, { duration: `${Number(item.duration)} day(s)` })
+        Object.assign(item, { leave_status: item.leave_status.toLowerCase() });
+        return item;
     }
 
     getFormattedLeaveBalances(list: Balance[]) {
