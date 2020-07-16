@@ -11,11 +11,12 @@ import { isAndroid } from "tns-core-modules/platform";
 import { BalanceListState } from '../shared/states/balance/balance.state';
 import { LeaveService } from '../shared/services/leave.service';
 import { BackendService } from '../shared/services/backend.service';
-import { RequestBalanceList } from '../shared/states/balance/balance.actions';
-import { RequestHistoryList } from '../shared/states/history/history.actions';
+import { RequestBalanceList, UpdateBalanceList } from '../shared/states/balance/balance.actions';
+import { AddHistoryItem } from '../shared/states/history/history.actions';
 import { AlertService } from '../shared/services/alert.service';
 
 import * as app from "tns-core-modules/application";
+import { LeaveStatus } from '../shared/constants';
 declare var android: any;
 
 @Component({
@@ -147,14 +148,27 @@ export class LeaveRequestComponent implements OnInit {
       halftype = this.isMorning ? '1' : '2';
     }
     this.processing = true;
+
     this._backendService.saveLeave(leaveTypeCode, startDate, endDate, duration, remark, halftype)
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(response => {
         const status = response['status'];
         if (status.code == 200) {
-          this._store.dispatch(new RequestBalanceList()).pipe(tap((res) => {
-            this._store.dispatch(new RequestHistoryList);
-          }));
+          // update balance
+          for (let i = 0; i < this.balanceList.length; i++) {
+            if (this.balanceList[i].leave_type_code === leaveTypeCode) {
+              this.balanceList[i].balance -= Number(duration);
+              break;
+            }
+          }
+          this._store.dispatch(new UpdateBalanceList(this.balanceList));
+          // this._store.dispatch(new RequestBalanceList()).pipe(tap((res) => {
+          //   this._store.dispatch(new RequestHistoryList);
+          // }));
+          //  update history list
+          const appliedItem = this._leaveService.getPreparedAppliedHistory(leaveTypeCode, startDate, endDate, duration, remark);
+          this._store.dispatch(new AddHistoryItem(appliedItem));
+
           this._alertService.showSuccess('Leave request');
           this.formReset();
         } else {

@@ -1,5 +1,5 @@
 import { State, Selector, Action, StateContext } from '@ngxs/store';
-import { RequestHistoryList } from './history.actions';
+import { RequestHistoryList, AddHistoryItem } from './history.actions';
 import { BackendService } from '../../services/backend.service';
 import { LeaveService } from '../../services/leave.service';
 import { tap } from 'rxjs/operators';
@@ -40,5 +40,16 @@ export class HistoryListState {
         }, (error) => {
             console.error('Error response:', error);
         }));
+    }
+
+    @Action(AddHistoryItem)
+    addHistoryItem(
+        { getState, setState }: StateContext<HistoryListStateModel>,
+        { payload }: AddHistoryItem
+    ) {
+        const state = getState();
+        setState({
+            list: [...state.list, payload]
+        });
     }
 }

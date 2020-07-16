@@ -1,4 +1,4 @@
-import { MonthName, LeaveType } from '../constants';
+import { MonthName, LeaveType, LeaveStatus } from '../constants';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { History } from '../models/history.model';
@@ -9,6 +9,7 @@ import { Associate } from '../models/associate.model';
 export class LeaveService {
 
     private leaveType_Obs$: BehaviorSubject<any> = new BehaviorSubject(null);
+    private pullingStrategy_Obs$: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
     getLeaveTypeObs(): Observable<any> {
         return this.leaveType_Obs$.asObservable();
@@ -18,6 +19,13 @@ export class LeaveService {
         this.leaveType_Obs$.next(_data);
     }
 
+    getPullingStrategy_Obs(): Observable<boolean> {
+        return this.pullingStrategy_Obs$.asObservable();
+    }
+
+    setPullingStrategy_Obs(_flag: boolean) {
+        this.pullingStrategy_Obs$.next(_flag);
+    }
 
     getMinimalLeaves(list: History[]) {
         return this.getFormattedLeaveHistories(list.slice(0, 3));
@@ -35,6 +43,19 @@ export class LeaveService {
             Object.assign(item, { leave_status: item.leave_status.toLowerCase() });
         });
         return list;
+    }
+
+    getPreparedAppliedHistory(leaveTypeCode, startDate, endDate, duration, remark) {
+        const updatedItem = {
+            leave_type_code: leaveTypeCode,
+            leave_start_date: startDate,
+            leave_end_date: endDate,
+            duration: duration,
+            remark: remark,
+            leave_status: LeaveStatus.Applied,
+            approver_name: 'no approver authorizes this leave yet.'
+        }
+        return updatedItem;
     }
 
     getFormattedLeaveBalances(list: Balance[]) {

@@ -87,7 +87,7 @@ export class LeaveHistoryComponent implements OnInit, OnDestroy {
         this.endDate.label = result.endLabel;
         this.callToLeaveHistoryWithDate(this.startDate.value, this.endDate.value);
       } else {
-        console.log('close event');
+        console.log('nothing choice');
       }
     });
   }
@@ -119,12 +119,13 @@ export class LeaveHistoryComponent implements OnInit, OnDestroy {
           this.LeaveHistories = value;
           this.processing = false;
           this.isEmpty = false;
+          this._leaveService.setPullingStrategy_Obs(false);
         } else {
           this._store.dispatch(new RequestHistoryList());
         }
       }, (error) => {
         this.processing = false;
-      })
+      });
   }
 
   private callToLeaveHistoryWithDate(_startDate: string, _endDate: string) {

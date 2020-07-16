@@ -1,5 +1,5 @@
 import { State, Selector, Action, StateContext } from '@ngxs/store';
-import { RequestBalanceList } from './balance.actions';
+import { RequestBalanceList, UpdateBalanceList } from './balance.actions';
 import { BackendService } from '../../services/backend.service';
 import { LeaveService } from '../../services/leave.service';
 import { tap } from 'rxjs/operators';
@@ -39,5 +39,16 @@ export class BalanceListState {
         }, (error) => {
             console.error('Error response:', error);
         }));
+    }
+
+    @Action(UpdateBalanceList)
+    updateBalanceList(
+        { getState, setState }: StateContext<BalanceListStateModel>,
+        { payload }: UpdateBalanceList
+    ) {
+        const state = getState();
+        setState({
+            ...state, list: payload
+        });
     }
 }

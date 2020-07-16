@@ -34,12 +34,11 @@ import { LeaveApprovalComponent } from '@src/app/leave-approval/leave-approval.c
 import { NativeScriptUIListViewModule } from "nativescript-ui-listview/angular";
 import { ApproveCommentModalComponent } from '@src/app/leave-approval/approve-comment-modal/approve-comment-modal.component';
 import { LeaveApprovalDetailsComponent } from '@src/app/leave-approval-details/leave-approval-details.component';
-// import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
-// import { MemoryServiceService } from '@src/app/shared/services/memory-service.service';
 import { environment } from '../environments/environment.prod';
 import { registerElement } from "nativescript-angular";
 import { CommentModalComponent } from '@src/app/ui-components/comment-modal/comment-modal.component';
 registerElement("PreviousNextView", () => require("nativescript-iqkeyboardmanager").PreviousNextView);
+registerElement("PullToRefresh", () => require("@nstudio/nativescript-pulltorefresh").PullToRefresh);
 @NgModule({
   declarations: [
     AppComponent,
@@ -69,7 +68,6 @@ registerElement("PreviousNextView", () => require("nativescript-iqkeyboardmanage
     NativeScriptFormsModule,
     NativeScriptUICalendarModule,
     NativeScriptHttpClientModule,
-    // HttpClientInMemoryWebApiModule.forRoot(MemoryServiceService),
     NativeScriptUIChartModule,
     NgxsModule.forRoot([HistoryListState, ProfileState, BalanceListState], { developmentMode: !environment.production }),
     NgxsResetPluginModule.forRoot(),

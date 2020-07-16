@@ -1,17 +1,19 @@
-<ListView row="0" [items]="items" (itemTap)="onItemTap($event)" ios:height="210" android:height="200" class="list-group"
-    (loaded)="onLoaded($event.object)">
-    <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
-        <GridLayout class="list-group-item" columns="4*, 1*" rows="auto, auto" [ngSwitch]="item.leave_status">
-            <Label [text]="item.date" row="0" col="0" class="list-group-item__date"></Label>
-            <Label text="{{item.type}} {{item.duration}}" row="1" col="0" colspan="3"
-                class="list-group-item__type"></Label>
+<PullToRefresh (refresh)="refreshList($event)" indicatorColor="#fe2f2f" ios:height="210" android:height="200">
+    <ListView row="0" [items]="items" (itemTap)="onItemTap($event)" class="list-group"
+        (loaded)="onLoaded($event.object)">
+        <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
+            <GridLayout class="list-group-item" columns="4*, 1*" rows="auto, auto" [ngSwitch]="item.leave_status">
+                <Label [text]="item.date" row="0" col="0" class="list-group-item__date"></Label>
+                <Label text="{{item.type}} {{item.duration}}" row="1" col="0" colspan="3"
+                    class="list-group-item__type"></Label>
 
-            <Label *ngSwitchCase="'applied'" [text]="item.leave_status" row="0" col="1" rowspan="2"
-                class="list-group-item__status bg-warning"></Label>
-            <Label *ngSwitchCase="'rejected'" [text]="item.leave_status" row="0" col="1" rowspan="2"
-                class="list-group-item__status bg-primary"></Label>
-            <Label *ngSwitchDefault [text]="item.leave_status" row="0" col="1" rowspan="2"
-                class="list-group-item__status bg-success"></Label>
-        </GridLayout>
-    </ng-template>
-</ListView>
+                <Label *ngSwitchCase="'applied'" [text]="item.leave_status" row="0" col="1" rowspan="2"
+                    class="list-group-item__status bg-warning"></Label>
+                <Label *ngSwitchCase="'rejected'" [text]="item.leave_status" row="0" col="1" rowspan="2"
+                    class="list-group-item__status bg-primary"></Label>
+                <Label *ngSwitchDefault [text]="item.leave_status" row="0" col="1" rowspan="2"
+                    class="list-group-item__status bg-success"></Label>
+            </GridLayout>
+        </ng-template>
+    </ListView>
+</PullToRefresh>

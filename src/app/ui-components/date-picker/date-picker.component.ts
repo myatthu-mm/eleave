@@ -48,15 +48,16 @@ export class DatePickerComponent implements OnInit, OnDestroy {
       overlayAlpha: 0.8,
       doneLabelColor: new Color('#fe2f2f')
     };
+    if (this.minToay) {
+      Object.assign(pickerOptions, { minDate: new Date() });
+    }
     if (this.minDate) {
       Object.assign(pickerOptions, { minDate: new Date(this.minDate) });
     }
     if (this.maxDate) {
       Object.assign(pickerOptions, { maxDate: new Date(this.maxDate) });
     }
-    if (this.minToay) {
-      Object.assign(pickerOptions, { minDate: new Date() });
-    }
+
     picker.pickDate(pickerOptions).then((result) => {
       // ok button
       if (result) {
