@@ -32,7 +32,7 @@ export class LeaveListviewComponent implements OnInit {
     this.routerExtensions.navigate(['/history-details'], {
       queryParams: this.items[args.index],
       animated: true,
-      transition: { name: isIOS ? 'curl' : 'fade' }
+      transition: { name: isIOS ? 'curl' : 'explode', duration: 650 }
     });
   }
 

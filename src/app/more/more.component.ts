@@ -61,7 +61,7 @@ export class MoreComponent implements OnInit {
     console.log('More created***');
     this._page.actionBarHidden = true;
     this._unsubscribe$ = new Subject();
-    // this.callToProfile();
+    this.callToProfile();
   }
 
   @HostListener('unloaded')
@@ -76,10 +76,12 @@ export class MoreComponent implements OnInit {
     this._store.dispatch(
       new StateResetAll()
     );
-    this._routerExtension.navigate(['/'], { clearHistory: true });
-    this._store.dispatch(
-      new StateResetAll()
-    );
+    this._routerExtension.navigate(['/'],
+      {
+        animated: true,
+        transition: { name: 'slideBottom' },
+        clearHistory: true
+      });
   }
 
   private callToProfile() {

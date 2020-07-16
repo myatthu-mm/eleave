@@ -80,7 +80,7 @@ export class LeaveRequestComponent implements OnInit {
       })
     );
 
-    // this.callToLeaveBalance();
+    this.callToLeaveBalance();
   }
 
   @HostListener('unloaded')
