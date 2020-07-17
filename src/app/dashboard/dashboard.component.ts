@@ -3,7 +3,7 @@ import { Page } from "tns-core-modules/ui/page";
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngxs/store';
-import { setString } from "tns-core-modules/application-settings";
+import { setString, getString } from "tns-core-modules/application-settings";
 import { Profile } from '../shared/models/profile.model';
 import { Balance } from '../shared/models/balance.model';
 import { History } from '../shared/models/history.model';
@@ -14,13 +14,14 @@ import { RequestBalanceList } from '../shared/states/balance/balance.actions';
 import { HistoryListState } from '../shared/states/history/history.state';
 import { RequestHistoryList } from '../shared/states/history/history.actions';
 import { AlertService } from '../shared/services/alert.service';
+import { BackendService } from '../shared/services/backend.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  profile: Profile;
+  private profile: Profile;
   private balanceList: Balance[];
   private historyList: History[];
   processing: boolean;
@@ -29,10 +30,13 @@ export class DashboardComponent implements OnInit {
   @Output()
   gotoHistory_event: EventEmitter<Boolean> = new EventEmitter<Boolean>();
 
+  isNewuserLogin: boolean;
+
   constructor(
     private _store: Store,
     private _page: Page,
-    private _alertService: AlertService) {
+    private _alertService: AlertService,
+    private _backendService: BackendService) {
     this.profile = new Profile();
   }
 
@@ -68,12 +72,14 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isNewuserLogin = true;
   }
 
   @HostListener('loaded')
   pageOnInit() {
     this._page.actionBarHidden = true;
     this._unsubscribe$ = new Subject();
+    this.profile = new Profile();
     this.callToProfile();
   }
 
@@ -88,13 +94,14 @@ export class DashboardComponent implements OnInit {
     this._store.select(ProfileState.getProfile)
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(value => {
-        if (value && Object.keys(value).length > 1) {
+        if (value && Object.keys(value).length > 1 && !this.isNewuserLogin) {
           this.profile = value;
           setString('unit', value.unit_name);
           this.processing = false;
           this.callToLeaveBalance();
         } else {
           this.processing = true;
+          this.isNewuserLogin = false;
           this._store.dispatch(new RequestProfile());
         }
       }, (error) => {

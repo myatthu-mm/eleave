@@ -17,7 +17,7 @@ import { AlertService } from '../shared/services/alert.service';
   styleUrls: ['./more.component.scss']
 })
 export class MoreComponent implements OnInit {
-  profile: Profile;
+  private profile: Profile;
   processing: boolean;
   private _unsubscribe$ = new Subject();
 
@@ -74,6 +74,7 @@ export class MoreComponent implements OnInit {
     this._store.dispatch(
       new StateResetAll()
     );
+
     this._routerExtension.navigate(['/'],
       {
         animated: true,
