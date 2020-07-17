@@ -3,7 +3,7 @@ import { Page } from "tns-core-modules/ui/page";
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngxs/store';
-import { setString, getString } from "tns-core-modules/application-settings";
+import { setString } from "tns-core-modules/application-settings";
 import { Profile } from '../shared/models/profile.model';
 import { Balance } from '../shared/models/balance.model';
 import { History } from '../shared/models/history.model';
@@ -14,7 +14,7 @@ import { RequestBalanceList } from '../shared/states/balance/balance.actions';
 import { HistoryListState } from '../shared/states/history/history.state';
 import { RequestHistoryList } from '../shared/states/history/history.actions';
 import { AlertService } from '../shared/services/alert.service';
-import { BackendService } from '../shared/services/backend.service';
+import { LeaveService } from '../shared/services/leave.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -36,7 +36,7 @@ export class DashboardComponent implements OnInit {
     private _store: Store,
     private _page: Page,
     private _alertService: AlertService,
-    private _backendService: BackendService) {
+    private _leaveService: LeaveService) {
     this.profile = new Profile();
   }
 
@@ -135,6 +135,7 @@ export class DashboardComponent implements OnInit {
         if (value.length) {
           this.LeaveHistories = value.slice(0, 3);
           this.processing = false;
+          this._leaveService.setPullingStrategy_Obs(false);
         } else {
           this.processing = true;
           this._store.dispatch(new RequestHistoryList());

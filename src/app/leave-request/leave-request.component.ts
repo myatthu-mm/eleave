@@ -148,7 +148,6 @@ export class LeaveRequestComponent implements OnInit {
       halftype = this.isMorning ? '1' : '2';
     }
     this.processing = true;
-
     this._backendService.saveLeave(leaveTypeCode, startDate, endDate, duration, remark, halftype)
       .pipe(takeUntil(this._unsubscribe$))
       .subscribe(response => {
